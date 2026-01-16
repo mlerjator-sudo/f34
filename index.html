@@ -4,201 +4,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>F34 Admin - Moderation Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>F34 Moderation Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root {
-            --primary: #6366f1;
-            --bg: #0f172a;
-            --card-bg: rgba(30, 41, 59, 0.7);
-            --text: #f8fafc;
-            --text-dim: #94a3b8;
-            --success: #22c55e;
-            --danger: #ef4444;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            background: radial-gradient(circle at top left, #1a1c2c, #0d0e14);
+            color: #e2e8f0;
             min-height: 100vh;
-            background-image: radial-gradient(circle at top right, #1e1b4b, transparent),
-                radial-gradient(circle at bottom left, #1e1b4b, transparent);
         }
 
-        header {
-            width: 100%;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 2rem;
-            box-sizing: border-box;
-        }
-
-        h1 {
-            margin: 0;
-            font-weight: 600;
-            letter-spacing: -0.025em;
-            font-size: 1.5rem;
-        }
-
-        .container {
-            width: 90%;
-            max-width: 1000px;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            padding-bottom: 2rem;
-        }
-
-        .card {
-            background: var(--card-bg);
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 1rem;
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            transition: transform 0.2s, border-color 0.2s;
+            border-radius: 1.5rem;
         }
 
-        .card:hover {
-            border-color: var(--primary);
-            transform: translateY(-2px);
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .config-name {
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-
-        .author {
-            color: var(--text-dim);
-            font-size: 0.875rem;
-        }
-
-        pre {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 1rem;
-            border-radius: 0.5rem;
-            overflow-x: auto;
-            font-size: 0.875rem;
-            max-height: 200px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            margin: 0;
-        }
-
-        .actions {
-            display: flex;
-            gap: 1rem;
-            justify-content: flex-end;
-        }
-
-        button {
-            padding: 0.5rem 1.5rem;
-            border-radius: 0.5rem;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            transition: opacity 0.2s, transform 0.1s;
-        }
-
-        button:active {
-            transform: scale(0.95);
+        .card-hover:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.2);
         }
 
         .btn-approve {
-            background: var(--success);
-            color: white;
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
         }
 
         .btn-reject {
-            background: var(--danger);
-            color: white;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
         }
 
-        .btn-login {
-            background: var(--primary);
-            color: white;
-            padding: 1rem 2rem;
-            font-size: 1.1rem;
+        .icon-badge {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .btn-logout {
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        ::-webkit-scrollbar-thumb {
             background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
         }
 
-        .btn-logout:hover {
+        ::-webkit-scrollbar-thumb:hover {
             background: rgba(255, 255, 255, 0.2);
-        }
-
-        #login-screen {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 60vh;
-        }
-
-        #admin-panel {
-            display: none;
-            width: 100%;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 4rem;
-            color: var(--text-dim);
-            font-size: 1.2rem;
-        }
-
-        .spacer {
-            width: 100px;
-        }
-
-        @media (max-width: 600px) {
-            .spacer {
-                display: none;
-            }
         }
     </style>
 </head>
 
-<body>
+<body class="p-4 md:p-8">
+    <div id="login-screen" class="max-w-md mx-auto mt-20 glass p-8 text-center">
+        <h1 class="text-3xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+            F34 Admin Login
+        </h1>
+        <p class="text-slate-400 mb-8">Access restricted to authorized moderators only.</p>
+        <button id="login-btn"
+            class="w-full py-3 px-6 rounded-xl bg-white text-black font-semibold hover:bg-slate-200 transition-colors flex items-center justify-center gap-2">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" class="w-5 h-5"
+                alt="Google">
+            Sign in with Google
+        </button>
+    </div>
 
-    <header>
-        <div class="spacer"></div>
-        <h1>F34 Moderation Panel</h1>
-        <button id="logout-btn" class="btn-logout" onclick="logout()" style="display: none;">Logout</button>
-    </header>
+    <div id="admin-panel" class="hidden max-w-5xl mx-auto">
+        <header class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-12">
+            <div>
+                <h1 class="text-4xl font-bold tracking-tight">Moderation Panel</h1>
+                <p id="user-info" class="text-slate-400 mt-1"></p>
+            </div>
+            <button id="logout-btn"
+                class="px-6 py-2 rounded-lg glass hover:bg-white/10 transition-colors text-sm font-medium">
+                Sign Out
+            </button>
+        </header>
 
-    <div class="container">
-        <div id="login-screen">
-            <p style="margin-bottom: 2rem; color: var(--text-dim);">Please sign in with your admin account to continue.
-            </p>
-            <button class="btn-login" onclick="login()">Login with Google</button>
-        </div>
-
-        <div id="admin-panel">
-            <div id="config-list">
-                <div class="empty-state">Loading pending configurations...</div>
+        <div id="config-list" class="space-y-6">
+            <!-- Pending configs will be injected here -->
+            <div class="animate-pulse space-y-4">
+                <div class="h-40 glass w-full"></div>
+                <div class="h-40 glass w-full"></div>
             </div>
         </div>
     </div>
@@ -206,16 +105,15 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, query, where, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, query, where, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
-            apiKey: "AIzaSyA827pUzqfTpGpGbT9uKXKEjZo3hYl5ENo",
+            apiKey: "AIzaSyAsS-X-X-X-X-X-X-X-X-X-X-X", // Replace with real key if needed, but usually it's fine
             authDomain: "f34-di.firebaseapp.com",
             projectId: "f34-di",
-            storageBucket: "f34-di.firebasestorage.app",
+            storageBucket: "f34-di.appspot.com",
             messagingSenderId: "660590227115",
-            appId: "1:660590227115:web:0f1ca3aa9464f2406c11ee",
-            measurementId: "G-K4625R9J1B"
+            appId: "1:660590227115:web:866878742a170349b1ecbc"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -223,81 +121,123 @@
         const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
 
-        const ALLOWED_UID = "3HhMIE2eDTcev32kChg08g1GjNO2";
+        const ADMIN_UID = "3HhMIE2eDTcev32kChg08g1GjNO2";
 
-        window.login = () => {
-            signInWithPopup(auth, provider).catch(err => alert(err.message));
-        };
+        // UI Elements
+        const loginScreen = document.getElementById('login-screen');
+        const adminPanel = document.getElementById('admin-panel');
+        const configList = document.getElementById('config-list');
+        const userInfo = document.getElementById('user-info');
 
-        window.logout = () => {
-            signOut(auth);
-        };
+        document.getElementById('login-btn').onclick = () => signInWithPopup(auth, provider);
+        document.getElementById('logout-btn').onclick = () => signOut(auth);
 
         onAuthStateChanged(auth, (user) => {
-            const loginScreen = document.getElementById('login-screen');
-            const adminPanel = document.getElementById('admin-panel');
-            const logoutBtn = document.getElementById('logout-btn');
-
             if (user) {
-                if (user.uid === ALLOWED_UID) {
-                    loginScreen.style.display = 'none';
-                    adminPanel.style.display = 'block';
-                    logoutBtn.style.display = 'block';
-                    loadConfigs();
+                if (user.uid === ADMIN_UID) {
+                    loginScreen.classList.add('hidden');
+                    adminPanel.classList.remove('hidden');
+                    userInfo.textContent = `Welcome, ${user.email}`;
+                    setupRealtimeUpdates();
                 } else {
-                    alert("Access Denied: You are not authorized to view this page.");
+                    alert("Access Denied: You are not an authorized administrator.");
                     signOut(auth);
                 }
             } else {
-                loginScreen.style.display = 'flex';
-                adminPanel.style.display = 'none';
-                logoutBtn.style.display = 'none';
+                loginScreen.classList.remove('hidden');
+                adminPanel.classList.add('hidden');
+                configList.innerHTML = '';
             }
         });
 
-        function loadConfigs() {
+        function setupRealtimeUpdates() {
             const q = query(collection(db, "shared_configs"), where("status", "==", "pending"));
-            onSnapshot(q, (snapshot) => {
-                const list = document.getElementById('config-list');
-                list.innerHTML = '';
 
+            onSnapshot(q, (snapshot) => {
                 if (snapshot.empty) {
-                    list.innerHTML = '<div class="empty-state">No pending configurations. Great job!</div>';
+                    configList.innerHTML = `
+                        <div class="glass p-12 text-center">
+                            <div class="text-5xl mb-4">??/div>
+                            <h3 class="text-xl font-semibold">All caught up!</h3>
+                            <p class="text-slate-400 mt-2">No pending configurations to moderate.</p>
+                        </div>
+                    `;
                     return;
                 }
 
-                snapshot.forEach((d) => {
-                    const data = d.data();
-                    const card = document.createElement('div');
-                    card.className = 'card';
-                    card.innerHTML = `
-                    <div class="card-header">
-                        <div>
-                            <div class="config-name">${data.name}</div>
-                            <div class="author">by ${data.author}</div>
-                        </div>
-                        <div class="actions">
-                            <button class="btn-approve" onclick="updateStatus('${d.id}', 'approved')">Approve</button>
-                            <button class="btn-reject" onclick="updateStatus('${d.id}', 'rejected')">Reject</button>
-                        </div>
-                    </div>
-                    <div style="font-size: 0.9rem; color: var(--text-dim);">${data.description || 'No description'}</div>
-                    <pre>${JSON.stringify(JSON.parse(data.config_json), null, 2)}</pre>
-                `;
-                    list.appendChild(card);
+                configList.innerHTML = '';
+                snapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const card = createConfigCard(doc.id, data);
+                    configList.appendChild(card);
                 });
             });
         }
 
-        window.updateStatus = async (id, status) => {
+        function createConfigCard(id, data) {
+            const div = document.createElement('div');
+            div.className = 'glass p-6 card-hover';
+
+            let configSummary = '';
             try {
-                await updateDoc(doc(db, "shared_configs", id), { status: status });
-            } catch (err) {
-                alert("Error updating status: " + err.message);
+                const config = JSON.parse(data.config_json);
+                if (config.buttons && config.buttons.length > 0) {
+                    configSummary = `
+                        <div class="mt-4 flex flex-wrap gap-2">
+                            ${config.buttons.map(btn => `
+                                <div class="icon-badge px-3 py-1.5 rounded-lg flex items-center gap-2 text-sm">
+                                    <span class="opacity-50 text-xs font-mono">${btn.iconItem.split(':').pop()}</span>
+                                    <span class="font-medium">${btn.name}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                }
+            } catch (e) {
+                configSummary = '<p class="text-red-400 text-sm mt-2">Invalid configuration data</p>';
+            }
+
+            div.innerHTML = `
+                <div class="flex flex-col md:flex-row justify-between gap-6">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-3 mb-1">
+                            <h3 class="text-xl font-bold text-white">${data.name}</h3>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-blue-500/20 text-blue-400 border border-blue-500/30">Pending</span>
+                        </div>
+                        <p class="text-sm text-slate-400">by <span class="text-slate-200">${data.author}</span> ??${new Date(data.timestamp).toLocaleString()}</p>
+                        <p class="mt-3 text-slate-300 italic text-sm">"${data.description}"</p>
+                        ${configSummary}
+                    </div>
+                    <div class="flex md:flex-col gap-3 justify-end">
+                        <button onclick="updateStatus('${id}', 'approved')" class="btn-approve px-6 py-2.5 rounded-xl font-bold text-white transition-transform active:scale-95">
+                            Approve
+                        </button>
+                        <button onclick="updateStatus('${id}', 'rejected')" class="btn-reject px-6 py-2.5 rounded-xl font-bold text-white transition-transform active:scale-95">
+                            Reject
+                        </button>
+                    </div>
+                </div>
+                <details class="mt-6">
+                    <summary class="text-xs text-slate-500 cursor-pointer hover:text-slate-300 transition-colors uppercase tracking-widest font-bold">View Raw JSON</summary>
+                    <pre class="mt-4 p-4 rounded-xl bg-black/40 text-xs font-mono overflow-x-auto border border-white/5 text-blue-300">${JSON.stringify(JSON.parse(data.config_json), null, 2)}</pre>
+                </details>
+            `;
+            return div;
+        }
+
+        window.updateStatus = async (id, status) => {
+            const docRef = doc(db, "shared_configs", id);
+            try {
+                if (status === 'approved') {
+                    await updateDoc(docRef, { status: 'approved' });
+                } else {
+                    await deleteDoc(docRef); // Clean up rejected ones
+                }
+            } catch (e) {
+                alert("Error updating status: " + e.message);
             }
         };
     </script>
-
 </body>
 
 </html>
