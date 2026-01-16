@@ -74,6 +74,7 @@
             Sign in with Google
         </button>
     </div>
+
     <div id="admin-panel" class="hidden max-w-5xl mx-auto">
         <header class="flex justify-between items-center mb-12">
             <h1 class="text-4xl font-bold">Moderation Panel</h1>
@@ -82,10 +83,12 @@
         </header>
         <div id="config-list" class="space-y-6"></div>
     </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, collection, query, where, onSnapshot, doc, updateDoc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
         const firebaseConfig = {
             apiKey: "AIzaSyA827pUzqfTpGpGbT9uKXKEjZo3hYl5ENo",
             authDomain: "f34-di.firebaseapp.com",
@@ -94,16 +97,20 @@
             messagingSenderId: "660590227115",
             appId: "1:660590227115:web:0f1ca3aa9464f2406c11ee"
         };
+
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
         const ADMIN_UID = "3HhMIE2eDTcev32kChg08g1GjNO2";
+
         const loginScreen = document.getElementById('login-screen');
         const adminPanel = document.getElementById('admin-panel');
         const configList = document.getElementById('config-list');
+
         document.getElementById('login-btn').onclick = () => signInWithPopup(auth, provider);
         document.getElementById('logout-btn').onclick = () => signOut(auth);
+
         onAuthStateChanged(auth, (user) => {
             if (user && user.uid === ADMIN_UID) {
                 loginScreen.classList.add('hidden');
@@ -117,6 +124,7 @@
                 adminPanel.classList.add('hidden');
             }
         });
+
         function setupRealtimeUpdates() {
             const q = query(collection(db, "shared_configs"), where("status", "==", "pending"));
             onSnapshot(q, (snapshot) => {
@@ -182,6 +190,7 @@
                 });
             });
         }
+
         window.updateStatus = async (id, status) => {
             const docRef = doc(db, "shared_configs", id);
             if (status === 'approved') await updateDoc(docRef, { status: 'approved' });
@@ -195,10 +204,10 @@
             const data = snap.data();
             const config = JSON.parse(data.config_json);
 
-            const lang = prompt("Enter Language Code (e.g., ko, en, ja):", "ko");
+            const lang = prompt("Enter Language Code (e.g., ko, en, ja):", "en");
             if (!lang) return;
 
-            const useAI = confirm("Use AI to translate automatically?");
+            const useAI = confirm("Do you want to use AI for automatic translation? (Cancel for Manual)");
 
             let translatedName = data.name;
             const translatedButtons = [];
