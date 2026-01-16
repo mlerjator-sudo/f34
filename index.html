@@ -120,17 +120,46 @@
                 snapshot.forEach((doc) => {
                     const data = doc.data();
                     const div = document.createElement('div');
-                    div.className = 'glass p-6 card-hover flex justify-between items-center';
+                    div.className = 'glass p-6 card-hover';
+
+                    let configSummary = '';
+                    let rawJson = '';
+                    try {
+                        const config = JSON.parse(data.config_json);
+                        rawJson = JSON.stringify(config, null, 2);
+                        if (config.buttons && config.buttons.length > 0) {
+                            configSummary = `
+                                <div class="mt-4 flex flex-wrap gap-2">
+                                    ${config.buttons.map(btn => `
+                                        <div class="icon-badge px-3 py-1.5 rounded-lg flex items-center gap-2 text-sm">
+                                            <span class="opacity-50 text-xs font-mono">${btn.iconItem.split(':').pop()}</span>
+                                            <span class="font-medium">${btn.name}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            `;
+                        }
+                    } catch (e) {
+                        configSummary = '<p class="text-red-400 text-sm mt-2">Invalid configuration data</p>';
+                    }
+
                     div.innerHTML = `
-                        <div>
-                            <h3 class="text-xl font-bold">${data.name}</h3>
-                            <p class="text-slate-400">by ${data.author}</p>
-                            <p class="mt-2 italic">"${data.description}"</p>
+                        <div class="flex flex-col md:flex-row justify-between gap-6">
+                            <div class="flex-1">
+                                <h3 class="text-2xl font-bold">${data.name}</h3>
+                                <p class="text-slate-400">by ${data.author}</p>
+                                <p class="mt-3 text-slate-300 italic">"${data.description}"</p>
+                                ${configSummary}
+                            </div>
+                            <div class="flex md:flex-col gap-3 justify-end items-center">
+                                <button onclick="updateStatus('${doc.id}', 'approved')" class="btn-approve px-8 py-3 rounded-xl font-bold text-white transition-transform active:scale-95">Approve</button>
+                                <button onclick="updateStatus('${doc.id}', 'rejected')" class="btn-reject px-8 py-3 rounded-xl font-bold text-white transition-transform active:scale-95">Reject</button>
+                            </div>
                         </div>
-                        <div class="flex gap-3">
-                            <button onclick="updateStatus('${doc.id}', 'approved')" class="btn-approve px-6 py-2 rounded-xl font-bold">Approve</button>
-                            <button onclick="updateStatus('${doc.id}', 'rejected')" class="btn-reject px-6 py-2 rounded-xl font-bold">Reject</button>
-                        </div>
+                        <details class="mt-6">
+                            <summary class="text-xs text-slate-500 cursor-pointer hover:text-slate-300 uppercase tracking-widest font-bold">View Raw JSON</summary>
+                            <pre class="mt-4 p-4 rounded-xl bg-black/40 text-xs font-mono overflow-x-auto border border-white/5 text-blue-300">${rawJson}</pre>
+                        </details>
                     `;
                     configList.appendChild(div);
                 });
