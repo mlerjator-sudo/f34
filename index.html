@@ -133,11 +133,11 @@
                                     ${config.buttons.map(btn => `
                                         <div class="icon-badge p-3 rounded-xl flex flex-col gap-2 min-w-[150px]">
                                             <div class="flex items-center gap-2">
-                                                <span class="opacity-40 text-[10px] font-mono bg-white/5 px-1 rounded">${btn.iconItem.split(':').pop()}</span>
-                                                <span class="font-bold text-sm">${btn.name}</span>
+                                                <span class="opacity-40 text-[10px] font-mono bg-white/5 px-1 rounded">${btn.iconItem ? btn.iconItem.split(':').pop() : 'unknown'}</span>
+                                                <span class="font-bold text-sm">${btn.name || 'Unknown'}</span>
                                             </div>
                                             <div class="text-[11px] font-mono text-blue-300 bg-blue-500/10 p-2 rounded border border-blue-500/20 break-all leading-tight">
-                                                ${btn.command}
+                                                ${(btn.commands && btn.commands.length > 0) ? btn.commands.join('<br>') : (btn.command || 'No Command')}
                                             </div>
                                         </div>
                                     `).join('')}
