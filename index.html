@@ -99,7 +99,10 @@
                 div.innerHTML = `
                     <div>
                         <div class="flex justify-between items-start">
-                            <h3 class="text-xl font-bold">${data.name}</h3>
+                            <div>
+                                <h3 class="text-xl font-bold">${data.name}</h3>
+                                <span class="text-[10px] text-blue-400 font-bold uppercase tracking-wider">${data.category || 'General'}</span>
+                            </div>
                             <span class="text-[10px] opacity-40 font-mono">${data.downloads || 0} DLs</span>
                         </div>
                         <p class="text-slate-400 text-xs mt-1">by ${data.author.split('@')[0]}</p>
