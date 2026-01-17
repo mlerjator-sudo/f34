@@ -59,9 +59,6 @@
                 <p class="text-slate-400 mt-2">Discover and download shared configurations</p>
             </div>
             <div class="flex items-center gap-4">
-                <div id="connection-status"
-                    class="text-[10px] uppercase tracking-widest opacity-50 px-3 py-1 rounded-full border border-white/10">
-                    Connecting...</div>
                 <a href="admin.html"
                     class="px-6 py-2 rounded-lg glass hover:bg-white/10 transition-colors text-sm">Admin Panel</a>
                 <button id="auth-btn"
@@ -81,25 +78,12 @@
         <div id="config-list" class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div id="loading-state" class="col-span-full glass p-12 text-center text-xl animate-pulse">
                 Loading configurations...
-                <div class="text-xs opacity-50 mt-2" id="debug-status">Initializing...</div>
             </div>
         </div>
     </div>
 
     <script type="module">
-        const statusEl = document.getElementById('debug-status');
-        const connStatus = document.getElementById('connection-status');
-
-        const log = (msg, type = 'info') => {
-            console.log(`[F34] ${msg}`);
-            if (statusEl) {
-                const div = document.createElement('div');
-                div.textContent = msg;
-                if (type === 'error') div.className = 'text-red-400';
-                if (type === 'success') div.className = 'text-green-400';
-                statusEl.appendChild(div);
-            }
-        };
+        const log = (msg) => console.log(`[F34] ${msg}`);
 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { initializeFirestore, collection, query, where, onSnapshot, getDocs, doc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -131,11 +115,9 @@
             const filterContainer = document.getElementById('category-filter');
             const authBtn = document.getElementById('auth-btn');
 
-            // --- AUTH LOGIC ---
             onAuthStateChanged(auth, async (user) => {
                 currentUser = user;
                 if (user) {
-                    connStatus.textContent = "Auth: " + user.email.split('@')[0];
                     try {
                         const userDoc = await getDoc(doc(db, "users", user.email));
                         if (userDoc.exists()) {
@@ -150,9 +132,8 @@
                         } else {
                             authBtn.textContent = 'Link Minecraft (Login in Mod)';
                         }
-                    } catch (e) { log("Auth Doc Error: " + e.message, 'error'); }
+                    } catch (e) { log("Auth Doc Error: " + e.message); }
                 } else {
-                    connStatus.textContent = "Guest Mode";
                     authBtn.textContent = 'Login with Google';
                 }
                 renderConfigs();
@@ -171,7 +152,6 @@
                 }
             };
 
-            // --- DATA FETCHING (HYBRID) ---
             const CATEGORIES = ["Adventure", "Horror", "Decoration", "Economy", "Equipment", "Food", "Game Mechanics", "Library", "Magic", "Management", "Minigame", "Mobs", "Optimization", "Social", "Storage", "Technology", "Transportation", "Utility", "World Gen", "General", "Convenience"];
             CATEGORIES.forEach(cat => {
                 const btn = document.createElement('button');
@@ -189,41 +169,29 @@
                 renderConfigs();
             }
 
-            // 1. Try SDK Fetch
-            log("Attempting SDK fetch...");
             const q = query(collection(db, "shared_configs"), where("status", "==", "approved"));
 
             getDocs(q).then(snap => {
-                if (dataLoaded) return; // Already loaded via REST
-                log("SDK Fetch Success: " + snap.size + " docs", 'success');
+                if (dataLoaded) return;
                 processSnapshot(snap);
             }).catch(err => {
-                log("SDK Fetch Failed: " + err.message, 'error');
                 if (!dataLoaded) fetchViaREST();
             });
 
-            // 2. REST Fallback (after 3 seconds)
             setTimeout(() => {
-                if (!dataLoaded) {
-                    log("SDK slow, triggering REST fallback...");
-                    fetchViaREST();
-                }
+                if (!dataLoaded) fetchViaREST();
             }, 3000);
 
             async function fetchViaREST() {
                 if (dataLoaded) return;
                 try {
-                    // Fetch approved configs via REST API
                     const url = `https://firestore.googleapis.com/v1/projects/f34-di/databases/(default)/documents/shared_configs`;
                     const response = await fetch(url);
                     const data = await response.json();
-
                     if (data.documents) {
-                        log("REST Fetch Success: " + data.documents.length + " docs", 'success');
                         allConfigs = data.documents
                             .map(doc => {
                                 const fields = doc.fields;
-                                // Convert Firestore REST format to simple object
                                 const obj = { id: doc.name.split('/').pop() };
                                 for (let key in fields) {
                                     obj[key] = fields[key].stringValue || fields[key].integerValue || fields[key].doubleValue || fields[key].booleanValue || null;
@@ -231,26 +199,17 @@
                                 return obj;
                             })
                             .filter(c => c.status === 'approved');
-
                         dataLoaded = true;
-                        connStatus.textContent += " (REST)";
                         renderConfigs();
-                    } else {
-                        log("REST returned no documents.", 'error');
                     }
-                } catch (e) {
-                    log("REST Fallback Failed: " + e.message, 'error');
-                }
+                } catch (e) { log("REST Fallback Failed: " + e.message); }
             }
 
             function processSnapshot(snap) {
                 allConfigs = [];
                 snap.forEach(doc => allConfigs.push({ id: doc.id, ...doc.data() }));
                 dataLoaded = true;
-                connStatus.textContent += " (SDK)";
                 renderConfigs();
-
-                // Setup real-time listener if SDK is working
                 onSnapshot(q, (s) => {
                     allConfigs = [];
                     s.forEach(doc => allConfigs.push({ id: doc.id, ...doc.data() }));
@@ -261,12 +220,10 @@
             function renderConfigs() {
                 if (!dataLoaded) return;
                 const filtered = currentCategory === 'all' ? allConfigs : allConfigs.filter(c => c.category === currentCategory);
-
                 if (filtered.length === 0) {
                     configList.innerHTML = `<div class="col-span-full glass p-12 text-center text-xl">${allConfigs.length === 0 ? 'No configurations found yet.' : 'No results in this category.'}</div>`;
                     return;
                 }
-
                 configList.innerHTML = '';
                 filtered.forEach((data) => {
                     const div = document.createElement('div');
@@ -280,7 +237,6 @@
                             </div>`;
                         }
                     } catch (e) { }
-
                     div.innerHTML = `
                         <div>
                             <div class="flex justify-between items-start">
@@ -320,8 +276,7 @@
                     await updateDoc(docRef, { downloads: increment(1) });
                 } catch (e) { alert("Download failed."); }
             };
-
-        } catch (e) { log("Init Error: " + e.message, 'error'); }
+        } catch (e) { log("Init Error: " + e.message); }
     </script>
 </body>
 
