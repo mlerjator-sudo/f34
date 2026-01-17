@@ -93,78 +93,64 @@
                 class="w-full py-4 rounded-2xl bg-white text-black font-bold hover:bg-slate-200 transition-colors">Logout</button>
         </div>
     </div>
-
-    <div id="main-content">
-        <!-- Header -->
-        <header class="max-w-7xl mx-auto px-6 pt-12 pb-8 flex flex-col md:flex-row justify-between items-center gap-8">
-            <div class="text-center md:text-left flex flex-col md:flex-row items-center gap-6">
-                <img src="logo.png" alt="F34 Logo" class="w-20 h-20 rounded-3xl shadow-2xl border border-white/10">
-                <div>
-                    <h1
-                        class="text-5xl font-black tracking-tighter bg-gradient-to-r from-white to-slate-500 bg-clip-text text-transparent text-white">
-                        F34 DI-Community</h1>
-                    <p class="text-slate-400 mt-2 text-lg font-light" id="t-subtitle">Discover and download shared
-                        configurations</p>
-                </div>
-            </div>
-            <div class="flex flex-wrap justify-center items-center gap-4">
-                <!-- Language Switcher -->
-                <div class="glass p-1 flex gap-1 text-[10px] font-bold uppercase tracking-widest">
-                    <button onclick="setLang('en')" id="lang-en"
-                        class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">EN</button>
-                    <button onclick="setLang('ko')" id="lang-ko"
-                        class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">KO</button>
-                    <button onclick="setLang('jp')" id="lang-jp"
-                        class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">JP</button>
-                    <button onclick="setLang('cn')" id="lang-cn"
-                        class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">CN</button>
-                    <button onclick="setLang('es')" id="lang-es"
-                        class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">ES</button>
-                    <button onclick="setLang('fr')" id="lang-fr"
-                        class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">FR</button>
-                    <button onclick="setLang('de')" id="lang-de"
-                        class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">DE</button>
-                    <button onclick="setLang('ru')" id="lang-ru"
-                        class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">RU</button>
-                </div>
-
-                <!-- Auth Button / Profile -->
-                <button id="auth-btn"
-                    class="glass px-6 py-2.5 font-bold hover:bg-white/10 transition-all border border-white/10">
-                    Login with Google
-                </button>
-
-                <!-- My Configs Button -->
-                <button id="my-configs-btn" onclick="openMyConfigsModal()"
-                    class="glass px-6 py-3 font-bold hover:bg-white/5 transition-all hidden" id="t-my-configs">My
-                    Configs</button>
-
-                <button onclick="openSupportModal()" class="glass px-6 py-3 font-bold hover:bg-white/5 transition-all"
-                    id="t-support">Support</button>
-                <a href="admin.html" id="t-admin-panel"
-                    class="glass px-6 py-3 font-bold hover:bg-white/5 transition-all hidden">Admin Panel</a>
-            </div>
-        </header>
-
-        <!-- Categories -->
-        <div class="max-w-7xl mx-auto px-6 mb-12">
-            <div id="category-list" class="flex flex-wrap gap-2 justify-center">
-                <!-- Categories will be injected here -->
-            </div>
+    <div class="flex flex-wrap justify-center items-center gap-4">
+        <!-- Language Switcher -->
+        <div class="glass p-1 flex gap-1 text-[10px] font-bold uppercase tracking-widest">
+            <button onclick="setLang('en')" id="lang-en"
+                class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">EN</button>
+            <button onclick="setLang('ko')" id="lang-ko"
+                class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">KO</button>
+            <button onclick="setLang('jp')" id="lang-jp"
+                class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">JP</button>
+            <button onclick="setLang('cn')" id="lang-cn"
+                class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">CN</button>
+            <button onclick="setLang('es')" id="lang-es"
+                class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">ES</button>
+            <button onclick="setLang('fr')" id="lang-fr"
+                class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">FR</button>
+            <button onclick="setLang('de')" id="lang-de"
+                class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">DE</button>
+            <button onclick="setLang('ru')" id="lang-ru"
+                class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">RU</button>
         </div>
 
-        <!-- Main Grid -->
-        <main class="max-w-7xl mx-auto px-6">
-            <div id="config-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="col-span-full glass p-20 text-center">
-                    <div id="loading-spinner"
-                        class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mb-4">
-                    </div>
-                    <p class="text-xl text-slate-400 font-light" id="t-loading">Loading configurations...</p>
-                    <p class="text-xs text-slate-600 mt-4" id="debug-status"></p>
+        <!-- Auth Button / Profile -->
+        <button id="auth-btn"
+            class="glass px-6 py-2.5 font-bold hover:bg-white/10 transition-all border border-white/10">
+            Login with Google
+        </button>
+
+        <!-- My Configs Button -->
+        <button id="my-configs-btn" onclick="openMyConfigsModal()"
+            class="glass px-6 py-3 font-bold hover:bg-white/5 transition-all hidden" id="t-my-configs">My
+            Configs</button>
+
+        <button onclick="openSupportModal()" class="glass px-6 py-3 font-bold hover:bg-white/5 transition-all"
+            id="t-support">Support</button>
+        <a href="admin.html" id="t-admin-panel"
+            class="glass px-6 py-3 font-bold hover:bg-white/5 transition-all hidden">Admin Panel</a>
+    </div>
+    </header>
+
+    <!-- Categories -->
+    <div class="max-w-7xl mx-auto px-6 mb-12">
+        <div id="category-list" class="flex flex-wrap gap-2 justify-center">
+            <!-- Categories will be injected here -->
+        </div>
+    </div>
+
+    <!-- Main Grid -->
+    <main class="max-w-7xl mx-auto px-6">
+        <div id="config-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="col-span-full glass p-20 text-center">
+                <div id="loading-spinner"
+                    class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mb-4">
                 </div>
+                <p class="text-xl text-slate-400 font-light" id="t-loading">Loading configurations...</p>
+                <p class="text-xs text-slate-600 mt-4" id="debug-status"></p>
             </div>
-        </main>
+        </div>
+    </main>
     </div>
 
     <!-- Details Modal -->
