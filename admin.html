@@ -6,21 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>F34 Admin Panel</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-
         body {
-            font-family: 'Inter', sans-serif;
-            background: radial-gradient(circle at top left, #1a1c2c, #0d0e14);
-            color: #e2e8f0;
-            min-height: 100vh;
+            font-family: 'Outfit', sans-serif;
+            background: #020617;
+            color: #f8fafc;
+            overflow-x: hidden;
         }
 
         .glass {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.02);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
         }
 
         .card-hover {
@@ -28,695 +27,603 @@
         }
 
         .card-hover:hover {
-            transform: translateY(-4px);
             background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
         }
 
-        .btn-approve {
-            background: linear-gradient(135deg, #10b981, #059669);
-        }
-
-        .btn-reject {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-        }
-
-        .btn-blue {
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
-        }
-
-        .btn-warning {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-        }
-
-        .icon-badge {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .filter-btn.active {
-            background: rgba(59, 130, 246, 0.2);
-            border-color: rgba(59, 130, 246, 0.5);
-            color: #60a5fa;
+        .tab-btn {
+            transition: all 0.3s ease;
+            position: relative;
         }
 
         .tab-btn.active {
-            border-bottom: 2px solid #3b82f6;
             color: #3b82f6;
         }
 
-        .modal-backdrop {
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(8px);
-        }
-
-        .modal-content {
-            background: rgba(20, 22, 35, 0.95);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        }
-
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.02);
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #3b82f6;
+            border-radius: 2px;
         }
     </style>
 </head>
 
-<body class="p-4 md:p-8">
-    <div id="login-screen" class="max-w-md mx-auto mt-20 glass p-8 text-center">
-        <h1 id="t-admin-login"
-            class="text-3xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
-            F34 Admin Login</h1>
-        <div class="flex flex-wrap justify-center gap-2 mb-6">
-            <button onclick="setLang('en')" id="lang-en"
-                class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">EN</button>
-            <button onclick="setLang('ko')" id="lang-ko"
-                class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">KO</button>
-            <button onclick="setLang('jp')" id="lang-jp"
-                class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">JP</button>
-            <button onclick="setLang('cn')" id="lang-cn"
-                class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">CN</button>
-            <button onclick="setLang('es')" id="lang-es"
-                class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">ES</button>
-            <button onclick="setLang('fr')" id="lang-fr"
-                class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">FR</button>
-            <button onclick="setLang('de')" id="lang-de"
-                class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">DE</button>
-            <button onclick="setLang('ru')" id="lang-ru"
-                class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">RU</button>
+<body class="min-h-screen">
+    <!-- Login Screen -->
+    <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center p-6 bg-[#020617]">
+        <div class="glass p-12 max-w-md w-full text-center">
+            <h1 class="text-4xl font-black mb-2 tracking-tighter">Admin Access</h1>
+            <p class="text-slate-500 mb-8">Please login with an authorized account</p>
+            <button id="login-btn"
+                class="w-full py-4 rounded-2xl bg-white text-black font-bold hover:bg-slate-200 transition-colors">
+                Login with Google
+            </button>
         </div>
-        <button id="login-btn"
-            class="w-full py-3 px-6 rounded-xl bg-white text-black font-semibold hover:bg-slate-200 transition-colors flex items-center justify-center gap-3">
-            <svg class="w-5 h-5" viewBox="0 0 24 24">
-                <path fill="#4285F4"
-                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                <path fill="#34A853"
-                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                <path fill="#FBBC05"
-                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" />
-                <path fill="#EA4335"
-                    d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-            </svg>
-            <span id="t-login-text">Sign in with Google</span>
-        </button>
     </div>
 
-    <div id="admin-panel" class="hidden max-w-6xl mx-auto">
-        <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-6">
-            <h1 id="t-mod-panel" class="text-4xl font-bold">Moderation Panel</h1>
-            <div class="flex flex-wrap items-center gap-4">
-                <div class="flex flex-wrap glass p-1 rounded-xl max-w-[280px] md:max-w-none">
-                    <button onclick="setLang('en')" id="lang-en-panel"
-                        class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">EN</button>
-                    <button onclick="setLang('ko')" id="lang-ko-panel"
-                        class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">KO</button>
-                    <button onclick="setLang('jp')" id="lang-jp-panel"
-                        class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">JP</button>
-                    <button onclick="setLang('cn')" id="lang-cn-panel"
-                        class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">CN</button>
-                    <button onclick="setLang('es')" id="lang-es-panel"
-                        class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">ES</button>
-                    <button onclick="setLang('fr')" id="lang-fr-panel"
-                        class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">FR</button>
-                    <button onclick="setLang('de')" id="lang-de-panel"
-                        class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">DE</button>
-                    <button onclick="setLang('ru')" id="lang-ru-panel"
-                        class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">RU</button>
+    <!-- Admin Panel -->
+    <div id="admin-panel" class="hidden">
+        <!-- Header -->
+        <header class="max-w-7xl mx-auto px-6 pt-12 pb-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-8 mb-12">
+                <div>
+                    <h1 class="text-4xl font-black tracking-tighter">Admin Panel</h1>
+                    <p class="text-slate-500 mt-1">Moderation & System Management</p>
                 </div>
-                <a href="index.html" id="t-hub"
-                    class="px-6 py-2 rounded-lg glass hover:bg-white/10 transition-colors text-sm">Community Hub</a>
-                <button id="auth-btn"
-                    class="px-6 py-2 rounded-lg glass hover:bg-white/10 transition-colors text-sm">Login with
-                    Google</button>
+                <div class="flex items-center gap-6">
+                    <nav class="glass p-1 flex gap-1 text-sm font-bold">
+                        <button onclick="switchTab('configs')" id="tab-configs"
+                            class="tab-btn active px-6 py-2 rounded-xl hover:bg-white/5 transition-all">Configurations</button>
+                        <button onclick="switchTab('players')" id="tab-players"
+                            class="tab-btn px-6 py-2 rounded-xl hover:bg-white/5 transition-all">Players</button>
+                        <button onclick="switchTab('support')" id="tab-support"
+                            class="tab-btn px-6 py-2 rounded-xl hover:bg-white/5 transition-all">Support Center</button>
+                    </nav>
+                    <div class="glass p-1 flex gap-1 text-[10px] font-bold uppercase tracking-widest">
+                        <button onclick="setLang('en')" id="lang-en"
+                            class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">EN</button>
+                        <button onclick="setLang('ko')" id="lang-ko"
+                            class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">KO</button>
+                    </div>
+                    <button id="auth-btn"
+                        class="glass px-6 py-2.5 font-bold hover:bg-white/10 transition-all border border-white/10"></button>
+                </div>
             </div>
         </header>
 
-        <!-- Tabs -->
-        <div class="flex flex-wrap gap-4 md:gap-8 border-b border-white/10 mb-8">
-            <button onclick="switchTab('configs')" id="tab-configs"
-                class="tab-btn active pb-4 font-bold text-lg transition-all">Configurations</button>
-            <button onclick="switchTab('players')" id="tab-players"
-                class="tab-btn pb-4 font-bold text-lg transition-all">Players</button>
-            <button onclick="switchTab('support')" id="tab-support"
-                class="tab-btn pb-4 font-bold text-lg transition-all">Support Center</button>
-        </div>
-
-        <!-- Configs Section -->
-        <div id="section-configs">
-            <div class="mb-8">
-                <div id="category-filter" class="flex flex-wrap gap-2">
-                    <!-- Categories injected via JS -->
+        <main class="max-w-7xl mx-auto px-6 pb-20">
+            <!-- Section: Configurations -->
+            <div id="section-configs" class="space-y-6">
+                <div class="flex justify-between items-end mb-8">
+                    <h2 class="text-2xl font-bold" id="t-pending-title">Pending Approvals</h2>
+                </div>
+                <div id="config-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Configs will be injected here -->
                 </div>
             </div>
-            <div id="config-list" class="space-y-6">
-                <div id="t-loading" class="glass p-12 text-center text-xl animate-pulse">
-                    Loading pending configurations...
+
+            <!-- Section: Players -->
+            <div id="section-players" class="hidden space-y-6">
+                <div class="flex justify-between items-end mb-8">
+                    <h2 class="text-2xl font-bold" id="t-players-title">Player Management</h2>
+                </div>
+                <div class="glass overflow-hidden">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr
+                                class="border-b border-white/5 text-[10px] uppercase tracking-widest text-slate-500 font-bold">
+                                <th class="px-6 py-4">Player</th>
+                                <th class="px-6 py-4">Email</th>
+                                <th class="px-6 py-4">Warnings</th>
+                                <th class="px-6 py-4">Status</th>
+                                <th class="px-6 py-4 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="player-list">
+                            <!-- Players will be injected here -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        </div>
 
-        <!-- Players Section -->
-        <div id="section-players" class="hidden">
-            <div class="glass overflow-x-auto">
-                <table class="w-full text-left min-w-[600px]">
-                    <thead class="bg-white/5 border-b border-white/10">
-                        <tr>
-                            <th class="p-4 font-bold">Player</th>
-                            <th class="p-4 font-bold">Email</th>
-                            <th class="p-4 font-bold">Warnings</th>
-                            <th class="p-4 font-bold">Status</th>
-                            <th class="p-4 font-bold text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="player-list">
-                        <!-- Players injected via JS -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Support Section -->
-        <div id="section-support" class="hidden">
-            <div id="support-list" class="space-y-6">
-                <div class="glass p-12 text-center text-xl animate-pulse">
-                    Loading support tickets...
+            <!-- Section: Support Center -->
+            <div id="section-support" class="hidden space-y-6">
+                <div class="flex justify-between items-end mb-8">
+                    <h2 class="text-2xl font-bold" id="t-support-title">Support Tickets</h2>
+                </div>
+                <div id="support-list" class="grid grid-cols-1 gap-6">
+                    <!-- Tickets will be injected here -->
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 
     <!-- Player Details Modal -->
-    <div id="player-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 modal-backdrop">
-        <div class="modal-content w-full max-w-4xl max-h-[90vh] rounded-3xl overflow-hidden flex flex-col">
-            <div class="p-6 border-b border-white/10 flex justify-between items-center">
-                <h2 id="player-modal-title" class="text-2xl font-bold">Player Management</h2>
-                <button onclick="closePlayerModal()" class="p-2 hover:bg-white/10 rounded-full transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
-                        </path>
-                    </svg>
-                </button>
-            </div>
-            <div class="p-8 overflow-y-auto custom-scrollbar flex flex-col gap-8">
-                <!-- Player Info & Actions -->
-                <div id="player-info-section" class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <!-- Injected via JS -->
-                </div>
-                <!-- Deployed Configs -->
-                <div>
-                    <h3 class="text-xl font-bold mb-4">Deployed Configurations</h3>
-                    <div id="player-configs-list" class="space-y-4">
-                        <!-- Injected via JS -->
-                    </div>
-                </div>
-            </div>
-            <div class="p-6 border-t border-white/10 flex justify-end">
-                <button onclick="closePlayerModal()"
-                    class="px-6 py-2 rounded-xl glass hover:bg-white/10 transition-colors">Close</button>
+    <div id="player-modal" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closePlayerModal()"></div>
+        <div class="glass max-w-4xl w-full max-h-[90vh] overflow-y-auto relative z-10 p-8 md:p-12 animate-fade-in">
+            <div id="player-modal-content">
+                <!-- Content injected here -->
             </div>
         </div>
     </div>
+    noConfigs: "No pending configurations.",
+    approve: "Approve",
+    reject: "Reject",
+    playersTitle: "Player Management",
+    supportTitle: "Support Tickets",
+    noTickets: "No support tickets found.",
+    ticketTitle: "Support Ticket",
+    ticketUser: "From",
+    ticketDate: "Date",
+    ticketDelete: "Delete Ticket",
+    playerBan: "Ban Player",
+    playerUnban: "Unban Player",
+    playerWarn: "Warn",
+    playerDelete: "Delete Account",
+    playerConfigs: "Deployed Configurations",
+    banHours: "Hours",
+    banStatus: "Banned until",
+    activeStatus: "Active",
+    categories: { General: "General" }
+    },
+    ko: {
+    pendingTitle: "승인 대기 중인 설정",
+    noConfigs: "대기 중인 설정이 없습니다.",
+    approve: "승인",
+    reject: "거절",
+    playersTitle: "플레이어 관리",
+    supportTitle: "고객 센터 문의",
+    noTickets: "접수된 문의가 없습니다.",
+    ticketTitle: "고객 문의",
+    ticketUser: "작성자",
+    ticketDate: "날짜",
+    ticketDelete: "문의 삭제",
+    playerBan: "플레이어 차단",
+    playerUnban: "차단 해제",
+    playerWarn: "경고",
+    playerDelete: "계정 삭제",
+    playerConfigs: "배포한 설정 목록",
+    banHours: "시간",
+    banStatus: "차단 만료:",
+    activeStatus: "정상",
+    categories: { General: "일반" }
+    }
+    };
 
-    <script type="module">
-        const log = (msg) => console.log(`[F34-Admin] ${msg}`);
+    let currentLang = localStorage.getItem('f34_lang') || 'en';
+    let db, auth, provider;
+    let currentUser = null;
+    let mcAccount = null;
+    let allConfigs = [];
+    let allPlayers = [];
+    let allTickets = [];
+    let dataLoaded = false;
+    let currentTab = 'configs';
 
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithPopup, signInWithRedirect, getRedirectResult, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { initializeFirestore, collection, query, where, onSnapshot, getDocs, doc, updateDoc, deleteDoc, getDoc, setDoc, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    function log(msg) { console.log(`[F34 Admin] ${msg}`); }
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyA827pUzqfTpGpGbT9uKXKEjZo3hYl5ENo",
-            authDomain: "f34-di.firebaseapp.com",
-            projectId: "f34-di",
-            storageBucket: "f34-di.firebasestorage.app",
-            messagingSenderId: "660590227115",
-            appId: "1:660590227115:web:0f1ca3aa9464f2406c11ee"
-        };
+    window.setLang = (lang) => {
+    currentLang = lang;
+    localStorage.setItem('f34_lang', lang);
+    updateUI();
+    };
 
-        // --- Global State ---
-        let db, auth, provider;
-        const ADMIN_UID = "3HhMIE2eDTcev32kChg08g1GjNO2";
-        let currentUser = null;
-        let mcAccount = null;
-        let currentCategory = 'all';
-        let allConfigs = [];
-        let allPlayers = [];
-        let allTickets = [];
-        let dataLoaded = false;
-        let currentLang = localStorage.getItem('f34_lang') || 'en';
-        let activeTab = 'configs';
+    window.switchTab = (tab) => {
+    currentTab = tab;
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById(`tab-${tab}`).classList.add('active');
 
-        const CATEGORIES = ["Adventure", "Horror", "Decoration", "Economy", "Equipment", "Food", "Game Mechanics", "Library", "Magic", "Management", "Minigame", "Mobs", "Optimization", "Social", "Storage", "Technology", "Transportation", "Utility", "World Gen", "General", "Convenience"];
+    document.getElementById('section-configs').classList.add('hidden');
+    document.getElementById('section-players').classList.add('hidden');
+    document.getElementById('section-support').classList.add('hidden');
+    document.getElementById(`section-${tab}`).classList.remove('hidden');
 
-        const i18n = {
-            en: {
-                adminLogin: "F34 Admin Login", loginText: "Sign in with Google", modPanel: "Moderation Panel", hub: "Community Hub", login: "Login with Google", logout: "Logout", admin: "Admin", all: "All", loading: "Loading pending configurations...", approve: "Approve", reject: "Reject", raw: "View Raw JSON", noPending: "No pending configurations.", noResults: "No results in this category.", noDesc: "No description.",
-                players: "Players", configs: "Configurations", support: "Support Center", email: "Email", warnings: "Warnings", status: "Status", actions: "Actions", ban: "Ban", unban: "Unban", warn: "Warn", delete: "Delete Account", banDuration: "Ban Duration (hours)", active: "Active", banned: "Banned",
-                ticketTitle: "Support Ticket", ticketUser: "User", ticketDate: "Date", ticketContent: "Message", ticketDelete: "Delete Ticket", noTickets: "No support tickets found.",
-                categories: { Adventure: "Adventure", Horror: "Horror", Decoration: "Decoration", Economy: "Economy", Equipment: "Equipment", Food: "Food", "Game Mechanics": "Game Mechanics", Library: "Library", Magic: "Magic", Management: "Management", Minigame: "Minigame", Mobs: "Mobs", Optimization: "Optimization", Social: "Social", Storage: "Storage", Technology: "Technology", Transportation: "Transportation", Utility: "Utility", "World Gen": "World Gen", General: "General", Convenience: "Convenience" }
-            },
-            ko: {
-                adminLogin: "F34 관리자 로그인", loginText: "Google로 로그인", modPanel: "관리자 패널", hub: "커뮤니티 허브", login: "Google로 로그인", logout: "로그아웃", admin: "관리자", all: "전체", loading: "대기 중인 설정을 불러오는 중...", approve: "승인", reject: "거절", raw: "원본 JSON 보기", noPending: "대기 중인 설정이 없습니다.", noResults: "이 카테고리에 결과가 없습니다.", noDesc: "설명이 없습니다.",
-                players: "플레이어", configs: "설정 목록", support: "고객 센터", email: "이메일", warnings: "경고", status: "상태", actions: "작업", ban: "차단", unban: "차단 해제", warn: "경고", delete: "계정 삭제", banDuration: "차단 시간 (시간)", active: "활성", banned: "차단됨",
-                ticketTitle: "고객 문의", ticketUser: "사용자", ticketDate: "날짜", ticketContent: "내용", ticketDelete: "문의 삭제", noTickets: "등록된 문의가 없습니다.",
-                categories: { Adventure: "모험", Horror: "공포", Decoration: "장식", Economy: "경제", Equipment: "장비", Food: "음식", "Game Mechanics": "게임 메커니즘", Library: "라이브러리", Magic: "마법", Management: "관리", Minigame: "미니게임", Mobs: "몹", Optimization: "최적화", Social: "소셜", Storage: "저장", Technology: "기술", Transportation: "이동수단", Utility: "유틸리티", "World Gen": "월드 생성", General: "일반", Convenience: "편의성" }
-            }
-        };
+    if (tab === 'players') fetchPlayers();
+    if (tab === 'support') fetchTickets();
+    };
 
-        // --- UI Functions ---
-        window.setLang = (lang) => {
-            currentLang = lang;
-            localStorage.setItem('f34_lang', lang);
-            updateUI();
-        };
+    function updateUI() {
+    const t = i18n[currentLang] || i18n.en;
+    document.getElementById('t-pending-title').textContent = t.pendingTitle;
+    document.getElementById('t-players-title').textContent = t.playersTitle;
+    document.getElementById('t-support-title').textContent = t.supportTitle;
 
-        window.switchTab = (tab) => {
-            activeTab = tab;
-            document.getElementById('section-configs').classList.toggle('hidden', tab !== 'configs');
-            document.getElementById('section-players').classList.toggle('hidden', tab !== 'players');
-            document.getElementById('section-support').classList.toggle('hidden', tab !== 'support');
-            document.getElementById('tab-configs').classList.toggle('active', tab === 'configs');
-            document.getElementById('tab-players').classList.toggle('active', tab === 'players');
-            document.getElementById('tab-support').classList.toggle('active', tab === 'support');
-            if (tab === 'players') fetchPlayers();
-            if (tab === 'support') fetchTickets();
-        };
+    document.querySelectorAll('[id^="lang-"]').forEach(btn => {
+    btn.classList.remove('bg-white/10', 'text-blue-400');
+    if (btn.id === `lang-${currentLang}`) btn.classList.add('bg-white/10', 'text-blue-400');
+    });
 
-        function updateUI() {
-            const t = i18n[currentLang] || i18n.en;
-            document.querySelectorAll('[id^="t-"]').forEach(el => {
-                const key = el.id.replace('t-', '').replace(/-([a-z])/g, (g) => g[1].toUpperCase());
-                if (t[key]) el.textContent = t[key];
-            });
+    renderConfigs();
+    renderPlayers();
+    renderTickets();
+    }
 
-            const authBtn = document.getElementById('auth-btn');
-            if (authBtn && !currentUser) authBtn.textContent = t.login;
+    function renderConfigs() {
+    if (!dataLoaded) return;
+    const t = i18n[currentLang] || i18n.en;
+    const configList = document.getElementById('config-list');
+    if (!configList) return;
 
-            renderCategories();
-            renderConfigs();
-            if (activeTab === 'players') renderPlayers();
-            if (activeTab === 'support') renderTickets();
-        }
+    if (allConfigs.length === 0) {
+    configList.innerHTML = `<div class="col-span-full glass p-12 text-center text-xl">${t.noConfigs}</div>`;
+    return;
+    }
 
-        function renderCategories() {
-            const t = i18n[currentLang] || i18n.en;
-            const filterContainer = document.getElementById('category-filter');
-            if (!filterContainer) return;
-            filterContainer.innerHTML = '';
+    configList.innerHTML = '';
+    allConfigs.forEach(data => {
+    const div = document.createElement('div');
+    div.className = "glass p-6 card-hover flex flex-col justify-between";
+    div.innerHTML = `
+    <div>
+        <div class="flex justify-between items-start mb-4">
+            <div>
+                <h3 class="text-xl font-bold">${data.name || 'Untitled'}</h3>
+                <span class="text-[10px] text-blue-400 font-bold uppercase tracking-wider">${data.category}</span>
+            </div>
+        </div>
+        <p class="text-slate-400 text-xs">by ${data.author}</p>
+        <p class="mt-4 text-sm text-slate-300 line-clamp-3">"${data.description || 'No description'}"</p>
+    </div>
+    <div class="flex gap-3 mt-8">
+        <button onclick="updateStatus('${data.id}', 'approved')"
+            class="flex-1 py-3 rounded-xl bg-blue-600 font-bold hover:bg-blue-500 transition-colors">${t.approve}</button>
+        <button onclick="updateStatus('${data.id}', 'rejected')"
+            class="flex-1 py-3 rounded-xl glass font-bold hover:bg-red-500/20 text-red-400 transition-colors">${t.reject}</button>
+    </div>
+    `;
+    configList.appendChild(div);
+    });
+    }
 
-            const allBtn = document.createElement('button');
-            allBtn.className = `filter-btn px-4 py-2 rounded-lg glass text-[10px] font-bold uppercase tracking-wider transition-all ${currentCategory === 'all' ? 'active' : ''}`;
-            allBtn.textContent = t.all;
-            allBtn.onclick = () => window.setFilter('all');
-            filterContainer.appendChild(allBtn);
+    // --- Player Management Functions ---
+    async function fetchPlayers() {
+    try {
+    const snap = await getDocs(collection(db, "users"));
+    allPlayers = [];
+    snap.forEach(doc => allPlayers.push({ email: doc.id, ...doc.data() }));
+    renderPlayers();
+    } catch (e) { log("Fetch Players Error: " + e.message); }
+    }
 
-            CATEGORIES.forEach(cat => {
-                const btn = document.createElement('button');
-                btn.className = `filter-btn px-4 py-2 rounded-lg glass text-[10px] font-bold uppercase tracking-wider transition-all ${currentCategory === cat ? 'active' : ''}`;
-                btn.textContent = t.categories[cat] || cat;
-                btn.onclick = () => window.setFilter(cat);
-                filterContainer.appendChild(btn);
-            });
-        }
+    function renderPlayers() {
+    const t = i18n[currentLang] || i18n.en;
+    const playerList = document.getElementById('player-list');
+    if (!playerList) return;
+    playerList.innerHTML = '';
+    allPlayers.forEach(player => {
+    const isBanned = player.ban_until && player.ban_until > Date.now();
+    const tr = document.createElement('tr');
+    tr.className = "border-b border-white/5 hover:bg-white/5 transition-colors cursor-pointer";
+    tr.onclick = () => showPlayerDetails(player.email);
+    tr.innerHTML = `
+    <td class="px-6 py-4">
+        <div class="flex items-center gap-3">
+            <img src="https://mc-heads.net/avatar/${player.mc_name}/32" class="w-8 h-8 rounded border border-white/10">
+            <span class="font-bold">${player.mc_name}</span>
+        </div>
+    </td>
+    <td class="px-6 py-4 text-slate-400 text-sm">${player.email}</td>
+    <td class="px-6 py-4"><span
+            class="px-2 py-1 rounded bg-yellow-500/10 text-yellow-500 text-xs font-bold">${player.warnings || 0}</span>
+    </td>
+    <td class="px-6 py-4">
+        <span
+            class="px-2 py-1 rounded text-xs font-bold ${isBanned ? 'bg-red-500/10 text-red-500' : 'bg-green-500/10 text-green-500'}">
+            ${isBanned ? t.banStatus + ' ' + new Date(player.ban_until).toLocaleDateString() : t.activeStatus}
+        </span>
+    </td>
+    <td class="px-6 py-4 text-right">
+        <button class="text-blue-400 font-bold text-xs hover:underline">Manage</button>
+    </td>
+    `;
+    playerList.appendChild(tr);
+    });
+    }
 
-        window.setFilter = (cat) => {
-            currentCategory = cat;
-            renderCategories();
-            renderConfigs();
-        }
+    window.showPlayerDetails = async (email) => {
+    const player = allPlayers.find(p => p.email === email);
+    if (!player) return;
+    const t = i18n[currentLang] || i18n.en;
+    const modal = document.getElementById('player-modal');
+    const content = document.getElementById('player-modal-content');
+    const isBanned = player.ban_until && player.ban_until > Date.now();
 
-        function renderConfigs() {
-            if (!dataLoaded) return;
-            const t = i18n[currentLang] || i18n.en;
-            const configList = document.getElementById('config-list');
-            if (!configList) return;
+    content.innerHTML = `
+    <div class="flex justify-between items-start mb-12">
+        <div class="flex items-center gap-6">
+            <img src="https://mc-heads.net/avatar/${player.mc_name}/64"
+                class="w-16 h-16 rounded-2xl border border-white/10">
+            <div>
+                <h2 class="text-3xl font-black tracking-tighter">${player.mc_name}</h2>
+                <p class="text-slate-500">${player.email}</p>
+            </div>
+        </div>
+        <button onclick="closePlayerModal()" class="text-slate-400 hover:text-white transition-colors">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+    </div>
 
-            const filtered = currentCategory === 'all' ? allConfigs : allConfigs.filter(c => c.category === currentCategory);
-            if (filtered.length === 0) {
-                configList.innerHTML = `<div class="glass p-12 text-center text-xl">${allConfigs.length === 0 ? t.noPending : t.noResults}</div>`;
-                return;
-            }
-            configList.innerHTML = '';
-            filtered.forEach((data) => {
-                const div = document.createElement('div');
-                div.className = `glass p-6 card-hover`;
-                let configSummary = '', rawJson = '';
-                try {
-                    const config = JSON.parse(data.config_json);
-                    rawJson = JSON.stringify(config, null, 2);
-                    if (config.buttons) {
-                        configSummary = `<div class="mt-4 flex flex-wrap gap-3">
-                            ${config.buttons.map(btn => `<div class="icon-badge p-3 rounded-xl flex flex-col gap-2 min-w-[150px]">
-                                <div class="flex items-center gap-2"><span class="font-bold text-sm">${btn.name || 'Unknown'}</span></div>
-                                <div class="text-[11px] font-mono text-blue-300 bg-blue-500/10 p-2 rounded border border-blue-500/20 break-all leading-tight">${btn.command || 'No Command'}</div>
-                            </div>`).join('')}
-                        </div>`;
-                    }
-                } catch (e) { }
-                div.innerHTML = `
-                    <div class="flex flex-col md:flex-row justify-between gap-6">
-                        <div class="flex-1">
-                            <div class="flex items-center gap-3">
-                                <h3 class="text-2xl font-bold">${data.name || 'Untitled'}</h3>
-                                <span class="px-2 py-1 rounded-md bg-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-wider border border-blue-500/30">${t.categories[data.category] || data.category || t.categories.General}</span>
-                            </div>
-                            <p class="text-slate-400 text-sm">by ${data.author || 'Unknown'}</p>
-                            <p class="mt-3 text-slate-300 italic">"${data.description || t.noDesc}"</p>
-                            ${configSummary}
-                        </div>
-                        <div class="flex md:flex-col gap-3 justify-center items-center">
-                            <button onclick="updateStatus('${data.id}', 'approved')" class="btn-approve px-8 py-3 rounded-xl font-bold text-white transition-transform active:scale-95 w-full md:w-32">${t.approve}</button>
-                            <button onclick="updateStatus('${data.id}', 'rejected')" class="btn-reject px-8 py-3 rounded-xl font-bold text-white transition-transform active:scale-95 w-full md:w-32">${t.reject}</button>
-                        </div>
-                    </div>
-                    <details class="mt-6">
-                        <summary class="text-xs text-slate-500 cursor-pointer hover:text-slate-300 uppercase tracking-widest font-bold">${t.raw}</summary>
-                        <pre class="mt-4 p-4 rounded-xl bg-black/40 text-xs font-mono overflow-x-auto border border-white/5 text-blue-300">${rawJson}</pre>
-                    </details>`;
-                configList.appendChild(div);
-            });
-        }
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        <div class="glass p-6">
+            <h4 class="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-4">${t.playerBan}</h4>
+            <div class="flex gap-2">
+                <input type="number" id="ban-hours" placeholder="${t.banHours}"
+                    class="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-blue-500">
+                <button onclick="banPlayer('${player.email}')"
+                    class="px-4 py-2 bg-red-600 rounded-xl font-bold text-sm hover:bg-red-500 transition-colors">Ban</button>
+            </div>
+            ${isBanned ? `<button onclick="unbanPlayer('${player.email}')"
+                class="w-full mt-2 py-2 glass text-blue-400 font-bold text-sm hover:bg-white/5 transition-colors">${t.playerUnban}</button>`
+            : ''}
+        </div>
+        <div class="glass p-6">
+            <h4 class="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-4">${t.playerWarn}</h4>
+            <button onclick="warnPlayer('${player.email}')"
+                class="w-full py-2 bg-yellow-600 rounded-xl font-bold text-sm hover:bg-yellow-500 transition-colors">${t.playerWarn}
+                (+1)</button>
+            <p class="text-center mt-2 text-xs text-slate-500">Current Warnings: ${player.warnings || 0}</p>
+        </div>
+        <div class="glass p-6">
+            <h4 class="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-4">${t.playerDelete}</h4>
+            <button onclick="deletePlayer('${player.email}')"
+                class="w-full py-2 border border-red-500/20 text-red-500 rounded-xl font-bold text-sm hover:bg-red-500/10 transition-colors">${t.playerDelete}</button>
+        </div>
+    </div>
 
-        // --- Player Management Functions ---
-        async function fetchPlayers() {
-            try {
-                const snap = await getDocs(collection(db, "users"));
-                allPlayers = [];
-                snap.forEach(doc => allPlayers.push({ email: doc.id, ...doc.data() }));
-                renderPlayers();
-            } catch (e) { log("Fetch Players Error: " + e.message); }
-        }
+    <div>
+        <h3 class="text-xl font-bold mb-6">${t.playerConfigs}</h3>
+        <div id="player-configs-list" class="space-y-4">
+            <div class="animate-pulse text-slate-500">Loading configurations...</div>
+        </div>
+    </div>
+    `;
 
-        function renderPlayers() {
-            const t = i18n[currentLang] || i18n.en;
-            const playerList = document.getElementById('player-list');
-            if (!playerList) return;
-            playerList.innerHTML = '';
+    // Fetch player's configs
+    const configsList = document.getElementById('player-configs-list');
+    try {
+    const q = query(collection(db, "shared_configs"), where("author", "==", player.email));
+    const snap = await getDocs(q);
+    if (snap.empty) {
+    configsList.innerHTML = '<div class="text-slate-500 italic">No configurations deployed.</div>';
+    } else {
+    configsList.innerHTML = '';
+    snap.forEach(doc => {
+    const data = doc.data();
+    const div = document.createElement('div');
+    div.className = "glass p-4 flex justify-between items-center border border-white/5";
+    div.innerHTML = `
+    <div>
+        <div class="font-bold">${data.name || 'Untitled'}</div>
+        <div class="text-xs text-slate-400">${data.category} • ${data.status}</div>
+    </div>
+    <button onclick="deleteConfig('${doc.id}', '${player.email}')"
+        class="p-2 text-red-400 hover:bg-red-400/10 rounded-lg transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+            </path>
+        </svg>
+    </button>
+    `;
+    configsList.appendChild(div);
+    });
+    }
+    } catch (e) { configsList.innerHTML = '<div class="text-red-400">Error loading configs.</div>'; }
 
-            allPlayers.forEach(player => {
-                const isBanned = player.ban_until && player.ban_until > Date.now();
-                const tr = document.createElement('tr');
-                tr.className = "border-b border-white/5 hover:bg-white/5 transition-colors cursor-pointer";
-                tr.onclick = (e) => {
-                    if (e.target.tagName !== 'BUTTON' && e.target.tagName !== 'INPUT') showPlayerDetails(player.email);
-                };
-                tr.innerHTML = `
-                    <td class="p-4">
-                        <div class="flex items-center gap-3">
-                            <img src="https://mc-heads.net/avatar/${player.mc_name}/32" class="w-8 h-8 rounded border border-white/10" alt="Skin">
-                            <span class="font-bold">${player.mc_name || 'Unknown'}</span>
-                        </div>
-                    </td>
-                    <td class="p-4 text-slate-400 text-sm">${player.email}</td>
-                    <td class="p-4"><span class="px-2 py-1 rounded bg-yellow-500/20 text-yellow-400 text-xs font-bold">${player.warnings || 0}</span></td>
-                    <td class="p-4">
-                        <span class="px-2 py-1 rounded text-xs font-bold ${isBanned ? 'bg-red-500/20 text-red-400' : 'bg-green-500/20 text-green-400'}">
-                            ${isBanned ? t.banned : t.active}
-                        </span>
-                    </td>
-                    <td class="p-4 text-right">
-                        <button onclick="showPlayerDetails('${player.email}')" class="px-3 py-1 rounded bg-blue-500/20 text-blue-400 text-xs font-bold hover:bg-blue-500/30 transition-colors">Manage</button>
-                    </td>
-                `;
-                playerList.appendChild(tr);
-            });
-        }
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    };
 
-        window.showPlayerDetails = async (email) => {
-            const player = allPlayers.find(p => p.email === email);
-            if (!player) return;
-            const t = i18n[currentLang] || i18n.en;
+    window.closePlayerModal = () => {
+    document.getElementById('player-modal').classList.add('hidden');
+    document.body.style.overflow = 'auto';
+    };
 
-            const modal = document.getElementById('player-modal');
-            const infoSection = document.getElementById('player-info-section');
-            const configsList = document.getElementById('player-configs-list');
-
-            const isBanned = player.ban_until && player.ban_until > Date.now();
-            const banTimeLeft = isBanned ? Math.ceil((player.ban_until - Date.now()) / (1000 * 60 * 60)) : 0;
-
-            infoSection.innerHTML = `
-                <div class="glass p-6 flex flex-col gap-4">
-                    <div class="flex items-center gap-4">
-                        <img src="https://mc-heads.net/avatar/${player.mc_name}/64" class="w-16 h-16 rounded-xl border border-white/10" alt="Skin">
-                        <div>
-                            <h3 class="text-2xl font-bold">${player.mc_name}</h3>
-                            <p class="text-slate-400 text-sm">${player.email}</p>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4 mt-4">
-                        <div class="icon-badge p-3 rounded-xl">
-                            <div class="text-[10px] opacity-40 uppercase font-bold">${t.warnings}</div>
-                            <div class="text-xl font-bold text-yellow-400">${player.warnings || 0}</div>
-                        </div>
-                        <div class="icon-badge p-3 rounded-xl">
-                            <div class="text-[10px] opacity-40 uppercase font-bold">${t.status}</div>
-                            <div class="text-xl font-bold ${isBanned ? 'text-red-400' : 'text-green-400'}">${isBanned ? t.banned : t.active}</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="glass p-6 flex flex-col gap-4">
-                    <h4 class="font-bold uppercase text-xs opacity-40 tracking-widest">${t.actions}</h4>
-                    <div class="flex flex-col gap-3">
-                        <div class="flex gap-2">
-                            <input type="number" id="ban-hours" placeholder="${t.banDuration}" class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-blue-500">
-                            <button onclick="banPlayer('${player.email}')" class="btn-reject px-6 py-2 rounded-xl font-bold text-sm">${t.ban}</button>
-                        </div>
-                        ${isBanned ? `<button onclick="unbanPlayer('${player.email}')" class="btn-blue px-6 py-2 rounded-xl font-bold text-sm">${t.unban}</button>` : ''}
-                        <button onclick="warnPlayer('${player.email}')" class="btn-warning px-6 py-2 rounded-xl font-bold text-sm">${t.warn}</button>
-                        <button onclick="deletePlayer('${player.email}')" class="bg-red-600/20 text-red-500 border border-red-500/20 px-6 py-2 rounded-xl font-bold text-sm hover:bg-red-600/30 transition-colors">${t.delete}</button>
-                    </div>
-                    ${isBanned ? `<p class="text-xs text-red-400 mt-2">Banned for ${banTimeLeft} more hours.</p>` : ''}
-                </div>
-            `;
-
-            // Fetch player's configs
-            configsList.innerHTML = '<div class="animate-pulse">Loading configurations...</div>';
-            try {
-                const q = query(collection(db, "shared_configs"), where("author", "==", player.email));
-                const snap = await getDocs(q);
-                if (snap.empty) {
-                    configsList.innerHTML = '<div class="text-slate-500 italic">No configurations deployed.</div>';
-                } else {
-                    configsList.innerHTML = '';
-                    snap.forEach(doc => {
-                        const data = doc.data();
-                        const div = document.createElement('div');
-                        div.className = "glass p-4 flex justify-between items-center border border-white/5";
-                        div.innerHTML = `
-                            <div>
-                                <div class="font-bold">${data.name || 'Untitled'}</div>
-                                <div class="text-xs text-slate-400">${data.category} • ${data.status}</div>
-                            </div>
-                            <button onclick="deleteConfig('${doc.id}', '${player.email}')" class="p-2 text-red-400 hover:bg-red-400/10 rounded-lg transition-colors">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                            </button>
-                        `;
-                        configsList.appendChild(div);
-                    });
-                }
-            } catch (e) { configsList.innerHTML = '<div class="text-red-400">Error loading configs.</div>'; }
-
-            modal.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-        };
-
-        window.closePlayerModal = () => {
-            document.getElementById('player-modal').classList.add('hidden');
-            document.body.style.overflow = 'auto';
-        };
-
-        window.banPlayer = async (email) => {
-            const hours = parseInt(document.getElementById('ban-hours').value);
-            if (isNaN(hours) || hours <= 0) return alert("Enter valid hours.");
-            try {
-                const banUntil = Date.now() + (hours * 60 * 60 * 1000);
-                await updateDoc(doc(db, "users", email), { ban_until: banUntil });
-                alert("Player banned.");
-                fetchPlayers();
-                showPlayerDetails(email);
-            } catch (e) { alert("Failed to ban player."); }
-        };
-
-        window.unbanPlayer = async (email) => {
-            try {
-                await updateDoc(doc(db, "users", email), { ban_until: null });
-                alert("Player unbanned.");
-                fetchPlayers();
-                showPlayerDetails(email);
-            } catch (e) { alert("Failed to unban player."); }
+    window.banPlayer = async (email) => {
+    const hours = parseInt(document.getElementById('ban-hours').value);
+    if (isNaN(hours) || hours <= 0) return alert("Enter valid hours."); try { const banUntil=Date.now() + (hours * 60 *
+        60 * 1000); await updateDoc(doc(db, "users" , email), { ban_until: banUntil }); alert("Player banned.");
+        fetchPlayers(); showPlayerDetails(email); } catch (e) { alert("Failed to ban player."); } };
+        window.unbanPlayer=async (email)=> {
+        try {
+        await updateDoc(doc(db, "users", email), { ban_until: null });
+        alert("Player unbanned.");
+        fetchPlayers();
+        showPlayerDetails(email);
+        } catch (e) { alert("Failed to unban player."); }
         };
 
         window.warnPlayer = async (email) => {
-            try {
-                const playerRef = doc(db, "users", email);
-                const snap = await getDoc(playerRef);
-                const warnings = (snap.data().warnings || 0) + 1;
-                await updateDoc(playerRef, { warnings: warnings });
-                alert(`Warning issued. Total: ${warnings}`);
-                fetchPlayers();
-                showPlayerDetails(email);
-            } catch (e) { alert("Failed to warn player."); }
+        try {
+        const playerRef = doc(db, "users", email);
+        const snap = await getDoc(playerRef);
+        const warnings = (snap.data().warnings || 0) + 1;
+        await updateDoc(playerRef, { warnings: warnings });
+        alert(`Warning issued. Total: ${warnings}`);
+        fetchPlayers();
+        showPlayerDetails(email);
+        } catch (e) { alert("Failed to warn player."); }
         };
 
         window.deletePlayer = async (email) => {
-            if (!confirm("Are you sure you want to delete this account? This cannot be undone.")) return;
-            try {
-                await deleteDoc(doc(db, "users", email));
-                alert("Account deleted.");
-                closePlayerModal();
-                fetchPlayers();
-            } catch (e) { alert("Failed to delete account."); }
+        if (!confirm("Are you sure you want to delete this account? This cannot be undone.")) return;
+        try {
+        await deleteDoc(doc(db, "users", email));
+        alert("Account deleted.");
+        closePlayerModal();
+        fetchPlayers();
+        } catch (e) { alert("Failed to delete account."); }
         };
 
         window.deleteConfig = async (id, email) => {
-            if (!confirm("Delete this configuration?")) return;
-            try {
-                await deleteDoc(doc(db, "shared_configs", id));
-                alert("Configuration deleted.");
-                showPlayerDetails(email);
-            } catch (e) { alert("Failed to delete configuration."); }
+        if (!confirm("Delete this configuration?")) return;
+        try {
+        await deleteDoc(doc(db, "shared_configs", id));
+        alert("Configuration deleted.");
+        showPlayerDetails(email);
+        } catch (e) { alert("Failed to delete configuration."); }
         };
 
         // --- Support Center Functions ---
         async function fetchTickets() {
-            try {
-                const q = query(collection(db, "support_tickets"), orderBy("timestamp", "desc"));
-                const snap = await getDocs(q);
-                allTickets = [];
-                snap.forEach(doc => allTickets.push({ id: doc.id, ...doc.data() }));
-                renderTickets();
-            } catch (e) { log("Fetch Tickets Error: " + e.message); }
+        try {
+        const q = query(collection(db, "support_tickets"), orderBy("timestamp", "desc"));
+        const snap = await getDocs(q);
+        allTickets = [];
+        snap.forEach(doc => allTickets.push({ id: doc.id, ...doc.data() }));
+        renderTickets();
+        } catch (e) { log("Fetch Tickets Error: " + e.message); }
         }
 
         function renderTickets() {
-            const t = i18n[currentLang] || i18n.en;
-            const supportList = document.getElementById('support-list');
-            if (!supportList) return;
+        const t = i18n[currentLang] || i18n.en;
+        const supportList = document.getElementById('support-list');
+        if (!supportList) return;
 
-            if (allTickets.length === 0) {
-                supportList.innerHTML = `<div class="glass p-12 text-center text-xl">${t.noTickets}</div>`;
-                return;
-            }
+        if (allTickets.length === 0) {
+        supportList.innerHTML = `<div class="glass p-12 text-center text-xl">${t.noTickets}</div>`;
+        return;
+        }
 
-            supportList.innerHTML = '';
-            allTickets.forEach(ticket => {
-                const date = new Date(ticket.timestamp).toLocaleString();
-                const div = document.createElement('div');
-                div.className = "glass p-6 card-hover";
-                div.innerHTML = `
-                    <div class="flex justify-between items-start mb-4">
-                        <div>
-                            <h3 class="text-xl font-bold">${t.ticketTitle}</h3>
-                            <p class="text-slate-400 text-sm">${t.ticketUser}: ${ticket.email} (${ticket.mc_name || 'Unknown'})</p>
-                            <p class="text-slate-500 text-xs">${t.ticketDate}: ${date}</p>
-                        </div>
-                        <button onclick="deleteTicket('${ticket.id}')" class="p-2 text-red-400 hover:bg-red-400/10 rounded-lg transition-colors" title="${t.ticketDelete}">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                        </button>
-                    </div>
-                    <div class="bg-white/5 p-4 rounded-xl border border-white/5 text-slate-300 whitespace-pre-wrap">${ticket.message}</div>
-                `;
-                supportList.appendChild(div);
-            });
+        supportList.innerHTML = '';
+        allTickets.forEach(ticket => {
+        const date = new Date(ticket.timestamp).toLocaleString();
+        const div = document.createElement('div');
+        div.className = "glass p-6 card-hover";
+        div.innerHTML = `
+        <div class="flex justify-between items-start mb-4">
+            <div>
+                <h3 class="text-xl font-bold">${t.ticketTitle}</h3>
+                <p class="text-slate-400 text-sm">${t.ticketUser}: ${ticket.email} (${ticket.mc_name || 'Unknown'})</p>
+                <p class="text-slate-500 text-xs">${t.ticketDate}: ${date}</p>
+            </div>
+            <button onclick="deleteTicket('${ticket.id}')"
+                class="p-2 text-red-400 hover:bg-red-400/10 rounded-lg transition-colors" title="${t.ticketDelete}">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                    </path>
+                </svg>
+            </button>
+        </div>
+        <div class="bg-white/5 p-4 rounded-xl border border-white/5 text-slate-300 whitespace-pre-wrap">
+            ${ticket.message}</div>
+        `;
+        supportList.appendChild(div);
+        });
         }
 
         window.deleteTicket = async (id) => {
-            if (!confirm("Delete this ticket?")) return;
-            try {
-                await deleteDoc(doc(db, "support_tickets", id));
-                alert("Ticket deleted.");
-                fetchTickets();
-            } catch (e) { alert("Failed to delete ticket."); }
+        if (!confirm("Delete this ticket?")) return;
+        try {
+        await deleteDoc(doc(db, "support_tickets", id));
+        alert("Ticket deleted.");
+        fetchTickets();
+        } catch (e) { alert("Failed to delete ticket."); }
         };
 
         window.updateStatus = async (id, status) => {
-            try {
-                const docRef = doc(db, "shared_configs", id);
-                if (status === 'approved') await updateDoc(docRef, { status: 'approved' });
-                else await deleteDoc(docRef);
-                renderConfigs();
-            } catch (e) { alert("Failed to update status."); }
+        try {
+        const docRef = doc(db, "shared_configs", id);
+        if (status === 'approved') await updateDoc(docRef, { status: 'approved' });
+        else await deleteDoc(docRef);
+        renderConfigs();
+        } catch (e) { alert("Failed to update status."); }
         };
 
         // --- Firebase Logic ---
         try {
-            const app = initializeApp(firebaseConfig);
-            db = initializeFirestore(app, { experimentalForceLongPolling: true });
-            auth = getAuth(app);
-            provider = new GoogleAuthProvider();
+        const app = initializeApp(firebaseConfig);
+        db = initializeFirestore(app, { experimentalForceLongPolling: true });
+        auth = getAuth(app);
+        provider = new GoogleAuthProvider();
 
-            onAuthStateChanged(auth, async (user) => {
-                currentUser = user;
-                const loginScreen = document.getElementById('login-screen');
-                const adminPanel = document.getElementById('admin-panel');
-                const authBtn = document.getElementById('auth-btn');
+        onAuthStateChanged(auth, async (user) => {
+        currentUser = user;
+        const loginScreen = document.getElementById('login-screen');
+        const adminPanel = document.getElementById('admin-panel');
+        const authBtn = document.getElementById('auth-btn');
 
-                if (user && user.uid === ADMIN_UID) {
-                    if (loginScreen) loginScreen.classList.add('hidden');
-                    if (adminPanel) adminPanel.classList.remove('hidden');
-                    try {
-                        const userDoc = await getDoc(doc(db, "users", user.email));
-                        if (userDoc.exists()) {
-                            mcAccount = userDoc.data();
-                            if (authBtn) {
-                                authBtn.innerHTML = `<div class="flex items-center gap-3">
-                                    <img src="https://mc-heads.net/avatar/${mcAccount.mc_name}/32" class="w-8 h-8 rounded border border-white/20" alt="Skin">
-                                    <div class="text-left"><div class="text-[10px] opacity-50 leading-none">Admin</div><div class="font-bold">${mcAccount.mc_name}</div></div>
-                                </div>`;
-                            }
-                        }
-                    } catch (e) { log("Auth Doc Error: " + e.message); }
-                    setupDataFetching();
-                } else if (user) {
-                    alert("Access Denied");
-                    signOut(auth);
-                } else {
-                    if (loginScreen) loginScreen.classList.remove('hidden');
-                    if (adminPanel) adminPanel.classList.add('hidden');
-                }
-                updateUI();
-            });
+        if (user && user.uid === ADMIN_UID) {
+        if (loginScreen) loginScreen.classList.add('hidden');
+        if (adminPanel) adminPanel.classList.remove('hidden');
+        try {
+        const userDoc = await getDoc(doc(db, "users", user.email));
+        if (userDoc.exists()) {
+        mcAccount = userDoc.data();
+        if (authBtn) {
+        authBtn.innerHTML = `<div class="flex items-center gap-3">
+            <img src="https://mc-heads.net/avatar/${mcAccount.mc_name}/32"
+                class="w-8 h-8 rounded border border-white/20" alt="Skin">
+            <div class="text-left">
+                <div class="text-[10px] opacity-50 leading-none">Admin</div>
+                <div class="font-bold">${mcAccount.mc_name}</div>
+            </div>
+        </div>`;
+        }
+        }
+        } catch (e) { log("Auth Doc Error: " + e.message); }
+        setupDataFetching();
+        } else if (user) {
+        alert("Access Denied");
+        signOut(auth);
+        } else {
+        if (loginScreen) loginScreen.classList.remove('hidden');
+        if (adminPanel) adminPanel.classList.add('hidden');
+        }
+        updateUI();
+        });
 
-            const loginBtn = document.getElementById('login-btn');
-            const authBtn = document.getElementById('auth-btn');
+        const loginBtn = document.getElementById('login-btn');
+        const authBtn = document.getElementById('auth-btn');
 
-            const loginHandler = async () => {
-                if (currentUser) signOut(auth);
-                else {
-                    try {
-                        await signInWithPopup(auth, provider).catch(async (err) => {
-                            if (['auth/popup-blocked', 'auth/popup-closed-by-user', 'auth/cancelled-popup-request'].includes(err.code)) {
-                                await signInWithRedirect(auth, provider);
-                            } else throw err;
-                        });
-                    } catch (e) { alert("Login failed: " + e.message); }
-                }
-            };
+        const loginHandler = async () => {
+        if (currentUser) signOut(auth);
+        else {
+        try {
+        await signInWithPopup(auth, provider).catch(async (err) => {
+        if (['auth/popup-blocked', 'auth/popup-closed-by-user', 'auth/cancelled-popup-request'].includes(err.code)) {
+        await signInWithRedirect(auth, provider);
+        } else throw err;
+        });
+        } catch (e) { alert("Login failed: " + e.message); }
+        }
+        };
 
-            if (loginBtn) loginBtn.onclick = loginHandler;
-            if (authBtn) authBtn.onclick = loginHandler;
+        if (loginBtn) loginBtn.onclick = loginHandler;
+        if (authBtn) authBtn.onclick = loginHandler;
 
-            function setupDataFetching() {
-                const q = query(collection(db, "shared_configs"), where("status", "==", "pending"));
-                onSnapshot(q, (snap) => {
-                    allConfigs = [];
-                    snap.forEach(doc => allConfigs.push({ id: doc.id, ...doc.data() }));
-                    dataLoaded = true;
-                    renderConfigs();
-                });
-            }
+        function setupDataFetching() {
+        const q = query(collection(db, "shared_configs"), where("status", "==", "pending"));
+        onSnapshot(q, (snap) => {
+        log(`Fetched ${snap.size} pending configs`);
+        allConfigs = [];
+        snap.forEach(doc => allConfigs.push({ id: doc.id, ...doc.data() }));
+        dataLoaded = true;
+        renderConfigs();
+        }, (err) => {
+        log("Config Fetch Error: " + err.message);
+        const configList = document.getElementById('config-list');
+        if (configList) {
+        configList.innerHTML = `<div class="glass p-12 text-center text-red-400">
+            <p class="text-xl font-bold">Error loading configurations</p>
+            <p class="text-sm mt-2">${err.message}</p>
+        </div>`;
+        }
+        });
+        }
 
-            updateUI();
+        updateUI();
         } catch (e) { log("Init Error: " + e.message); }
-    </script>
+        </script>
 </body>
 
 </html>
