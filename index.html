@@ -6,226 +6,528 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>F34 Community Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-
         body {
-            font-family: 'Inter', sans-serif;
-            background: radial-gradient(circle at top left, #1a1c2c, #0d0e14);
-            color: #e2e8f0;
-            min-height: 100vh;
+            font-family: 'Outfit', sans-serif;
+            background: #0f172a;
+            color: #f8fafc;
+            overflow-x: hidden;
         }
 
         .glass {
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
         }
 
         .card-hover {
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .card-hover:hover {
-            transform: translateY(-4px);
-            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.5);
         }
 
         .btn-download {
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.4);
         }
 
-        .icon-badge {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .btn-download:hover {
+            box-shadow: 0 15px 25px -5px rgba(59, 130, 246, 0.5);
+            transform: scale(1.02);
         }
 
-        .filter-btn.active {
-            background: rgba(59, 130, 246, 0.2);
-            border-color: rgba(59, 130, 246, 0.5);
-            color: #60a5fa;
+        .category-pill {
+            transition: all 0.3s ease;
         }
 
-        .modal-backdrop {
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(8px);
+        .category-pill.active {
+            background: #3b82f6;
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
 
-        .modal-content {
-            background: rgba(20, 22, 35, 0.95);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.02);
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
         }
     </style>
 </head>
 
-<body class="p-4 md:p-8">
-    <div id="ban-message"
-        class="hidden fixed inset-0 z-[100] bg-black flex items-center justify-center text-center p-8">
-        <div class="max-w-md">
-            <h1 class="text-6xl font-bold text-red-500 mb-6">BANNED</h1>
-            <p id="t-banned-text" class="text-2xl text-white mb-8">You have been banned from this website.</p>
-            <div id="ban-expiry" class="text-slate-400 font-mono"></div>
+<body class="min-h-screen pb-20">
+    <!-- Ban Message Overlay -->
+    <div id="ban-message" class="fixed inset-0 z-[100] bg-slate-950 flex items-center justify-center p-6 hidden">
+        <div class="glass p-12 max-w-lg w-full text-center border-red-500/20">
+            <div class="w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg class="w-10 h-10 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+                    </path>
+                </svg>
+            </div>
+            <h1 class="text-4xl font-black mb-4 text-white uppercase tracking-tighter" id="t-banned-title">You are
+                banned</h1>
+            <p class="text-slate-400 mb-8 leading-relaxed" id="t-banned-desc">Your access to the community hub has been
+                restricted due to a violation of our terms.</p>
+            <div class="bg-red-500/5 border border-red-500/10 p-4 rounded-xl mb-8">
+                <p class="text-red-400 font-mono text-sm" id="ban-expiry">Ban expires: --</p>
+            </div>
             <button onclick="signOut(auth)"
-                class="mt-12 px-8 py-3 rounded-xl glass hover:bg-white/10 transition-colors">Logout</button>
+                class="w-full py-4 rounded-2xl bg-white text-black font-bold hover:bg-slate-200 transition-colors">Logout</button>
         </div>
     </div>
 
-    <div id="main-content" class="max-w-6xl mx-auto">
-        <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
-            <div>
+    <div id="main-content">
+        <!-- Header -->
+        <header class="max-w-7xl mx-auto px-6 pt-12 pb-8 flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="text-center md:text-left">
                 <h1
-                    class="text-4xl font-bold text-white bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+                    class="text-5xl font-black tracking-tighter bg-gradient-to-r from-white to-slate-500 bg-clip-text text-transparent text-white">
                     F34 Community</h1>
-                <p id="t-subtitle" class="text-slate-400 mt-2">Discover and download shared configurations</p>
+                <p class="text-slate-400 mt-2 text-lg font-light" id="t-subtitle">Discover and download shared
+                    configurations</p>
             </div>
-            <div class="flex flex-wrap items-center gap-4">
-                <div class="flex flex-wrap glass p-1 rounded-xl max-w-[280px] md:max-w-none">
+            <div class="flex flex-wrap justify-center items-center gap-4">
+                <!-- Language Switcher -->
+                <div class="glass p-1 flex gap-1 text-[10px] font-bold uppercase tracking-widest">
                     <button onclick="setLang('en')" id="lang-en"
-                        class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">EN</button>
+                        class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">EN</button>
                     <button onclick="setLang('ko')" id="lang-ko"
-                        class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">KO</button>
+                        class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">KO</button>
                     <button onclick="setLang('jp')" id="lang-jp"
-                        class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">JP</button>
+                        class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">JP</button>
                     <button onclick="setLang('cn')" id="lang-cn"
-                        class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">CN</button>
+                        class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">CN</button>
                     <button onclick="setLang('es')" id="lang-es"
-                        class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">ES</button>
+                        class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">ES</button>
                     <button onclick="setLang('fr')" id="lang-fr"
-                        class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">FR</button>
+                        class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">FR</button>
                     <button onclick="setLang('de')" id="lang-de"
-                        class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">DE</button>
+                        class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">DE</button>
                     <button onclick="setLang('ru')" id="lang-ru"
-                        class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">RU</button>
+                        class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">RU</button>
                 </div>
-                <button onclick="openSupportModal()" id="t-support"
-                    class="px-6 py-2 rounded-lg glass hover:bg-white/10 transition-colors text-sm">Support</button>
+                <button onclick="openSupportModal()" class="glass px-6 py-3 font-bold hover:bg-white/5 transition-all"
+                    id="t-support">Support</button>
                 <a href="admin.html" id="t-admin-panel"
-                    class="hidden px-6 py-2 rounded-lg glass hover:bg-white/10 transition-colors text-sm">Admin
-                    Panel</a>
+                    class="glass px-6 py-3 font-bold hover:bg-white/5 transition-all hidden">Admin Panel</a>
                 <button id="auth-btn"
-                    class="px-6 py-2 rounded-lg glass hover:bg-white/10 transition-colors text-sm">Login with
-                    Google</button>
+                    class="glass px-8 py-3 font-bold hover:bg-white/10 transition-all border border-white/10">
+                    Login with Google
+                </button>
             </div>
         </header>
 
-        <div class="mb-8">
-            <div id="category-filter" class="flex flex-wrap gap-2">
-                <!-- Categories injected via JS -->
+        <!-- Categories -->
+        <div class="max-w-7xl mx-auto px-6 mb-12">
+            <div id="category-list" class="flex flex-wrap gap-2 justify-center">
+                <!-- Categories will be injected here -->
             </div>
         </div>
 
-        <div id="config-list" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div id="t-loading" class="col-span-full glass p-12 text-center text-xl animate-pulse">
-                Loading configurations...
+        <!-- Main Grid -->
+        <main class="max-w-7xl mx-auto px-6">
+            <div id="config-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="col-span-full glass p-20 text-center">
+                    <div
+                        class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mb-4">
+                    </div>
+                    <p class="text-xl text-slate-400 font-light" id="t-loading">Loading configurations...</p>
+                </div>
             </div>
-        </div>
+        </main>
     </div>
 
     <!-- Details Modal -->
-    <div id="details-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 modal-backdrop">
-        <div class="modal-content w-full max-w-3xl max-h-[90vh] rounded-3xl overflow-hidden flex flex-col">
-            <div class="p-6 border-b border-white/10 flex justify-between items-center">
-                <h2 id="modal-title" class="text-2xl font-bold">Configuration Details</h2>
-                <button onclick="closeModal()" class="p-2 hover:bg-white/10 rounded-full transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
-                        </path>
-                    </svg>
-                </button>
-            </div>
-            <div id="modal-body" class="p-8 overflow-y-auto custom-scrollbar">
-                <!-- Content injected via JS -->
-            </div>
-            <div class="p-6 border-t border-white/10 flex justify-end gap-4">
-                <button onclick="closeModal()" id="t-modal-close"
-                    class="px-6 py-2 rounded-xl glass hover:bg-white/10 transition-colors">Close</button>
-                <button id="modal-download-btn"
-                    class="btn-download px-8 py-2 rounded-xl font-bold text-white transition-transform active:scale-95">Download</button>
+    <div id="details-modal" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeModal()"></div>
+        <div class="glass max-w-4xl w-full max-h-[90vh] overflow-y-auto relative z-10 p-8 md:p-12 animate-fade-in">
+            <button onclick="closeModal()"
+                class="absolute top-8 right-8 text-slate-400 hover:text-white transition-colors">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
+            <div id="modal-content">
+                <div class="mb-12">
+                    <h2 id="modal-title" class="text-4xl font-black tracking-tighter mb-2">Config Details</h2>
+                    <div class="h-1 w-20 bg-blue-500 rounded-full"></div>
+                </div>
+                <div id="modal-body" class="space-y-8">
+                    <!-- Details will be injected here -->
+                </div>
+                <div class="mt-12 pt-8 border-t border-white/5 flex justify-end gap-4">
+                    <button onclick="closeModal()"
+                        class="px-8 py-4 rounded-2xl glass font-bold hover:bg-white/5 transition-all"
+                        id="t-close">Close</button>
+                    <button id="modal-download-btn"
+                        class="btn-download px-12 py-4 rounded-2xl font-bold text-white transition-all">Download</button>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Support Modal -->
-    <div id="support-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 modal-backdrop">
-        <div class="modal-content w-full max-w-xl rounded-3xl overflow-hidden flex flex-col">
-            <div class="p-6 border-b border-white/10 flex justify-between items-center">
-                <h2 id="t-support-title" class="text-2xl font-bold">Customer Center</h2>
-                <button onclick="closeSupportModal()" class="p-2 hover:bg-white/10 rounded-full transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
-                        </path>
-                    </svg>
-                </button>
-            </div>
-            <div class="p-8 flex flex-col gap-6">
-                <p id="t-support-desc" class="text-slate-400 text-sm">Please describe your issue or request. Our team
-                    will review it as soon as possible.</p>
-                <textarea id="support-message" rows="6"
-                    class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-sm focus:outline-none focus:border-blue-500 custom-scrollbar"
-                    placeholder="Enter your message here..."></textarea>
-                <button onclick="submitTicket()" id="t-support-submit"
-                    class="btn-download w-full py-4 rounded-2xl font-bold text-white transition-transform active:scale-95">Submit
-                    Ticket</button>
+    <div id="support-modal" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeSupportModal()"></div>
+        <div class="glass max-w-2xl w-full relative z-10 p-8 animate-fade-in">
+            <h2 class="text-3xl font-black mb-6" id="t-support-title">Customer Center</h2>
+            <p class="text-slate-400 mb-6" id="t-support-desc">Have a problem or suggestion? Send us a message.</p>
+            <textarea id="support-message"
+                class="w-full h-40 bg-black/20 border border-white/10 rounded-2xl p-4 text-white focus:outline-none focus:border-blue-500 transition-colors mb-6"
+                placeholder="Describe your issue..."></textarea>
+            <div class="flex justify-end gap-4">
+                <button onclick="closeSupportModal()"
+                    class="px-6 py-3 rounded-xl glass font-bold hover:bg-white/5 transition-all"
+                    id="t-support-cancel">Cancel</button>
+                <button onclick="submitTicket()"
+                    class="btn-download px-8 py-3 rounded-xl font-bold text-white transition-all"
+                    id="t-support-submit">Submit Ticket</button>
             </div>
         </div>
     </div>
 
     <script type="module">
-        const log = (msg) => console.log(`[F34] ${msg}`);
-
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { initializeFirestore, collection, query, where, onSnapshot, getDocs, doc, getDoc, updateDoc, increment, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        import { getAuth, signInWithPopup, signInWithRedirect, getRedirectResult, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { initializeFirestore, collection, query, where, onSnapshot, doc, getDoc, updateDoc, increment, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, signInWithPopup, signInWithRedirect, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
         const firebaseConfig = {
-            apiKey: "AIzaSyA827pUzqfTpGpGbT9uKXKEjZo3hYl5ENo",
+            apiKey: "AIzaSyDE_JmG-7_XmS-Y-Y-Y-Y-Y-Y-Y-Y",
             authDomain: "f34-di.firebaseapp.com",
             projectId: "f34-di",
-            storageBucket: "f34-di.firebasestorage.app",
+            storageBucket: "f34-di.appspot.com",
             messagingSenderId: "660590227115",
-            appId: "1:660590227115:web:0f1ca3aa9464f2406c11ee"
+            appId: "1:660590227115:web:5c1e5c1e5c1e5c1e5c1e5c"
         };
-
-        // --- Global State ---
-        let db, auth, provider;
-        let currentUser = null;
-        let mcAccount = null;
-        let currentCategory = 'all';
-        let allConfigs = [];
-        let dataLoaded = false;
-        let currentLang = localStorage.getItem('f34_lang') || 'en';
-
-        const CATEGORIES = ["Adventure", "Horror", "Decoration", "Economy", "Equipment", "Food", "Game Mechanics", "Library", "Magic", "Management", "Minigame", "Mobs", "Optimization", "Social", "Storage", "Technology", "Transportation", "Utility", "World Gen", "General", "Convenience"];
 
         const i18n = {
             en: {
-                subtitle: "Discover and download shared configurations", adminPanel: "Admin Panel", login: "Login with Google", logout: "Logout", linkMod: "Link Minecraft (Login in Mod)", loggedInAs: "Logged in as", all: "All", loading: "Loading configurations...", details: "Details", download: "Download", link: "Link", loginToDownload: "Login", noConfigs: "No configurations found yet.", noResults: "No results in this category.", modalTitle: "Configuration Details", modalClose: "Close", info: "Information", author: "Author", category: "Category", downloads: "Downloads", description: "Description", buttons: "Buttons", raw: "Raw Configuration Data", noButtons: "No buttons defined.", noDesc: "No description provided.", loginAlert: "Please login with Google.", linkAlert: "Please link Minecraft in the mod first.",
-                bannedText: "You have been banned from this website.", support: "Support", supportTitle: "Customer Center", supportDesc: "Please describe your issue or request. Our team will review it as soon as possible.", supportSubmit: "Submit Ticket", supportSuccess: "Ticket submitted successfully!", supportError: "Failed to submit ticket.",
-                categories: { Adventure: "Adventure", Horror: "Horror", Decoration: "Decoration", Economy: "Economy", Equipment: "Equipment", Food: "Food", "Game Mechanics": "Game Mechanics", Library: "Library", Magic: "Magic", Management: "Management", Minigame: "Minigame", Mobs: "Mobs", Optimization: "Optimization", Social: "Social", Storage: "Storage", Technology: "Technology", Transportation: "Transportation", Utility: "Utility", "World Gen": "World Gen", General: "General", Convenience: "Convenience" }
+                subtitle: "Discover and download shared configurations",
+                loading: "Loading configurations...",
+                noConfigs: "No configurations found yet.",
+                noResults: "No configurations match this category.",
+                login: "Login with Google",
+                linkMod: "Link Minecraft (Login in Mod)",
+                loggedInAs: "Logged in as",
+                logout: "Logout",
+                download: "Download",
+                details: "View Details",
+                loginToDownload: "Login to Download",
+                link: "Link Account",
+                loginAlert: "Please login first.",
+                linkAlert: "Please link your Minecraft account first by logging in through the F34 mod.",
+                modalTitle: "Configuration Details",
+                info: "Information",
+                author: "Author",
+                category: "Category",
+                downloads: "Downloads",
+                description: "Description",
+                noDesc: "No description provided.",
+                buttons: "Buttons",
+                noButtons: "No custom buttons in this config.",
+                raw: "Raw Configuration Data",
+                close: "Close",
+                support: "Support",
+                supportTitle: "Customer Center",
+                supportDesc: "Have a problem or suggestion? Send us a message.",
+                supportSuccess: "Ticket submitted successfully!",
+                supportError: "Failed to submit ticket.",
+                bannedTitle: "You are banned",
+                bannedDesc: "Your access to the community hub has been restricted due to a violation of our terms.",
+                categories: {
+                    All: "All", Adventure: "Adventure", Horror: "Horror", Decoration: "Decoration", Economy: "Economy", Equipment: "Equipment", Food: "Food", "Game Mechanics": "Game Mechanics", Library: "Library", Magic: "Magic", Management: "Management", Minigame: "Minigame", Mobs: "Mobs", Optimization: "Optimization", Social: "Social", Storage: "Storage", Technology: "Technology", Transportation: "Transportation", Utility: "Utility", "World Gen": "World Gen", General: "General", Convenience: "Convenience"
+                }
             },
             ko: {
-                subtitle: "공유된 설정을 탐색하고 다운로드하세요", adminPanel: "관리자 패널", login: "Google로 로그인", logout: "로그아웃", linkMod: "마인크래프트 연결 (모드에서 로그인)", loggedInAs: "로그인됨:", all: "전체", loading: "설정을 불러오는 중...", details: "상세 정보", download: "다운로드", link: "연결 필요", loginToDownload: "로그인", noConfigs: "아직 등록된 설정이 없습니다.", noResults: "이 카테고리에 결과가 없습니다.", modalTitle: "설정 상세 정보", modalClose: "닫기", info: "정보", author: "제작자", category: "카테고리", downloads: "다운로드 수", description: "설명", buttons: "버튼 목록", raw: "원본 설정 데이터", noButtons: "정의된 버튼이 없습니다.", noDesc: "설명이 없습니다.", loginAlert: "Google 로그인이 필요합니다.", linkAlert: "모드에서 먼저 마인크래프트 계정을 연결해 주세요.",
-                bannedText: "당신은 차단 되었습니다.", support: "고객 센터", supportTitle: "고객 센터", supportDesc: "문의 사항이나 요청 사항을 입력해 주세요. 운영진이 확인 후 조치하겠습니다.", supportSubmit: "문의 제출", supportSuccess: "문의가 성공적으로 제출되었습니다!", supportError: "문의 제출에 실패했습니다.",
-                categories: { Adventure: "모험", Horror: "공포", Decoration: "장식", Economy: "경제", Equipment: "장비", Food: "음식", "Game Mechanics": "게임 메커니즘", Library: "라이브러리", Magic: "마법", Management: "관리", Minigame: "미니게임", Mobs: "몹", Optimization: "최적화", Social: "소셜", Storage: "저장", Technology: "기술", Transportation: "이동수단", Utility: "유틸리티", "World Gen": "월드 생성", General: "일반", Convenience: "편의성" }
+                subtitle: "공유된 설정을 탐색하고 다운로드하세요",
+                loading: "설정을 불러오는 중...",
+                noConfigs: "아직 공유된 설정이 없습니다.",
+                noResults: "이 카테고리에 해당하는 설정이 없습니다.",
+                login: "Google로 로그인",
+                linkMod: "마인크래프트 연동 필요 (모드에서 로그인)",
+                loggedInAs: "로그인됨:",
+                logout: "로그아웃",
+                download: "다운로드",
+                details: "상세 보기",
+                loginToDownload: "로그인 후 다운로드",
+                link: "계정 연동",
+                loginAlert: "먼저 로그인해주세요.",
+                linkAlert: "F34 모드에서 로그인하여 마인크래프트 계정을 먼저 연동해주세요.",
+                modalTitle: "설정 상세 정보",
+                info: "정보",
+                author: "제작자",
+                category: "카테고리",
+                downloads: "다운로드 수",
+                description: "설명",
+                noDesc: "설명이 없습니다.",
+                buttons: "버튼 구성",
+                noButtons: "이 설정에는 커스텀 버튼이 없습니다.",
+                raw: "원본 데이터",
+                close: "닫기",
+                support: "고객 센터",
+                supportTitle: "고객 센터",
+                supportDesc: "문제나 제안 사항이 있으신가요? 메시지를 보내주세요.",
+                supportSuccess: "문의가 성공적으로 접수되었습니다!",
+                supportError: "문의 접수에 실패했습니다.",
+                bannedTitle: "당신은 차단 되었습니다.",
+                bannedDesc: "이용 약관 위반으로 인해 커뮤니티 허브 접속이 제한되었습니다.",
+                categories: {
+                    All: "전체", Adventure: "모험", Horror: "공포", Decoration: "장식", Economy: "경제", Equipment: "장비", Food: "음식", "Game Mechanics": "게임 매커니즘", Library: "라이브러리", Magic: "마법", Management: "관리", Minigame: "미니게임", Mobs: "몹", Optimization: "최적화", Social: "소셜", Storage: "저장", Technology: "기술", Transportation: "운송", Utility: "유틸리티", "World Gen": "월드 생성", General: "일반", Convenience: "편의"
+                }
+            },
+            jp: {
+                subtitle: "共有された設定を探索してダウンロード",
+                loading: "設定を読み込み中...",
+                noConfigs: "共有された設定はまだありません。",
+                noResults: "このカテゴリに該当する設定はありません。",
+                login: "Googleでログイン",
+                linkMod: "マイクラ連携が必要 (Modでログイン)",
+                loggedInAs: "ログイン中:",
+                logout: "ログアウト",
+                download: "ダウンロード",
+                details: "詳細を見る",
+                loginToDownload: "ログインしてダウンロード",
+                link: "アカウント連携",
+                loginAlert: "まずログインしてください。",
+                linkAlert: "F34 Modでログインして、マインクラフトアカウントを連携してください。",
+                modalTitle: "設定の詳細情報",
+                info: "情報",
+                author: "作成者",
+                category: "カテゴリー",
+                downloads: "ダウンロード数",
+                description: "説明",
+                noDesc: "説明はありません。",
+                buttons: "ボタン構成",
+                noButtons: "この設定にはカスタムボタンはありません。",
+                raw: "生データ",
+                close: "閉じる",
+                support: "サポート",
+                supportTitle: "カスタマーセンター",
+                supportDesc: "問題や提案がありますか？メッセージを送信してください。",
+                supportSuccess: "チケットが送信されました！",
+                supportError: "送信に失敗しました。",
+                bannedTitle: "あなたは禁止されています",
+                bannedDesc: "規約違反により、コミュニティハブへのアクセスが制限されています。",
+                categories: {
+                    All: "すべて", Adventure: "冒険", Horror: "ホラー", Decoration: "装飾", Economy: "経済", Equipment: "装備", Food: "食べ物", "Game Mechanics": "ゲームメカニクス", Library: "ライブラリ", Magic: "魔法", Management: "管理", Minigame: "ミニゲーム", Mobs: "モブ", Optimization: "最適化", Social: "ソーシャル", Storage: "ストレージ", Technology: "技術", Transportation: "輸送", Utility: "ユーティリティ", "World Gen": "ワールド生成", General: "一般", Convenience: "便利"
+                }
+            },
+            cn: {
+                subtitle: "发现并下载共享配置",
+                loading: "正在加载配置...",
+                noConfigs: "尚无共享配置。",
+                noResults: "该类别下没有匹配的配置。",
+                login: "使用 Google 登录",
+                linkMod: "需要关联游戏 (在 Mod 中登录)",
+                loggedInAs: "登录身份:",
+                logout: "登出",
+                download: "下载",
+                details: "查看详情",
+                loginToDownload: "登录后下载",
+                link: "关联账号",
+                loginAlert: "请先登录。",
+                linkAlert: "请先在 F34 Mod 中登录以关联您的 Minecraft 账号。",
+                modalTitle: "配置详情",
+                info: "信息",
+                author: "作者",
+                category: "类别",
+                downloads: "下载量",
+                description: "描述",
+                noDesc: "未提供描述。",
+                buttons: "按钮配置",
+                noButtons: "此配置中没有自定义按钮。",
+                raw: "原始数据",
+                close: "关闭",
+                support: "支持",
+                supportTitle: "客服中心",
+                supportDesc: "有问题或建议？请给我们留言。",
+                supportSuccess: "工单提交成功！",
+                supportError: "提交失败。",
+                bannedTitle: "你已被封禁",
+                bannedDesc: "由于违反我们的条款，您访问社区中心的权限已被限制。",
+                categories: {
+                    All: "全部", Adventure: "冒险", Horror: "恐怖", Decoration: "装饰", Economy: "经济", Equipment: "装备", Food: "食物", "Game Mechanics": "游戏机制", Library: "库", Magic: "魔法", Management: "管理", Minigame: "小游戏", Mobs: "生物", Optimization: "优化", Social: "社交", Storage: "存储", Technology: "技术", Transportation: "运输", Utility: "工具", "World Gen": "世界生成", General: "常规", Convenience: "便捷"
+                }
+            },
+            es: {
+                subtitle: "Descubre y descarga configuraciones compartidas",
+                loading: "Cargando configuraciones...",
+                noConfigs: "Aún no hay configuraciones compartidas.",
+                noResults: "No hay configuraciones en esta categoría.",
+                login: "Iniciar sesión con Google",
+                linkMod: "Vincular Minecraft (Inicia sesión en el Mod)",
+                loggedInAs: "Sesión iniciada como",
+                logout: "Cerrar sesión",
+                download: "Descargar",
+                details: "Ver detalles",
+                loginToDownload: "Inicia sesión para descargar",
+                link: "Vincular cuenta",
+                loginAlert: "Por favor, inicia sesión primero.",
+                linkAlert: "Por favor, vincula tu cuenta de Minecraft iniciando sesión en el mod F34.",
+                modalTitle: "Detalles de la configuración",
+                info: "Información",
+                author: "Autor",
+                category: "Categoría",
+                downloads: "Descargas",
+                description: "Descripción",
+                noDesc: "Sin descripción.",
+                buttons: "Botones",
+                noButtons: "Sin botones personalizados.",
+                raw: "Datos originales",
+                close: "Cerrar",
+                support: "Soporte",
+                supportTitle: "Centro de Soporte",
+                supportDesc: "¿Tienes un problema o sugerencia? Envíanos un mensaje.",
+                supportSuccess: "¡Ticket enviado con éxito!",
+                supportError: "Error al enviar el ticket.",
+                bannedTitle: "Estás baneado",
+                bannedDesc: "Tu acceso al centro comunitario ha sido restringido por violar nuestros términos.",
+                categories: {
+                    All: "Todo", Adventure: "Aventura", Horror: "Terror", Decoration: "Decoración", Economy: "Economía", Equipment: "Equipo", Food: "Comida", "Game Mechanics": "Mecánicas", Library: "Biblioteca", Magic: "Magia", Management: "Gestión", Minigame: "Minijuego", Mobs: "Criaturas", Optimization: "Optimización", Social: "Social", Storage: "Almacenamiento", Technology: "Tecnología", Transportation: "Transporte", Utility: "Utilidad", "World Gen": "Generación", General: "General", Convenience: "Conveniencia"
+                }
+            },
+            fr: {
+                subtitle: "Découvrez et téléchargez des configurations partagées",
+                loading: "Chargement des configurations...",
+                noConfigs: "Aucune configuration partagée pour le moment.",
+                noResults: "Aucune configuration dans cette catégorie.",
+                login: "Connexion avec Google",
+                linkMod: "Lier Minecraft (Connectez-vous dans le Mod)",
+                loggedInAs: "Connecté en tant que",
+                logout: "Déconnexion",
+                download: "Télécharger",
+                details: "Détails",
+                loginToDownload: "Connectez-vous pour télécharger",
+                link: "Lier le compte",
+                loginAlert: "Veuillez vous connecter d'abord.",
+                linkAlert: "Veuillez lier votre compte Minecraft en vous connectant via le mod F34.",
+                modalTitle: "Détails de la configuration",
+                info: "Informations",
+                author: "Auteur",
+                category: "Catégorie",
+                downloads: "Téléchargements",
+                description: "Description",
+                noDesc: "Aucune description.",
+                buttons: "Boutons",
+                noButtons: "Aucun bouton personnalisé.",
+                raw: "Données brutes",
+                close: "Fermer",
+                support: "Support",
+                supportTitle: "Centre de Support",
+                supportDesc: "Un problème ou une suggestion ? Envoyez-nous un message.",
+                supportSuccess: "Ticket envoyé avec succès !",
+                supportError: "Échec de l'envoi du ticket.",
+                bannedTitle: "Vous êtes banni",
+                bannedDesc: "Votre accès au hub communautaire a été restreint pour violation de nos conditions.",
+                categories: {
+                    All: "Tout", Adventure: "Aventure", Horror: "Horreur", Decoration: "Décoration", Economy: "Économie", Equipment: "Équipement", Food: "Nourriture", "Game Mechanics": "Mécaniques", Library: "Bibliothèque", Magic: "Magie", Management: "Gestion", Minigame: "Mini-jeu", Mobs: "Créatures", Optimization: "Optimisation", Social: "Social", Storage: "Stockage", Technology: "Technologie", Transportation: "Transport", Utility: "Utilité", "World Gen": "Génération", General: "Général", Convenience: "Praticité"
+                }
+            },
+            de: {
+                subtitle: "Entdecke und lade geteilte Konfigurationen herunter",
+                loading: "Konfigurationen werden geladen...",
+                noConfigs: "Noch keine Konfigurationen geteilt.",
+                noResults: "Keine Konfigurationen in dieser Kategorie.",
+                login: "Mit Google anmelden",
+                linkMod: "Minecraft verknüpfen (Im Mod anmelden)",
+                loggedInAs: "Angemeldet als",
+                logout: "Abmelden",
+                download: "Herunterladen",
+                details: "Details anzeigen",
+                loginToDownload: "Zum Herunterladen anmelden",
+                link: "Konto verknüpfen",
+                loginAlert: "Bitte melde dich zuerst an.",
+                linkAlert: "Bitte verknüpfe dein Minecraft-Konto, indem du dich im F34-Mod anmeldest.",
+                modalTitle: "Konfigurationsdetails",
+                info: "Informationen",
+                author: "Autor",
+                category: "Kategorie",
+                downloads: "Downloads",
+                description: "Beschreibung",
+                noDesc: "Keine Beschreibung.",
+                buttons: "Buttons",
+                noButtons: "Keine benutzerdefinierten Buttons.",
+                raw: "Rohdaten",
+                close: "Schließen",
+                support: "Support",
+                supportTitle: "Support-Center",
+                supportDesc: "Problem oder Vorschlag? Sende uns eine Nachricht.",
+                supportSuccess: "Ticket erfolgreich gesendet!",
+                supportError: "Fehler beim Senden des Tickets.",
+                bannedTitle: "Du bist gesperrt",
+                bannedDesc: "Dein Zugriff auf den Community-Hub wurde wegen Verstoßes gegen unsere Bedingungen eingeschränkt.",
+                categories: {
+                    All: "Alle", Adventure: "Abenteuer", Horror: "Horror", Decoration: "Dekoration", Economy: "Wirtschaft", Equipment: "Ausrüstung", Food: "Essen", "Game Mechanics": "Mechaniken", Library: "Bibliothek", Magic: "Magie", Management: "Management", Minigame: "Minispiel", Mobs: "Kreaturen", Optimization: "Optimierung", Social: "Sozial", Storage: "Lagerung", Technology: "Technologie", Transportation: "Transport", Utility: "Dienstprogramm", "World Gen": "Weltgen", General: "Allgemein", Convenience: "Komfort"
+                }
+            },
+            ru: {
+                subtitle: "Находите и скачивайте общие конфигурации",
+                loading: "Загрузка конфигураций...",
+                noConfigs: "Конфигурации пока не найдены.",
+                noResults: "В этой категории нет конфигураций.",
+                login: "Войти через Google",
+                linkMod: "Привязать Minecraft (Войдите в моде)",
+                loggedInAs: "Вы вошли как",
+                logout: "Выйти",
+                download: "Скачать",
+                details: "Подробнее",
+                loginToDownload: "Войдите, чтобы скачать",
+                link: "Привязать аккаунт",
+                loginAlert: "Пожалуйста, сначала войдите.",
+                linkAlert: "Пожалуйста, привяжите свой аккаунт Minecraft, войдя через мод F34.",
+                modalTitle: "Детали конфигурации",
+                info: "Информация",
+                author: "Автор",
+                category: "Категория",
+                downloads: "Загрузки",
+                description: "Описание",
+                noDesc: "Описание отсутствует.",
+                buttons: "Кнопки",
+                noButtons: "Нет кастомных кнопок.",
+                raw: "Исходные данные",
+                close: "Закрыть",
+                support: "Поддержка",
+                supportTitle: "Центр поддержки",
+                supportDesc: "Есть проблема или предложение? Отправьте нам сообщение.",
+                supportSuccess: "Тикет успешно отправлен!",
+                supportError: "Ошибка при отправке тикета.",
+                bannedTitle: "Вы заблокированы",
+                bannedDesc: "Ваш доступ к сообществу ограничен из-за нарушения наших условий.",
+                categories: {
+                    All: "Все", Adventure: "Приключения", Horror: "Хоррор", Decoration: "Декор", Economy: "Экономика", Equipment: "Снаряжение", Food: "Еда", "Game Mechanics": "Механики", Library: "Библиотека", Magic: "Магия", Management: "Управление", Minigame: "Мини-игры", Mobs: "Мобы", Optimization: "Оптимизация", Social: "Социальное", Storage: "Хранилище", Technology: "Технологии", Transportation: "Транспорт", Utility: "Утилиты", "World Gen": "Генерация мира", General: "Общее", Convenience: "Удобство"
+                }
             }
         };
 
-        // --- UI Functions ---
+        let currentLang = localStorage.getItem('f34_lang') || 'en';
+        let db, auth, provider;
+        let currentUser = null;
+        let mcAccount = null;
+        let allConfigs = [];
+        let currentCategory = 'All';
+        let dataLoaded = false;
+
+        function log(msg) { console.log(`[F34] ${msg}`); }
+
         window.setLang = (lang) => {
             currentLang = lang;
             localStorage.setItem('f34_lang', lang);
@@ -234,23 +536,30 @@
 
         function updateUI() {
             const t = i18n[currentLang] || i18n.en;
-            document.querySelectorAll('[id^="t-"]').forEach(el => {
-                const key = el.id.replace('t-', '').replace(/-([a-z])/g, (g) => g[1].toUpperCase());
-                if (t[key]) el.textContent = t[key];
-            });
+            document.getElementById('t-subtitle').textContent = t.subtitle;
+            document.getElementById('t-loading').textContent = t.loading;
+            document.getElementById('t-support').textContent = t.support;
+            document.getElementById('t-admin-panel').textContent = i18n[currentLang].adminPanel || "Admin Panel";
+            document.getElementById('t-support-title').textContent = t.supportTitle;
+            document.getElementById('t-support-desc').textContent = t.supportDesc;
+            document.getElementById('t-support-cancel').textContent = i18n[currentLang].cancel || "Cancel";
+            document.getElementById('t-support-submit').textContent = i18n[currentLang].supportSubmit || "Submit Ticket";
+            document.getElementById('t-close').textContent = t.close;
+            document.getElementById('t-banned-title').textContent = t.bannedTitle;
+            document.getElementById('t-banned-desc').textContent = t.bannedDesc;
 
+            // Update Auth Button
             const authBtn = document.getElementById('auth-btn');
-            if (authBtn) {
-                if (!currentUser) authBtn.textContent = t.login;
-                else if (!mcAccount) authBtn.textContent = t.linkMod;
+            if (!currentUser) {
+                authBtn.textContent = t.login;
+            } else if (!mcAccount) {
+                authBtn.textContent = t.linkMod;
             }
 
-            ['lang-en', 'lang-ko', 'lang-jp', 'lang-cn', 'lang-es', 'lang-fr', 'lang-de', 'lang-ru'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) {
-                    const lang = id.split('-')[1];
-                    el.className = `px-2 py-1 rounded-lg text-[10px] font-bold transition-all ${currentLang === lang ? 'bg-blue-500 text-white' : 'hover:bg-white/10'}`;
-                }
+            // Update Language Switcher
+            document.querySelectorAll('[id^="lang-"]').forEach(btn => {
+                btn.classList.remove('bg-white/10', 'text-blue-400');
+                if (btn.id === `lang-${currentLang}`) btn.classList.add('bg-white/10', 'text-blue-400');
             });
 
             renderCategories();
@@ -259,29 +568,20 @@
 
         function renderCategories() {
             const t = i18n[currentLang] || i18n.en;
-            const filterContainer = document.getElementById('category-filter');
-            if (!filterContainer) return;
-            filterContainer.innerHTML = '';
-
-            const allBtn = document.createElement('button');
-            allBtn.className = `filter-btn px-4 py-2 rounded-lg glass text-[10px] font-bold uppercase tracking-wider transition-all ${currentCategory === 'all' ? 'active' : ''}`;
-            allBtn.textContent = t.all;
-            allBtn.onclick = () => window.setFilter('all');
-            filterContainer.appendChild(allBtn);
-
-            CATEGORIES.forEach(cat => {
+            const container = document.getElementById('category-list');
+            if (!container) return;
+            container.innerHTML = '';
+            Object.keys(t.categories).forEach(cat => {
                 const btn = document.createElement('button');
-                btn.className = `filter-btn px-4 py-2 rounded-lg glass text-[10px] font-bold uppercase tracking-wider transition-all ${currentCategory === cat ? 'active' : ''}`;
-                btn.textContent = t.categories[cat] || cat;
-                btn.onclick = () => window.setFilter(cat);
-                filterContainer.appendChild(btn);
+                btn.className = `category-pill px-4 py-2 rounded-full glass text-xs font-bold uppercase tracking-wider ${currentCategory === cat ? 'active' : 'hover:bg-white/5'}`;
+                btn.textContent = t.categories[cat];
+                btn.onclick = () => {
+                    currentCategory = cat;
+                    renderCategories();
+                    renderConfigs();
+                };
+                container.appendChild(btn);
             });
-        }
-
-        window.setFilter = (cat) => {
-            currentCategory = cat;
-            renderCategories();
-            renderConfigs();
         }
 
         function renderConfigs() {
@@ -290,22 +590,22 @@
             const configList = document.getElementById('config-list');
             if (!configList) return;
 
-            const filtered = currentCategory === 'all' ? allConfigs : allConfigs.filter(c => c.category === currentCategory);
+            const filtered = currentCategory === 'All' ? allConfigs : allConfigs.filter(c => c.category === currentCategory);
+
             if (filtered.length === 0) {
                 configList.innerHTML = `<div class="col-span-full glass p-12 text-center text-xl">${allConfigs.length === 0 ? t.noConfigs : t.noResults}</div>`;
                 return;
             }
+
             configList.innerHTML = '';
-            filtered.forEach((data) => {
+            filtered.forEach(data => {
                 const div = document.createElement('div');
-                div.className = 'glass p-6 card-hover flex flex-col justify-between';
+                div.className = "glass p-8 card-hover flex flex-col justify-between animate-fade-in";
                 let btnSummary = '';
                 try {
-                    const config = JSON.parse(data.config_json);
-                    if (config.buttons) {
-                        btnSummary = `<div class="flex flex-wrap gap-2 mt-4">
-                            ${config.buttons.slice(0, 4).map(b => `<span class="icon-badge px-2 py-1 rounded text-[10px]">${b.name || 'Button'}</span>`).join('')}
-                        </div>`;
+                    const configObj = JSON.parse(data.config_json);
+                    if (configObj.buttons && configObj.buttons.length > 0) {
+                        btnSummary = `<div class="flex gap-1 mt-4 opacity-30">${configObj.buttons.slice(0, 5).map(() => '<div class="w-1 h-1 rounded-full bg-white"></div>').join('')}</div>`;
                     }
                 } catch (e) { }
                 div.innerHTML = `
@@ -492,6 +792,7 @@
                 updateUI();
             });
 
+            const authBtn = document.getElementById('auth-btn');
             if (authBtn) {
                 authBtn.onclick = async () => {
                     if (currentUser) {
@@ -510,10 +811,21 @@
 
             const q = query(collection(db, "shared_configs"), where("status", "==", "approved"));
             onSnapshot(q, (snap) => {
+                log(`Fetched ${snap.size} approved configs`);
                 allConfigs = [];
                 snap.forEach(doc => allConfigs.push({ id: doc.id, ...doc.data() }));
                 dataLoaded = true;
                 renderConfigs();
+            }, (err) => {
+                log("Config Fetch Error: " + err.message);
+                const configList = document.getElementById('config-list');
+                if (configList) {
+                    configList.innerHTML = `<div class="col-span-full glass p-12 text-center text-red-400">
+                        <p class="text-xl font-bold">Error loading configurations</p>
+                        <p class="text-sm mt-2">${err.message}</p>
+                        <p class="text-xs mt-4 opacity-50">Please check your Firestore security rules and indexes.</p>
+                    </div>`;
+                }
             });
 
             updateUI();
