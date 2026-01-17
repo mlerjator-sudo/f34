@@ -44,6 +44,10 @@
             background: linear-gradient(135deg, #3b82f6, #2563eb);
         }
 
+        .btn-warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
         .icon-badge {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -54,6 +58,35 @@
             border-color: rgba(59, 130, 246, 0.5);
             color: #60a5fa;
         }
+
+        .tab-btn.active {
+            border-bottom: 2px solid #3b82f6;
+            color: #3b82f6;
+        }
+
+        .modal-backdrop {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+        }
+
+        .modal-content {
+            background: rgba(20, 22, 35, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
     </style>
 </head>
 
@@ -62,11 +95,23 @@
         <h1 id="t-admin-login"
             class="text-3xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
             F34 Admin Login</h1>
-        <div class="flex justify-center gap-2 mb-6">
+        <div class="flex flex-wrap justify-center gap-2 mb-6">
             <button onclick="setLang('en')" id="lang-en"
-                class="px-3 py-1 rounded-lg text-xs font-bold transition-all">EN</button>
+                class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">EN</button>
             <button onclick="setLang('ko')" id="lang-ko"
-                class="px-3 py-1 rounded-lg text-xs font-bold transition-all">KO</button>
+                class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">KO</button>
+            <button onclick="setLang('jp')" id="lang-jp"
+                class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">JP</button>
+            <button onclick="setLang('cn')" id="lang-cn"
+                class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">CN</button>
+            <button onclick="setLang('es')" id="lang-es"
+                class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">ES</button>
+            <button onclick="setLang('fr')" id="lang-fr"
+                class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">FR</button>
+            <button onclick="setLang('de')" id="lang-de"
+                class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">DE</button>
+            <button onclick="setLang('ru')" id="lang-ru"
+                class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">RU</button>
         </div>
         <button id="login-btn"
             class="w-full py-3 px-6 rounded-xl bg-white text-black font-semibold hover:bg-slate-200 transition-colors flex items-center justify-center gap-3">
@@ -84,15 +129,27 @@
         </button>
     </div>
 
-    <div id="admin-panel" class="hidden max-w-5xl mx-auto">
-        <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
+    <div id="admin-panel" class="hidden max-w-6xl mx-auto">
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-6">
             <h1 id="t-mod-panel" class="text-4xl font-bold">Moderation Panel</h1>
             <div class="flex flex-wrap items-center gap-4">
-                <div class="flex glass p-1 rounded-xl">
+                <div class="flex flex-wrap glass p-1 rounded-xl max-w-[280px] md:max-w-none">
                     <button onclick="setLang('en')" id="lang-en-panel"
-                        class="px-3 py-1 rounded-lg text-xs font-bold transition-all">EN</button>
+                        class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">EN</button>
                     <button onclick="setLang('ko')" id="lang-ko-panel"
-                        class="px-3 py-1 rounded-lg text-xs font-bold transition-all">KO</button>
+                        class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">KO</button>
+                    <button onclick="setLang('jp')" id="lang-jp-panel"
+                        class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">JP</button>
+                    <button onclick="setLang('cn')" id="lang-cn-panel"
+                        class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">CN</button>
+                    <button onclick="setLang('es')" id="lang-es-panel"
+                        class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">ES</button>
+                    <button onclick="setLang('fr')" id="lang-fr-panel"
+                        class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">FR</button>
+                    <button onclick="setLang('de')" id="lang-de-panel"
+                        class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">DE</button>
+                    <button onclick="setLang('ru')" id="lang-ru-panel"
+                        class="px-2 py-1 rounded-lg text-[10px] font-bold transition-all">RU</button>
                 </div>
                 <a href="index.html" id="t-hub"
                     class="px-6 py-2 rounded-lg glass hover:bg-white/10 transition-colors text-sm">Community Hub</a>
@@ -102,17 +159,77 @@
             </div>
         </header>
 
-        <div class="mb-8">
-            <div id="category-filter" class="flex flex-wrap gap-2">
-                <button
-                    class="filter-btn active px-4 py-2 rounded-lg glass text-[10px] font-bold uppercase tracking-wider transition-all"
-                    data-category="all" id="t-all">All</button>
+        <!-- Tabs -->
+        <div class="flex gap-8 border-b border-white/10 mb-8">
+            <button onclick="switchTab('configs')" id="tab-configs"
+                class="tab-btn active pb-4 font-bold text-lg transition-all">Configurations</button>
+            <button onclick="switchTab('players')" id="tab-players"
+                class="tab-btn pb-4 font-bold text-lg transition-all">Players</button>
+        </div>
+
+        <!-- Configs Section -->
+        <div id="section-configs">
+            <div class="mb-8">
+                <div id="category-filter" class="flex flex-wrap gap-2">
+                    <!-- Categories injected via JS -->
+                </div>
+            </div>
+            <div id="config-list" class="space-y-6">
+                <div id="t-loading" class="glass p-12 text-center text-xl animate-pulse">
+                    Loading pending configurations...
+                </div>
             </div>
         </div>
 
-        <div id="config-list" class="space-y-6">
-            <div id="loading-state" class="glass p-12 text-center text-xl animate-pulse" id="t-loading">
-                Loading pending configurations...
+        <!-- Players Section -->
+        <div id="section-players" class="hidden">
+            <div class="glass overflow-hidden">
+                <table class="w-full text-left">
+                    <thead class="bg-white/5 border-b border-white/10">
+                        <tr>
+                            <th class="p-4 font-bold">Player</th>
+                            <th class="p-4 font-bold">Email</th>
+                            <th class="p-4 font-bold">Warnings</th>
+                            <th class="p-4 font-bold">Status</th>
+                            <th class="p-4 font-bold text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="player-list">
+                        <!-- Players injected via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Player Details Modal -->
+    <div id="player-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 modal-backdrop">
+        <div class="modal-content w-full max-w-4xl max-h-[90vh] rounded-3xl overflow-hidden flex flex-col">
+            <div class="p-6 border-b border-white/10 flex justify-between items-center">
+                <h2 id="player-modal-title" class="text-2xl font-bold">Player Management</h2>
+                <button onclick="closePlayerModal()" class="p-2 hover:bg-white/10 rounded-full transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+            <div class="p-8 overflow-y-auto custom-scrollbar flex flex-col gap-8">
+                <!-- Player Info & Actions -->
+                <div id="player-info-section" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Injected via JS -->
+                </div>
+                <!-- Deployed Configs -->
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Deployed Configurations</h3>
+                    <div id="player-configs-list" class="space-y-4">
+                        <!-- Injected via JS -->
+                    </div>
+                </div>
+            </div>
+            <div class="p-6 border-t border-white/10 flex justify-end">
+                <button onclick="closePlayerModal()"
+                    class="px-6 py-2 rounded-xl glass hover:bg-white/10 transition-colors">Close</button>
             </div>
         </div>
     </div>
@@ -122,7 +239,7 @@
 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithPopup, signInWithRedirect, getRedirectResult, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { initializeFirestore, collection, query, where, onSnapshot, getDocs, doc, updateDoc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { initializeFirestore, collection, query, where, onSnapshot, getDocs, doc, updateDoc, deleteDoc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA827pUzqfTpGpGbT9uKXKEjZo3hYl5ENo",
@@ -133,120 +250,349 @@
             appId: "1:660590227115:web:0f1ca3aa9464f2406c11ee"
         };
 
-        // --- i18n ---
-        const i18n = {
-            en: {
-                adminLogin: "F34 Admin Login",
-                loginText: "Sign in with Google",
-                modPanel: "Moderation Panel",
-                hub: "Community Hub",
-                login: "Login with Google",
-                logout: "Logout",
-                admin: "Admin",
-                all: "All",
-                loading: "Loading pending configurations...",
-                approve: "Approve",
-                reject: "Reject",
-                raw: "View Raw JSON",
-                noPending: "No pending configurations.",
-                noResults: "No results in this category.",
-                noDesc: "No description.",
-                categories: {
-                    Adventure: "Adventure", Horror: "Horror", Decoration: "Decoration", Economy: "Economy", Equipment: "Equipment", Food: "Food", "Game Mechanics": "Game Mechanics", Library: "Library", Magic: "Magic", Management: "Management", Minigame: "Minigame", Mobs: "Mobs", Optimization: "Optimization", Social: "Social", Storage: "Storage", Technology: "Technology", Transportation: "Transportation", Utility: "Utility", "World Gen": "World Gen", General: "General", Convenience: "Convenience"
-                }
-            },
-            ko: {
-                adminLogin: "F34 관리자 로그인",
-                loginText: "Google로 로그인",
-                modPanel: "관리자 패널",
-                hub: "커뮤니티 허브",
-                login: "Google로 로그인",
-                logout: "로그아웃",
-                admin: "관리자",
-                all: "전체",
-                loading: "대기 중인 설정을 불러오는 중...",
-                approve: "승인",
-                reject: "거절",
-                raw: "원본 JSON 보기",
-                noPending: "대기 중인 설정이 없습니다.",
-                noResults: "이 카테고리에 결과가 없습니다.",
-                noDesc: "설명이 없습니다.",
-                categories: {
-                    Adventure: "모험", Horror: "공포", Decoration: "장식", Economy: "경제", Equipment: "장비", Food: "음식", "Game Mechanics": "게임 메커니즘", Library: "라이브러리", Magic: "마법", Management: "관리", Minigame: "미니게임", Mobs: "몹", Optimization: "최적화", Social: "소셜", Storage: "저장", Technology: "기술", Transportation: "이동수단", Utility: "유틸리티", "World Gen": "월드 생성", General: "일반", Convenience: "편의성"
-                }
-            }
-        };
-
-        let currentLang = localStorage.getItem('f34_lang') || 'en';
-
-        window.setLang = (lang) => {
-            currentLang = lang;
-            localStorage.setItem('f34_lang', lang);
-            updateUI();
-        };
-
-        function updateUI() {
-            const t = i18n[currentLang];
-            if (document.getElementById('t-admin-login')) document.getElementById('t-admin-login').textContent = t.adminLogin;
-            if (document.getElementById('t-login-text')) document.getElementById('t-login-text').textContent = t.loginText;
-            if (document.getElementById('t-mod-panel')) document.getElementById('t-mod-panel').textContent = t.modPanel;
-            if (document.getElementById('t-hub')) document.getElementById('t-hub').textContent = t.hub;
-            if (document.getElementById('t-all')) document.getElementById('t-all').textContent = t.all;
-            if (document.getElementById('t-loading')) document.getElementById('t-loading').textContent = t.loading;
-
-            // Update auth button text if not logged in
-            if (!currentUser) {
-                document.getElementById('auth-btn').textContent = t.login;
-            }
-
-            // Update language switcher styles
-            ['lang-en', 'lang-ko', 'lang-en-panel', 'lang-ko-panel'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) {
-                    const isEn = id.includes('en');
-                    const isActive = (isEn && currentLang === 'en') || (!isEn && currentLang === 'ko');
-                    el.className = `px-3 py-1 rounded-lg text-xs font-bold transition-all ${isActive ? 'bg-blue-500 text-white' : 'hover:bg-white/10'}`;
-                }
-            });
-
-            renderCategories();
-            renderConfigs();
-        }
-
+        // --- Global State ---
         let db, auth, provider;
         const ADMIN_UID = "3HhMIE2eDTcev32kChg08g1GjNO2";
         let currentUser = null;
         let mcAccount = null;
         let currentCategory = 'all';
         let allConfigs = [];
+        let allPlayers = [];
         let dataLoaded = false;
+        let currentLang = localStorage.getItem('f34_lang') || 'en';
+        let activeTab = 'configs';
 
+        const CATEGORIES = ["Adventure", "Horror", "Decoration", "Economy", "Equipment", "Food", "Game Mechanics", "Library", "Magic", "Management", "Minigame", "Mobs", "Optimization", "Social", "Storage", "Technology", "Transportation", "Utility", "World Gen", "General", "Convenience"];
+
+        const i18n = {
+            en: {
+                adminLogin: "F34 Admin Login", loginText: "Sign in with Google", modPanel: "Moderation Panel", hub: "Community Hub", login: "Login with Google", logout: "Logout", admin: "Admin", all: "All", loading: "Loading pending configurations...", approve: "Approve", reject: "Reject", raw: "View Raw JSON", noPending: "No pending configurations.", noResults: "No results in this category.", noDesc: "No description.",
+                players: "Players", configs: "Configurations", email: "Email", warnings: "Warnings", status: "Status", actions: "Actions", ban: "Ban", warn: "Warn", delete: "Delete Account", banDuration: "Ban Duration (hours)", active: "Active", banned: "Banned",
+                categories: { Adventure: "Adventure", Horror: "Horror", Decoration: "Decoration", Economy: "Economy", Equipment: "Equipment", Food: "Food", "Game Mechanics": "Game Mechanics", Library: "Library", Magic: "Magic", Management: "Management", Minigame: "Minigame", Mobs: "Mobs", Optimization: "Optimization", Social: "Social", Storage: "Storage", Technology: "Technology", Transportation: "Transportation", Utility: "Utility", "World Gen": "World Gen", General: "General", Convenience: "Convenience" }
+            },
+            ko: {
+                adminLogin: "F34 관리자 로그인", loginText: "Google로 로그인", modPanel: "관리자 패널", hub: "커뮤니티 허브", login: "Google로 로그인", logout: "로그아웃", admin: "관리자", all: "전체", loading: "대기 중인 설정을 불러오는 중...", approve: "승인", reject: "거절", raw: "원본 JSON 보기", noPending: "대기 중인 설정이 없습니다.", noResults: "이 카테고리에 결과가 없습니다.", noDesc: "설명이 없습니다.",
+                players: "플레이어", configs: "설정 목록", email: "이메일", warnings: "경고", status: "상태", actions: "작업", ban: "차단", warn: "경고", delete: "계정 삭제", banDuration: "차단 시간 (시간)", active: "활성", banned: "차단됨",
+                categories: { Adventure: "모험", Horror: "공포", Decoration: "장식", Economy: "경제", Equipment: "장비", Food: "음식", "Game Mechanics": "게임 메커니즘", Library: "라이브러리", Magic: "마법", Management: "관리", Minigame: "미니게임", Mobs: "몹", Optimization: "최적화", Social: "소셜", Storage: "저장", Technology: "기술", Transportation: "이동수단", Utility: "유틸리티", "World Gen": "월드 생성", General: "일반", Convenience: "편의성" }
+            }
+            // ... other languages can be added similarly
+        };
+
+        // --- UI Functions ---
+        window.setLang = (lang) => {
+            currentLang = lang;
+            localStorage.setItem('f34_lang', lang);
+            updateUI();
+        };
+
+        window.switchTab = (tab) => {
+            activeTab = tab;
+            document.getElementById('section-configs').classList.toggle('hidden', tab !== 'configs');
+            document.getElementById('section-players').classList.toggle('hidden', tab !== 'players');
+            document.getElementById('tab-configs').classList.toggle('active', tab === 'configs');
+            document.getElementById('tab-players').classList.toggle('active', tab === 'players');
+            if (tab === 'players') fetchPlayers();
+        };
+
+        function updateUI() {
+            const t = i18n[currentLang] || i18n.en;
+            document.querySelectorAll('[id^="t-"]').forEach(el => {
+                const key = el.id.replace('t-', '').replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+                if (t[key]) el.textContent = t[key];
+            });
+
+            const authBtn = document.getElementById('auth-btn');
+            if (authBtn && !currentUser) authBtn.textContent = t.login;
+
+            renderCategories();
+            renderConfigs();
+            if (activeTab === 'players') renderPlayers();
+        }
+
+        function renderCategories() {
+            const t = i18n[currentLang] || i18n.en;
+            const filterContainer = document.getElementById('category-filter');
+            if (!filterContainer) return;
+            filterContainer.innerHTML = '';
+
+            const allBtn = document.createElement('button');
+            allBtn.className = `filter-btn px-4 py-2 rounded-lg glass text-[10px] font-bold uppercase tracking-wider transition-all ${currentCategory === 'all' ? 'active' : ''}`;
+            allBtn.textContent = t.all;
+            allBtn.onclick = () => window.setFilter('all');
+            filterContainer.appendChild(allBtn);
+
+            CATEGORIES.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = `filter-btn px-4 py-2 rounded-lg glass text-[10px] font-bold uppercase tracking-wider transition-all ${currentCategory === cat ? 'active' : ''}`;
+                btn.textContent = t.categories[cat] || cat;
+                btn.onclick = () => window.setFilter(cat);
+                filterContainer.appendChild(btn);
+            });
+        }
+
+        window.setFilter = (cat) => {
+            currentCategory = cat;
+            renderCategories();
+            renderConfigs();
+        }
+
+        function renderConfigs() {
+            if (!dataLoaded) return;
+            const t = i18n[currentLang] || i18n.en;
+            const configList = document.getElementById('config-list');
+            if (!configList) return;
+
+            const filtered = currentCategory === 'all' ? allConfigs : allConfigs.filter(c => c.category === currentCategory);
+            if (filtered.length === 0) {
+                configList.innerHTML = `<div class="glass p-12 text-center text-xl">${allConfigs.length === 0 ? t.noPending : t.noResults}</div>`;
+                return;
+            }
+            configList.innerHTML = '';
+            filtered.forEach((data) => {
+                const div = document.createElement('div');
+                div.className = `glass p-6 card-hover`;
+                let configSummary = '', rawJson = '';
+                try {
+                    const config = JSON.parse(data.config_json);
+                    rawJson = JSON.stringify(config, null, 2);
+                    if (config.buttons) {
+                        configSummary = `<div class="mt-4 flex flex-wrap gap-3">
+                            ${config.buttons.map(btn => `<div class="icon-badge p-3 rounded-xl flex flex-col gap-2 min-w-[150px]">
+                                <div class="flex items-center gap-2"><span class="font-bold text-sm">${btn.name || 'Unknown'}</span></div>
+                                <div class="text-[11px] font-mono text-blue-300 bg-blue-500/10 p-2 rounded border border-blue-500/20 break-all leading-tight">${btn.command || 'No Command'}</div>
+                            </div>`).join('')}
+                        </div>`;
+                    }
+                } catch (e) { }
+                div.innerHTML = `
+                    <div class="flex flex-col md:flex-row justify-between gap-6">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-3">
+                                <h3 class="text-2xl font-bold">${data.name || 'Untitled'}</h3>
+                                <span class="px-2 py-1 rounded-md bg-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-wider border border-blue-500/30">${t.categories[data.category] || data.category || t.categories.General}</span>
+                            </div>
+                            <p class="text-slate-400 text-sm">by ${data.author || 'Unknown'}</p>
+                            <p class="mt-3 text-slate-300 italic">"${data.description || t.noDesc}"</p>
+                            ${configSummary}
+                        </div>
+                        <div class="flex md:flex-col gap-3 justify-center items-center">
+                            <button onclick="updateStatus('${data.id}', 'approved')" class="btn-approve px-8 py-3 rounded-xl font-bold text-white transition-transform active:scale-95 w-full md:w-32">${t.approve}</button>
+                            <button onclick="updateStatus('${data.id}', 'rejected')" class="btn-reject px-8 py-3 rounded-xl font-bold text-white transition-transform active:scale-95 w-full md:w-32">${t.reject}</button>
+                        </div>
+                    </div>
+                    <details class="mt-6">
+                        <summary class="text-xs text-slate-500 cursor-pointer hover:text-slate-300 uppercase tracking-widest font-bold">${t.raw}</summary>
+                        <pre class="mt-4 p-4 rounded-xl bg-black/40 text-xs font-mono overflow-x-auto border border-white/5 text-blue-300">${rawJson}</pre>
+                    </details>`;
+                configList.appendChild(div);
+            });
+        }
+
+        // --- Player Management Functions ---
+        async function fetchPlayers() {
+            try {
+                const snap = await getDocs(collection(db, "users"));
+                allPlayers = [];
+                snap.forEach(doc => allPlayers.push({ email: doc.id, ...doc.data() }));
+                renderPlayers();
+            } catch (e) { log("Fetch Players Error: " + e.message); }
+        }
+
+        function renderPlayers() {
+            const t = i18n[currentLang] || i18n.en;
+            const playerList = document.getElementById('player-list');
+            if (!playerList) return;
+            playerList.innerHTML = '';
+
+            allPlayers.forEach(player => {
+                const isBanned = player.ban_until && player.ban_until > Date.now();
+                const tr = document.createElement('tr');
+                tr.className = "border-b border-white/5 hover:bg-white/5 transition-colors cursor-pointer";
+                tr.onclick = (e) => {
+                    if (e.target.tagName !== 'BUTTON' && e.target.tagName !== 'INPUT') showPlayerDetails(player.email);
+                };
+                tr.innerHTML = `
+                    <td class="p-4">
+                        <div class="flex items-center gap-3">
+                            <img src="https://mc-heads.net/avatar/${player.mc_name}/32" class="w-8 h-8 rounded border border-white/10" alt="Skin">
+                            <span class="font-bold">${player.mc_name || 'Unknown'}</span>
+                        </div>
+                    </td>
+                    <td class="p-4 text-slate-400 text-sm">${player.email}</td>
+                    <td class="p-4"><span class="px-2 py-1 rounded bg-yellow-500/20 text-yellow-400 text-xs font-bold">${player.warnings || 0}</span></td>
+                    <td class="p-4">
+                        <span class="px-2 py-1 rounded text-xs font-bold ${isBanned ? 'bg-red-500/20 text-red-400' : 'bg-green-500/20 text-green-400'}">
+                            ${isBanned ? t.banned : t.active}
+                        </span>
+                    </td>
+                    <td class="p-4 text-right">
+                        <button onclick="showPlayerDetails('${player.email}')" class="px-3 py-1 rounded bg-blue-500/20 text-blue-400 text-xs font-bold hover:bg-blue-500/30 transition-colors">Manage</button>
+                    </td>
+                `;
+                playerList.appendChild(tr);
+            });
+        }
+
+        window.showPlayerDetails = async (email) => {
+            const player = allPlayers.find(p => p.email === email);
+            if (!player) return;
+            const t = i18n[currentLang] || i18n.en;
+
+            const modal = document.getElementById('player-modal');
+            const infoSection = document.getElementById('player-info-section');
+            const configsList = document.getElementById('player-configs-list');
+
+            const isBanned = player.ban_until && player.ban_until > Date.now();
+            const banTimeLeft = isBanned ? Math.ceil((player.ban_until - Date.now()) / (1000 * 60 * 60)) : 0;
+
+            infoSection.innerHTML = `
+                <div class="glass p-6 flex flex-col gap-4">
+                    <div class="flex items-center gap-4">
+                        <img src="https://mc-heads.net/avatar/${player.mc_name}/64" class="w-16 h-16 rounded-xl border border-white/10" alt="Skin">
+                        <div>
+                            <h3 class="text-2xl font-bold">${player.mc_name}</h3>
+                            <p class="text-slate-400 text-sm">${player.email}</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 mt-4">
+                        <div class="icon-badge p-3 rounded-xl">
+                            <div class="text-[10px] opacity-40 uppercase font-bold">${t.warnings}</div>
+                            <div class="text-xl font-bold text-yellow-400">${player.warnings || 0}</div>
+                        </div>
+                        <div class="icon-badge p-3 rounded-xl">
+                            <div class="text-[10px] opacity-40 uppercase font-bold">${t.status}</div>
+                            <div class="text-xl font-bold ${isBanned ? 'text-red-400' : 'text-green-400'}">${isBanned ? t.banned : t.active}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass p-6 flex flex-col gap-4">
+                    <h4 class="font-bold uppercase text-xs opacity-40 tracking-widest">${t.actions}</h4>
+                    <div class="flex flex-col gap-3">
+                        <div class="flex gap-2">
+                            <input type="number" id="ban-hours" placeholder="${t.banDuration}" class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-blue-500">
+                            <button onclick="banPlayer('${player.email}')" class="btn-reject px-6 py-2 rounded-xl font-bold text-sm">${t.ban}</button>
+                        </div>
+                        <button onclick="warnPlayer('${player.email}')" class="btn-warning px-6 py-2 rounded-xl font-bold text-sm">${t.warn}</button>
+                        <button onclick="deletePlayer('${player.email}')" class="bg-red-600/20 text-red-500 border border-red-500/20 px-6 py-2 rounded-xl font-bold text-sm hover:bg-red-600/30 transition-colors">${t.delete}</button>
+                    </div>
+                    ${isBanned ? `<p class="text-xs text-red-400 mt-2">Banned for ${banTimeLeft} more hours.</p>` : ''}
+                </div>
+            `;
+
+            // Fetch player's configs
+            configsList.innerHTML = '<div class="animate-pulse">Loading configurations...</div>';
+            try {
+                const q = query(collection(db, "shared_configs"), where("author", "==", player.email));
+                const snap = await getDocs(q);
+                if (snap.empty) {
+                    configsList.innerHTML = '<div class="text-slate-500 italic">No configurations deployed.</div>';
+                } else {
+                    configsList.innerHTML = '';
+                    snap.forEach(doc => {
+                        const data = doc.data();
+                        const div = document.createElement('div');
+                        div.className = "glass p-4 flex justify-between items-center border border-white/5";
+                        div.innerHTML = `
+                            <div>
+                                <div class="font-bold">${data.name || 'Untitled'}</div>
+                                <div class="text-xs text-slate-400">${data.category} • ${data.status}</div>
+                            </div>
+                            <button onclick="deleteConfig('${doc.id}', '${player.email}')" class="p-2 text-red-400 hover:bg-red-400/10 rounded-lg transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            </button>
+                        `;
+                        configsList.appendChild(div);
+                    });
+                }
+            } catch (e) { configsList.innerHTML = '<div class="text-red-400">Error loading configs.</div>'; }
+
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        };
+
+        window.closePlayerModal = () => {
+            document.getElementById('player-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        };
+
+        window.banPlayer = async (email) => {
+            const hours = parseInt(document.getElementById('ban-hours').value);
+            if (isNaN(hours) || hours <= 0) return alert("Enter valid hours.");
+            try {
+                const banUntil = Date.now() + (hours * 60 * 60 * 1000);
+                await updateDoc(doc(db, "users", email), { ban_until: banUntil });
+                alert("Player banned.");
+                fetchPlayers();
+                showPlayerDetails(email);
+            } catch (e) { alert("Failed to ban player."); }
+        };
+
+        window.warnPlayer = async (email) => {
+            try {
+                const playerRef = doc(db, "users", email);
+                const snap = await getDoc(playerRef);
+                const warnings = (snap.data().warnings || 0) + 1;
+                await updateDoc(playerRef, { warnings: warnings });
+                alert(`Warning issued. Total: ${warnings}`);
+                fetchPlayers();
+                showPlayerDetails(email);
+            } catch (e) { alert("Failed to warn player."); }
+        };
+
+        window.deletePlayer = async (email) => {
+            if (!confirm("Are you sure you want to delete this account? This cannot be undone.")) return;
+            try {
+                await deleteDoc(doc(db, "users", email));
+                alert("Account deleted.");
+                closePlayerModal();
+                fetchPlayers();
+            } catch (e) { alert("Failed to delete account."); }
+        };
+
+        window.deleteConfig = async (id, email) => {
+            if (!confirm("Delete this configuration?")) return;
+            try {
+                await deleteDoc(doc(db, "shared_configs", id));
+                alert("Configuration deleted.");
+                showPlayerDetails(email);
+            } catch (e) { alert("Failed to delete configuration."); }
+        };
+
+        window.updateStatus = async (id, status) => {
+            try {
+                const docRef = doc(db, "shared_configs", id);
+                if (status === 'approved') await updateDoc(docRef, { status: 'approved' });
+                else await deleteDoc(docRef);
+                renderConfigs();
+            } catch (e) { alert("Failed to update status."); }
+        };
+
+        // --- Firebase Logic ---
         try {
             const app = initializeApp(firebaseConfig);
             db = initializeFirestore(app, { experimentalForceLongPolling: true });
             auth = getAuth(app);
             provider = new GoogleAuthProvider();
 
-            const loginScreen = document.getElementById('login-screen');
-            const adminPanel = document.getElementById('admin-panel');
-            const configList = document.getElementById('config-list');
-            const filterContainer = document.getElementById('category-filter');
-            const authBtn = document.getElementById('auth-btn');
-
             onAuthStateChanged(auth, async (user) => {
                 currentUser = user;
-                const t = i18n[currentLang];
+                const loginScreen = document.getElementById('login-screen');
+                const adminPanel = document.getElementById('admin-panel');
+                const authBtn = document.getElementById('auth-btn');
+
                 if (user && user.uid === ADMIN_UID) {
-                    loginScreen.classList.add('hidden');
-                    adminPanel.classList.remove('hidden');
+                    if (loginScreen) loginScreen.classList.add('hidden');
+                    if (adminPanel) adminPanel.classList.remove('hidden');
                     try {
                         const userDoc = await getDoc(doc(db, "users", user.email));
                         if (userDoc.exists()) {
                             mcAccount = userDoc.data();
-                            authBtn.innerHTML = `<div class="flex items-center gap-3">
-                                <img src="https://mc-heads.net/avatar/${mcAccount.mc_name}/32" class="w-8 h-8 rounded border border-white/20" alt="Skin">
-                                <div class="text-left"><div class="text-[10px] opacity-50 leading-none">${t.admin}</div><div class="font-bold">${mcAccount.mc_name}</div></div>
-                            </div>`;
+                            if (authBtn) {
+                                authBtn.innerHTML = `<div class="flex items-center gap-3">
+                                    <img src="https://mc-heads.net/avatar/${mcAccount.mc_name}/32" class="w-8 h-8 rounded border border-white/20" alt="Skin">
+                                    <div class="text-left"><div class="text-[10px] opacity-50 leading-none">Admin</div><div class="font-bold">${mcAccount.mc_name}</div></div>
+                                </div>`;
+                            }
                         }
                     } catch (e) { log("Auth Doc Error: " + e.message); }
                     setupDataFetching();
@@ -254,14 +600,17 @@
                     alert("Access Denied");
                     signOut(auth);
                 } else {
-                    loginScreen.classList.remove('hidden');
-                    adminPanel.classList.add('hidden');
+                    if (loginScreen) loginScreen.classList.remove('hidden');
+                    if (adminPanel) adminPanel.classList.add('hidden');
                 }
                 updateUI();
             });
 
-            document.getElementById('login-btn').onclick = authBtn.onclick = async () => {
-                if (currentUser && this === authBtn) signOut(auth);
+            const loginBtn = document.getElementById('login-btn');
+            const authBtn = document.getElementById('auth-btn');
+
+            const loginHandler = async () => {
+                if (currentUser) signOut(auth);
                 else {
                     try {
                         await signInWithPopup(auth, provider).catch(async (err) => {
@@ -273,135 +622,18 @@
                 }
             };
 
-            const CATEGORIES = ["Adventure", "Horror", "Decoration", "Economy", "Equipment", "Food", "Game Mechanics", "Library", "Magic", "Management", "Minigame", "Mobs", "Optimization", "Social", "Storage", "Technology", "Transportation", "Utility", "World Gen", "General", "Convenience"];
-
-            function renderCategories() {
-                const t = i18n[currentLang];
-                const allBtn = document.getElementById('t-all');
-                if (!filterContainer) return;
-                filterContainer.innerHTML = '';
-                filterContainer.appendChild(allBtn);
-
-                CATEGORIES.forEach(cat => {
-                    const btn = document.createElement('button');
-                    btn.className = `filter-btn px-4 py-2 rounded-lg glass text-[10px] font-bold uppercase tracking-wider transition-all ${currentCategory === cat ? 'active' : ''}`;
-                    btn.textContent = t.categories[cat] || cat;
-                    btn.dataset.category = cat;
-                    btn.onclick = () => setFilter(cat);
-                    filterContainer.appendChild(btn);
-                });
-            }
-
-            window.setFilter = (cat) => {
-                currentCategory = cat;
-                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.category === cat));
-                renderConfigs();
-            }
+            if (loginBtn) loginBtn.onclick = loginHandler;
+            if (authBtn) authBtn.onclick = loginHandler;
 
             function setupDataFetching() {
                 const q = query(collection(db, "shared_configs"), where("status", "==", "pending"));
-                getDocs(q).then(snap => {
-                    if (dataLoaded) return;
-                    processSnapshot(snap);
-                }).catch(err => {
-                    if (!dataLoaded) fetchViaREST();
-                });
-                setTimeout(() => {
-                    if (!dataLoaded) fetchViaREST();
-                }, 3000);
-            }
-
-            async function fetchViaREST() {
-                if (dataLoaded) return;
-                try {
-                    const url = `https://firestore.googleapis.com/v1/projects/f34-di/databases/(default)/documents/shared_configs`;
-                    const response = await fetch(url);
-                    const data = await response.json();
-                    if (data.documents) {
-                        allConfigs = data.documents
-                            .map(doc => {
-                                const fields = doc.fields;
-                                const obj = { id: doc.name.split('/').pop() };
-                                for (let key in fields) {
-                                    obj[key] = fields[key].stringValue || fields[key].integerValue || fields[key].doubleValue || fields[key].booleanValue || null;
-                                }
-                                return obj;
-                            })
-                            .filter(c => c.status === 'pending');
-                        dataLoaded = true;
-                        renderConfigs();
-                    }
-                } catch (e) { log("REST Fallback Failed: " + e.message); }
-            }
-
-            function processSnapshot(snap) {
-                allConfigs = [];
-                snap.forEach(doc => allConfigs.push({ id: doc.id, ...doc.data() }));
-                dataLoaded = true;
-                renderConfigs();
-                onSnapshot(query(collection(db, "shared_configs"), where("status", "==", "pending")), (s) => {
+                onSnapshot(q, (snap) => {
                     allConfigs = [];
-                    s.forEach(doc => allConfigs.push({ id: doc.id, ...doc.data() }));
+                    snap.forEach(doc => allConfigs.push({ id: doc.id, ...doc.data() }));
+                    dataLoaded = true;
                     renderConfigs();
                 });
             }
-
-            function renderConfigs() {
-                if (!dataLoaded) return;
-                const t = i18n[currentLang];
-                const filtered = currentCategory === 'all' ? allConfigs : allConfigs.filter(c => c.category === currentCategory);
-                if (filtered.length === 0) {
-                    configList.innerHTML = `<div class="glass p-12 text-center text-xl">${allConfigs.length === 0 ? t.noPending : t.noResults}</div>`;
-                    return;
-                }
-                configList.innerHTML = '';
-                filtered.forEach((data) => {
-                    const div = document.createElement('div');
-                    div.className = `glass p-6 card-hover`;
-                    let configSummary = '', rawJson = '';
-                    try {
-                        const config = JSON.parse(data.config_json);
-                        rawJson = JSON.stringify(config, null, 2);
-                        if (config.buttons) {
-                            configSummary = `<div class="mt-4 flex flex-wrap gap-3">
-                                ${config.buttons.map(btn => `<div class="icon-badge p-3 rounded-xl flex flex-col gap-2 min-w-[150px]">
-                                    <div class="flex items-center gap-2"><span class="font-bold text-sm">${btn.name || 'Unknown'}</span></div>
-                                    <div class="text-[11px] font-mono text-blue-300 bg-blue-500/10 p-2 rounded border border-blue-500/20 break-all leading-tight">${btn.command || 'No Command'}</div>
-                                </div>`).join('')}
-                            </div>`;
-                        }
-                    } catch (e) { }
-                    div.innerHTML = `
-                        <div class="flex flex-col md:flex-row justify-between gap-6">
-                            <div class="flex-1">
-                                <div class="flex items-center gap-3">
-                                    <h3 class="text-2xl font-bold">${data.name || 'Untitled'}</h3>
-                                    <span class="px-2 py-1 rounded-md bg-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-wider border border-blue-500/30">${t.categories[data.category] || data.category || t.categories.General}</span>
-                                </div>
-                                <p class="text-slate-400 text-sm">by ${data.author || 'Unknown'}</p>
-                                <p class="mt-3 text-slate-300 italic">"${data.description || t.noDesc}"</p>
-                                ${configSummary}
-                            </div>
-                            <div class="flex md:flex-col gap-3 justify-center items-center">
-                                <button onclick="updateStatus('${data.id}', 'approved')" class="btn-approve px-8 py-3 rounded-xl font-bold text-white transition-transform active:scale-95 w-full md:w-32">${t.approve}</button>
-                                <button onclick="updateStatus('${data.id}', 'rejected')" class="btn-reject px-8 py-3 rounded-xl font-bold text-white transition-transform active:scale-95 w-full md:w-32">${t.reject}</button>
-                            </div>
-                        </div>
-                        <details class="mt-6">
-                            <summary class="text-xs text-slate-500 cursor-pointer hover:text-slate-300 uppercase tracking-widest font-bold">${t.raw}</summary>
-                            <pre class="mt-4 p-4 rounded-xl bg-black/40 text-xs font-mono overflow-x-auto border border-white/5 text-blue-300">${rawJson}</pre>
-                        </details>`;
-                    configList.appendChild(div);
-                });
-            }
-
-            window.updateStatus = async (id, status) => {
-                try {
-                    const docRef = doc(db, "shared_configs", id);
-                    if (status === 'approved') await updateDoc(docRef, { status: 'approved' });
-                    else await deleteDoc(docRef);
-                } catch (e) { alert("Failed to update status."); }
-            };
 
             updateUI();
         } catch (e) { log("Init Error: " + e.message); }
