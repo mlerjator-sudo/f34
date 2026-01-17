@@ -54,7 +54,7 @@
         <header class="flex justify-between items-center mb-12">
             <div>
                 <h1
-                    class="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+                    class="text-4xl font-bold text-white bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
                     F34 Community</h1>
                 <p class="text-slate-400 mt-2">Discover and download shared configurations</p>
             </div>
@@ -75,10 +75,14 @@
             </div>
         </div>
 
-        <div id="config-list" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+        <div id="config-list" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="col-span-full glass p-12 text-center text-xl animate-pulse">Loading configurations...</div>
+        </div>
     </div>
 
     <script type="module">
+        console.log("F34 Community Hub Script Starting...");
+
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, collection, query, where, onSnapshot, doc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { getAuth, signInWithPopup, signInWithRedirect, getRedirectResult, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -107,9 +111,12 @@
         let allConfigs = [];
 
         // Handle redirect result
+        console.log("Checking for redirect result...");
         getRedirectResult(auth).then((result) => {
             if (result) {
                 console.log("Redirect login successful:", result.user.email);
+            } else {
+                console.log("No redirect result found.");
             }
         }).catch((error) => {
             console.error("Redirect Error:", error);
@@ -139,6 +146,7 @@
         };
 
         onAuthStateChanged(auth, async (user) => {
+            console.log("Auth state changed:", user ? user.email : "Logged out");
             currentUser = user;
             if (user) {
                 console.log("Checking link for email:", user.email);
@@ -161,7 +169,10 @@
                         console.warn("No link found in Firestore for:", user.email);
                         mcAccount = null;
                         authBtn.textContent = 'Link Minecraft (Login in Mod)';
-                        alert('Your Google account is not linked with Minecraft.\n\nTo link your account:\n1. Open Minecraft with the F34 mod.\n2. Click the Login button and sign in with this same Google account (' + user.email + ').\n3. Once linked, refresh this page.');
+                        if (!window.linkAlertShown) {
+                            alert('Your Google account is not linked with Minecraft.\n\nTo link your account:\n1. Open Minecraft with the F34 mod.\n2. Click the Login button and sign in with this same Google account (' + user.email + ').\n3. Once linked, refresh this page.');
+                            window.linkAlertShown = true;
+                        }
                     }
                 } catch (e) {
                     console.error("Firestore Check Error:", e);
@@ -201,15 +212,22 @@
         }
 
         const q = query(collection(db, "shared_configs"), where("status", "==", "approved"));
+        console.log("Setting up Firestore listener...");
+
         onSnapshot(q, (snapshot) => {
+            console.log("Firestore update received. Count:", snapshot.size);
             allConfigs = [];
             snapshot.forEach(doc => {
                 allConfigs.push({ id: doc.id, ...doc.data() });
             });
             renderConfigs();
+        }, (error) => {
+            console.error("Firestore Snapshot Error:", error);
+            configList.innerHTML = `<div class="col-span-full glass p-12 text-center text-red-400 text-xl">Error loading data: ${error.message}</div>`;
         });
 
         function renderConfigs() {
+            console.log("Rendering configs. Total:", allConfigs.length, "Filter:", currentCategory);
             const filtered = currentCategory === 'all'
                 ? allConfigs
                 : allConfigs.filter(c => c.category === currentCategory);
@@ -229,7 +247,7 @@
                     const config = JSON.parse(data.config_json);
                     if (config.buttons) {
                         btnSummary = `<div class="flex flex-wrap gap-2 mt-4">
-                            ${config.buttons.slice(0, 4).map(b => `<span class="icon-badge px-2 py-1 rounded text-[10px]">${b.name}</span>`).join('')}
+                            ${config.buttons.slice(0, 4).map(b => `<span class="icon-badge px-2 py-1 rounded text-[10px]">${b.name || 'Button'}</span>`).join('')}
                             ${config.buttons.length > 4 ? `<span class="opacity-40 text-[10px]">+${config.buttons.length - 4} more</span>` : ''}
                         </div>`;
                     }
@@ -239,13 +257,13 @@
                     <div>
                         <div class="flex justify-between items-start">
                             <div>
-                                <h3 class="text-xl font-bold">${data.name}</h3>
+                                <h3 class="text-xl font-bold">${data.name || 'Untitled'}</h3>
                                 <span class="text-[10px] text-blue-400 font-bold uppercase tracking-wider">${data.category || 'General'}</span>
                             </div>
                             <span class="text-[10px] opacity-40 font-mono">${data.downloads || 0} DLs</span>
                         </div>
-                        <p class="text-slate-400 text-xs mt-1">by ${data.author.split('@')[0]}</p>
-                        <p class="mt-4 text-sm text-slate-300 line-clamp-2">"${data.description}"</p>
+                        <p class="text-slate-400 text-xs mt-1">by ${data.author ? data.author.split('@')[0] : 'Unknown'}</p>
+                        <p class="mt-4 text-sm text-slate-300 line-clamp-2">"${data.description || 'No description.'}"</p>
                         ${btnSummary}
                     </div>
                     <button onclick="handleDownload('${data.id}')" class="btn-download mt-6 w-full py-3 rounded-xl font-bold text-white transition-transform active:scale-95 ${(!currentUser || !mcAccount) ? 'opacity-50 cursor-not-allowed' : ''}">${(currentUser && mcAccount) ? 'Download' : (currentUser ? 'Link Minecraft' : 'Login to Download')}</button>
@@ -264,13 +282,18 @@
                 alert('Your Google account is not linked with Minecraft. Please login using the F34 mod in Minecraft first.');
                 return;
             }
-            const docRef = doc(db, "shared_configs", id);
-            const snap = await getDoc(docRef);
+            try {
+                const docRef = doc(db, "shared_configs", id);
+                const snap = await getDoc(docRef);
 
-            if (!snap.exists()) return;
-            const data = snap.data();
-            downloadJson(data.config_json, data.name);
-            incrementDownloads(id);
+                if (!snap.exists()) return;
+                const data = snap.data();
+                downloadJson(data.config_json, data.name);
+                incrementDownloads(id);
+            } catch (e) {
+                console.error("Download Error:", e);
+                alert("Failed to download configuration.");
+            }
         };
 
         function downloadJson(json, name) {
@@ -286,8 +309,12 @@
         }
 
         async function incrementDownloads(id) {
-            const docRef = doc(db, "shared_configs", id);
-            await updateDoc(docRef, { downloads: increment(1) });
+            try {
+                const docRef = doc(db, "shared_configs", id);
+                await updateDoc(docRef, { downloads: increment(1) });
+            } catch (e) {
+                console.error("Increment Downloads Error:", e);
+            }
         }
     </script>
 </body>
