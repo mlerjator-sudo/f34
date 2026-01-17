@@ -4,12 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>F34 Admin Panel</title>
+    <title>F34 DI-Community Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Noto+Sans+KR:wght@300;400;700;900&display=swap"
+        rel="stylesheet">
     <style>
         body {
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Outfit', 'Noto Sans KR', sans-serif;
             background: #020617;
             color: #f8fafc;
             overflow-x: hidden;
@@ -57,8 +59,10 @@
     <!-- Login Screen -->
     <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center p-6 bg-[#020617]">
         <div class="glass p-12 max-w-md w-full text-center">
-            <h1 class="text-4xl font-black mb-2 tracking-tighter">Admin Access</h1>
-            <p class="text-slate-500 mb-8">Please login with an authorized account</p>
+            <img src="logo.png" alt="F34 Logo"
+                class="h-32 w-auto mx-auto mb-8 object-contain rounded-3xl shadow-2xl border border-white/10">
+            <h1 class="text-4xl font-black mb-2 tracking-tighter">F34 DI-Community</h1>
+            <p class="text-slate-500 mb-8">Admin Access Only</p>
             <button id="login-btn"
                 class="w-full py-4 rounded-2xl bg-white text-black font-bold hover:bg-slate-200 transition-colors">
                 Login with Google
@@ -71,9 +75,13 @@
         <!-- Header -->
         <header class="max-w-7xl mx-auto px-6 pt-12 pb-8">
             <div class="flex flex-col md:flex-row justify-between items-center gap-8 mb-12">
-                <div>
-                    <h1 class="text-4xl font-black tracking-tighter">Admin Panel</h1>
-                    <p class="text-slate-500 mt-1">Moderation & System Management</p>
+                <div class="flex items-center gap-6">
+                    <img src="logo.png" alt="F34 Logo"
+                        class="h-20 w-auto object-contain rounded-2xl shadow-xl border border-white/10">
+                    <div>
+                        <h1 class="text-4xl font-black tracking-tighter">F34 DI-Community</h1>
+                        <p class="text-slate-500 mt-1">Admin Panel • Moderation</p>
+                    </div>
                 </div>
                 <div class="flex items-center gap-6">
                     <nav class="glass p-1 flex gap-1 text-sm font-bold">
@@ -84,14 +92,17 @@
                         <button onclick="switchTab('support')" id="tab-support"
                             class="tab-btn px-6 py-2 rounded-xl hover:bg-white/5 transition-all">Support Center</button>
                     </nav>
+
+                    <!-- Auth Button / Profile -->
+                    <button id="auth-btn"
+                        class="glass px-6 py-2.5 font-bold hover:bg-white/10 transition-all border border-white/10"></button>
+
                     <div class="glass p-1 flex gap-1 text-[10px] font-bold uppercase tracking-widest">
                         <button onclick="setLang('en')" id="lang-en"
                             class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">EN</button>
                         <button onclick="setLang('ko')" id="lang-ko"
                             class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">KO</button>
                     </div>
-                    <button id="auth-btn"
-                        class="glass px-6 py-2.5 font-bold hover:bg-white/10 transition-all border border-white/10"></button>
                 </div>
             </div>
         </header>
@@ -156,7 +167,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { initializeFirestore, collection, query, where, onSnapshot, doc, getDoc, getDocs, updateDoc, deleteDoc, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        import { getAuth, signInWithPopup, signInWithRedirect, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { initializeAuth, browserLocalPersistence, browserPopupRedirectResolver, signInWithPopup, signInWithRedirect, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA827pUzqfTpGpGbT9uKXKEjZo3hYl5ENo",
@@ -340,7 +351,7 @@
                 tr.className = "border-b border-white/5 hover:bg-white/5 transition-colors cursor-pointer";
                 tr.onclick = () => showPlayerDetails(player.email);
                 tr.innerHTML = `
-                    <td class="px-6 py-4"><div class="flex items-center gap-3"><img src="https://mc-heads.net/avatar/${player.mc_name}/32" class="w-8 h-8 rounded border border-white/10"><span class="font-bold">${player.mc_name}</span></div></td>
+                    <td class="px-6 py-4"><div class="flex items-center gap-3"><img src="https://mc-heads.net/avatar/${player.mc_name}/32" class="w-8 h-8 rounded border border-white/20"><span class="font-bold">${player.mc_name}</span></div></td>
                     <td class="px-6 py-4 text-slate-400 text-sm">${player.email}</td>
                     <td class="px-6 py-4"><span class="px-2 py-1 rounded bg-yellow-500/10 text-yellow-500 text-xs font-bold">${player.warnings || 0}</span></td>
                     <td class="px-6 py-4"><span class="px-2 py-1 rounded text-xs font-bold ${isBanned ? 'bg-red-500/10 text-red-500' : 'bg-green-500/10 text-green-500'}">${isBanned ? t.banStatus + ' ' + new Date(player.ban_until).toLocaleDateString() : t.activeStatus}</span></td>
@@ -426,9 +437,15 @@
 
         try {
             const app = initializeApp(firebaseConfig);
+
+            auth = initializeAuth(app, {
+                persistence: browserLocalPersistence,
+                popupRedirectResolver: browserPopupRedirectResolver
+            });
+
             db = initializeFirestore(app, { experimentalForceLongPolling: true });
-            auth = getAuth(app);
             provider = new GoogleAuthProvider();
+
             onAuthStateChanged(auth, async (user) => {
                 currentUser = user;
                 const loginScreen = document.getElementById('login-screen');
@@ -441,18 +458,46 @@
                         const userDoc = await getDoc(doc(db, "users", user.email));
                         if (userDoc.exists()) {
                             mcAccount = userDoc.data();
-                            if (authBtn) authBtn.innerHTML = `<div class="flex items-center gap-3"><img src="https://mc-heads.net/avatar/${mcAccount.mc_name}/32" class="w-8 h-8 rounded border border-white/20"><div class="text-left"><div class="text-[10px] opacity-50">Admin</div><div class="font-bold">${mcAccount.mc_name}</div></div></div>`;
+                            authBtn.classList.remove('px-6');
+                            authBtn.classList.add('px-4');
+                            if (authBtn) authBtn.innerHTML = `<div class="flex items-center gap-3"><img src="https://mc-heads.net/avatar/${mcAccount.mc_name}/32" class="w-8 h-8 rounded border border-white/20"><div class="text-left"><div class="text-[10px] opacity-50">Admin</div><div class="font-bold text-xs">${mcAccount.mc_name}</div></div></div>`;
                         }
                     } catch (e) { log("Auth Doc Error: " + e.message); }
                     setupDataFetching();
-                } else if (user) { alert("Access Denied"); signOut(auth); } else { if (loginScreen) loginScreen.classList.remove('hidden'); if (adminPanel) adminPanel.classList.add('hidden'); }
+                } else if (user) {
+                    alert("Access Denied: Not an admin account.");
+                    signOut(auth);
+                } else {
+                    if (loginScreen) loginScreen.classList.remove('hidden');
+                    if (adminPanel) adminPanel.classList.add('hidden');
+                }
                 updateUI();
             });
-            document.getElementById('login-btn').onclick = async () => { try { await signInWithPopup(auth, provider).catch(async (err) => { if (['auth/popup-blocked', 'auth/popup-closed-by-user', 'auth/cancelled-popup-request'].includes(err.code)) await signInWithRedirect(auth, provider); else throw err; }); } catch (e) { alert("Login failed: " + e.message); } };
+
+            document.getElementById('login-btn').onclick = async () => {
+                try {
+                    await signInWithPopup(auth, provider).catch(async (err) => {
+                        if (['auth/popup-blocked', 'auth/popup-closed-by-user', 'auth/cancelled-popup-request', 'auth/internal-error'].includes(err.code)) {
+                            await signInWithRedirect(auth, provider);
+                        } else throw err;
+                    });
+                } catch (e) { alert("Login failed: " + e.message); }
+            };
+
             document.getElementById('auth-btn').onclick = () => signOut(auth);
+
             function setupDataFetching() {
                 const q = query(collection(db, "shared_configs"), where("status", "==", "pending"));
-                onSnapshot(q, (snap) => { if (fetchTimeout) clearTimeout(fetchTimeout); allConfigs = []; snap.forEach(doc => allConfigs.push({ id: doc.id, ...doc.data() })); dataLoaded = true; renderConfigs(); }, (err) => { log("SDK Error: " + err.message); if (!dataLoaded) fetchConfigsREST(); });
+                onSnapshot(q, (snap) => {
+                    if (fetchTimeout) clearTimeout(fetchTimeout);
+                    allConfigs = [];
+                    snap.forEach(doc => allConfigs.push({ id: doc.id, ...doc.data() }));
+                    dataLoaded = true;
+                    renderConfigs();
+                }, (err) => {
+                    log("SDK Error: " + err.message);
+                    if (!dataLoaded) fetchConfigsREST();
+                });
                 fetchTimeout = setTimeout(() => { if (!dataLoaded) fetchConfigsREST(); }, 5000);
             }
             updateUI();
