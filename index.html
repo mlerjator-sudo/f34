@@ -93,64 +93,79 @@
                 class="w-full py-4 rounded-2xl bg-white text-black font-bold hover:bg-slate-200 transition-colors">Logout</button>
         </div>
     </div>
-    <div class="flex flex-wrap justify-center items-center gap-4">
-        <!-- Language Switcher -->
-        <div class="glass p-1 flex gap-1 text-[10px] font-bold uppercase tracking-widest">
-            <button onclick="setLang('en')" id="lang-en"
-                class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">EN</button>
-            <button onclick="setLang('ko')" id="lang-ko"
-                class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">KO</button>
-            <button onclick="setLang('jp')" id="lang-jp"
-                class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">JP</button>
-            <button onclick="setLang('cn')" id="lang-cn"
-                class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">CN</button>
-            <button onclick="setLang('es')" id="lang-es"
-                class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">ES</button>
-            <button onclick="setLang('fr')" id="lang-fr"
-                class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">FR</button>
-            <button onclick="setLang('de')" id="lang-de"
-                class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">DE</button>
-            <button onclick="setLang('ru')" id="lang-ru"
-                class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">RU</button>
-        </div>
 
-        <!-- Auth Button / Profile -->
-        <button id="auth-btn"
-            class="glass px-6 py-2.5 font-bold hover:bg-white/10 transition-all border border-white/10">
-            Login with Google
-        </button>
-
-        <!-- My Configs Button -->
-        <button id="my-configs-btn" onclick="openMyConfigsModal()"
-            class="glass px-6 py-3 font-bold hover:bg-white/5 transition-all hidden" id="t-my-configs">My
-            Configs</button>
-
-        <button onclick="openSupportModal()" class="glass px-6 py-3 font-bold hover:bg-white/5 transition-all"
-            id="t-support">Support</button>
-        <a href="admin.html" id="t-admin-panel"
-            class="glass px-6 py-3 font-bold hover:bg-white/5 transition-all hidden">Admin Panel</a>
-    </div>
-    </header>
-
-    <!-- Categories -->
-    <div class="max-w-7xl mx-auto px-6 mb-12">
-        <div id="category-list" class="flex flex-wrap gap-2 justify-center">
-            <!-- Categories will be injected here -->
-        </div>
-    </div>
-
-    <!-- Main Grid -->
-    <main class="max-w-7xl mx-auto px-6">
-        <div id="config-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div class="col-span-full glass p-20 text-center">
-                <div id="loading-spinner"
-                    class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mb-4">
+    <div id="main-content">
+        <!-- Header -->
+        <header class="max-w-7xl mx-auto px-6 pt-12 pb-8 flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="text-center md:text-left flex flex-col md:flex-row items-center gap-6">
+                <img src="logo.png" alt="F34 Logo"
+                    class="h-24 w-auto object-contain rounded-3xl shadow-2xl border border-white/10">
+                <div>
+                    <h1
+                        class="text-5xl font-black tracking-tighter bg-gradient-to-r from-white to-slate-500 bg-clip-text text-transparent text-white">
+                        F34 DI-Community</h1>
+                    <p class="text-slate-400 mt-2 text-lg font-light" id="t-subtitle">Discover and download shared
+                        configurations</p>
                 </div>
-                <p class="text-xl text-slate-400 font-light" id="t-loading">Loading configurations...</p>
-                <p class="text-xs text-slate-600 mt-4" id="debug-status"></p>
+            </div>
+            <div class="flex flex-wrap justify-center items-center gap-4">
+                <!-- Language Switcher -->
+                <div class="glass p-1 flex gap-1 text-[10px] font-bold uppercase tracking-widest">
+                    <button onclick="setLang('en')" id="lang-en"
+                        class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">EN</button>
+                    <button onclick="setLang('ko')" id="lang-ko"
+                        class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">KO</button>
+                    <button onclick="setLang('jp')" id="lang-jp"
+                        class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">JP</button>
+                    <button onclick="setLang('cn')" id="lang-cn"
+                        class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">CN</button>
+                    <button onclick="setLang('es')" id="lang-es"
+                        class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">ES</button>
+                    <button onclick="setLang('fr')" id="lang-fr"
+                        class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">FR</button>
+                    <button onclick="setLang('de')" id="lang-de"
+                        class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">DE</button>
+                    <button onclick="setLang('ru')" id="lang-ru"
+                        class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">RU</button>
+                </div>
+
+                <!-- Auth Button / Profile -->
+                <button id="auth-btn"
+                    class="glass px-6 py-2.5 font-bold hover:bg-white/10 transition-all border border-white/10">
+                    Login with Google
+                </button>
+
+                <!-- My Configs Button -->
+                <button id="my-configs-btn" onclick="openMyConfigsModal()"
+                    class="glass px-6 py-3 font-bold hover:bg-white/5 transition-all hidden" id="t-my-configs">My
+                    Configs</button>
+
+                <button onclick="openSupportModal()" class="glass px-6 py-3 font-bold hover:bg-white/5 transition-all"
+                    id="t-support">Support</button>
+                <a href="admin.html" id="t-admin-panel"
+                    class="glass px-6 py-3 font-bold hover:bg-white/5 transition-all hidden">Admin Panel</a>
+            </div>
+        </header>
+
+        <!-- Categories -->
+        <div class="max-w-7xl mx-auto px-6 mb-12">
+            <div id="category-list" class="flex flex-wrap gap-2 justify-center">
+                <!-- Categories will be injected here -->
             </div>
         </div>
-    </main>
+
+        <!-- Main Grid -->
+        <main class="max-w-7xl mx-auto px-6">
+            <div id="config-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="col-span-full glass p-20 text-center">
+                    <div id="loading-spinner"
+                        class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mb-4">
+                    </div>
+                    <p class="text-xl text-slate-400 font-light" id="t-loading">Loading configurations...</p>
+                    <p class="text-xs text-slate-600 mt-4" id="debug-status"></p>
+                </div>
+            </div>
+        </main>
     </div>
 
     <!-- Details Modal -->
@@ -340,28 +355,28 @@
                 details: "詳細を見る",
                 loginToDownload: "ログインしてダウンロード",
                 link: "アカウント連携",
-                loginAlert: "先にログインしてください。",
-                linkAlert: "F34 MODでログインしてMinecraftアカウントを連携してください。",
+                loginAlert: "まずログインしてください。",
+                linkAlert: "F34 MODでログインして、Minecraftアカウントを先に連携してください。",
                 modalTitle: "設定の詳細情報",
                 info: "情報",
                 author: "作成者",
-                category: "カテゴリ",
+                category: "カテゴリー",
                 downloads: "ダウンロード数",
                 description: "説明",
                 noDesc: "説明がありません。",
                 buttons: "ボタン構成",
                 noButtons: "この設定にはカスタムボタンがありません。",
-                raw: "元データ",
+                raw: "生データ",
                 close: "閉じる",
-                support: "サポート",
+                support: "カスタマーセンター",
                 supportTitle: "カスタマーセンター",
-                supportDesc: "問題や提案がありますか？メッセージを送信してください。",
-                supportSuccess: "お問い合わせが正常に送信されました！",
-                supportError: "送信に失敗しました。",
+                supportDesc: "問題や提案がありますか？メッセージを送ってください。",
+                supportSuccess: "お問い合わせが正常に受け付けられました！",
+                supportError: "お問い合わせの送信に失敗しました。",
                 bannedTitle: "あなたは禁止されています",
                 bannedDesc: "利用規約違反により、コミュニティハブへのアクセスが制限されています。",
                 myConfigs: "マイ設定",
-                myConfigsTitle: "自分の設定",
+                myConfigsTitle: "マイ設定リスト",
                 noMyConfigs: "まだ配布した設定はありません。",
                 deleteConfirm: "本当にこの設定を削除しますか？",
                 deleteSuccess: "設定が削除されました。",
@@ -369,13 +384,13 @@
                 statusPending: "承認待ち",
                 statusApproved: "承認済み",
                 categories: {
-                    All: "すべて", Adventure: "冒険", Horror: "ホラー", Decoration: "装飾", Economy: "経済", Equipment: "装備", Food: "食べ物", "Game Mechanics": "ゲームメカニクス", Library: "ライブラリ", Magic: "魔法", Management: "管理", Minigame: "ミニゲーム", Mobs: "モブ", Optimization: "最適化", Social: "ソーシャル", Storage: "ストレージ", Technology: "技術", Transportation: "輸送", Utility: "ユーティリティ", "World Gen": "ワールド生成", General: "一般", Convenience: "便利"
+                    All: "すべて", Adventure: "冒険", Horror: "ホラー", Decoration: "装飾", Economy: "経済", Equipment: "装備", Food: "食べ物", "Game Mechanics": "ゲームメカニクス", Library: "ライブラリ", Magic: "魔法", Management: "管理", Minigame: "ミニゲーム", Mobs: "モブ", Optimization: "最適化", Social: "ソーシャル", Storage: "ストレージ", Technology: "技術", Transportation: "輸送", Utility: "ユーティリティ", "World Gen": "ワールド生成", General: "一般", Convenience: "便宜"
                 }
             },
             cn: {
-                subtitle: "探索并下载共享配置",
+                subtitle: "浏览并下载共享配置",
                 loading: "正在加载配置...",
-                noConfigs: "尚未找到共享配置。",
+                noConfigs: "尚无共享配置。",
                 noResults: "没有符合此类别的配置。",
                 login: "使用 Google 登录",
                 linkMod: "需要关联 Minecraft (在模组中登录)",
@@ -386,41 +401,41 @@
                 loginToDownload: "登录后下载",
                 link: "关联账号",
                 loginAlert: "请先登录。",
-                linkAlert: "请先在 F34 模组中登录以关联您的 Minecraft 账号。",
+                linkAlert: "请先通过 F34 模组登录以关联您的 Minecraft 账号。",
                 modalTitle: "配置详情",
                 info: "信息",
                 author: "作者",
                 category: "类别",
                 downloads: "下载次数",
                 description: "描述",
-                noDesc: "未提供描述。",
+                noDesc: "暂无描述。",
                 buttons: "按钮配置",
                 noButtons: "此配置中没有自定义按钮。",
                 raw: "原始数据",
                 close: "关闭",
-                support: "支持",
+                support: "客服中心",
                 supportTitle: "客服中心",
                 supportDesc: "有问题或建议吗？请给我们留言。",
                 supportSuccess: "工单提交成功！",
-                supportError: "提交失败。",
+                supportError: "工单提交失败。",
                 bannedTitle: "您已被封禁",
                 bannedDesc: "由于违反我们的条款，您访问社区中心的权限已被限制。",
                 myConfigs: "我的配置",
-                myConfigsTitle: "我的配置",
+                myConfigsTitle: "我的配置列表",
                 noMyConfigs: "您尚未发布任何配置。",
                 deleteConfirm: "您确定要删除此配置吗？",
                 deleteSuccess: "配置已成功删除。",
                 deleteError: "删除失败。",
-                statusPending: "待审核",
+                statusPending: "待审批",
                 statusApproved: "已批准",
                 categories: {
-                    All: "全部", Adventure: "冒险", Horror: "恐怖", Decoration: "装饰", Economy: "经济", Equipment: "装备", Food: "食物", "Game Mechanics": "游戏机制", Library: "库", Magic: "魔法", Management: "管理", Minigame: "小游戏", Mobs: "生物", Optimization: "优化", Social: "社交", Storage: "存储", Technology: "技术", Transportation: "运输", Utility: "工具", "World Gen": "世界生成", General: "通用", Convenience: "便捷"
+                    All: "全部", Adventure: "冒险", Horror: "恐怖", Decoration: "装饰", Economy: "经济", Equipment: "装备", Food: "食物", "Game Mechanics": "游戏机制", Library: "库", Magic: "魔法", Management: "管理", Minigame: "小游戏", Mobs: "生物", Optimization: "优化", Social: "社交", Storage: "存储", Technology: "技术", Transportation: "运输", Utility: "工具", "World Gen": "世界生成", General: "常规", Convenience: "便捷"
                 }
             },
             es: {
                 subtitle: "Descubre y descarga configuraciones compartidas",
                 loading: "Cargando configuraciones...",
-                noConfigs: "Aún no se han encontrado configuraciones.",
+                noConfigs: "Aún no hay configuraciones compartidas.",
                 noResults: "No hay configuraciones que coincidan con esta categoría.",
                 login: "Iniciar sesión con Google",
                 linkMod: "Vincular Minecraft (Iniciar sesión en el Mod)",
@@ -444,8 +459,8 @@
                 raw: "Datos sin procesar",
                 close: "Cerrar",
                 support: "Soporte",
-                supportTitle: "Centro de atención",
-                supportDesc: "¿Tienes algún problema o sugerencia? Envíanos un mensaje.",
+                supportTitle: "Centro de Atención",
+                supportDesc: "¿Tienes un problema o sugerencia? Envíanos un mensaje.",
                 supportSuccess: "¡Ticket enviado con éxito!",
                 supportError: "Error al enviar el ticket.",
                 bannedTitle: "Estás baneado",
@@ -457,25 +472,25 @@
                 deleteSuccess: "Configuración eliminada con éxito.",
                 deleteError: "Error al eliminar la configuración.",
                 statusPending: "Pendiente",
-                statusApproved: "Aprobado",
+                statusApproved: "Aprobada",
                 categories: {
-                    All: "Todo", Adventure: "Aventura", Horror: "Terror", Decoration: "Decoración", Economy: "Economía", Equipment: "Equipo", Food: "Comida", "Game Mechanics": "Mecánicas", Library: "Biblioteca", Magic: "Magia", Management: "Gestión", Minigame: "Minijuego", Mobs: "Criaturas", Optimization: "Optimización", Social: "Social", Storage: "Almacenamiento", Technology: "Tecnología", Transportation: "Transporte", Utility: "Utilidad", "World Gen": "Gen. de Mundo", General: "General", Convenience: "Conveniencia"
+                    All: "Todo", Adventure: "Aventura", Horror: "Terror", Decoration: "Decoración", Economy: "Economía", Equipment: "Equipamiento", Food: "Comida", "Game Mechanics": "Mecánicas", Library: "Biblioteca", Magic: "Magia", Management: "Gestión", Minigame: "Minijuego", Mobs: "Criaturas", Optimization: "Optimización", Social: "Social", Storage: "Almacenamiento", Technology: "Tecnología", Transportation: "Transporte", Utility: "Utilidad", "World Gen": "Gen. de Mundo", General: "General", Convenience: "Conveniencia"
                 }
             },
             fr: {
                 subtitle: "Découvrez et téléchargez des configurations partagées",
                 loading: "Chargement des configurations...",
-                noConfigs: "Aucune configuration trouvée pour le moment.",
+                noConfigs: "Aucune configuration partagée pour le moment.",
                 noResults: "Aucune configuration ne correspond à cette catégorie.",
-                login: "Connexion avec Google",
-                linkMod: "Lier Minecraft (Connexion dans le Mod)",
+                login: "Se connecter avec Google",
+                linkMod: "Lier Minecraft (Se connecter dans le Mod)",
                 loggedInAs: "Connecté en tant que :",
                 logout: "Déconnexion",
                 download: "Télécharger",
                 details: "Voir les détails",
                 loginToDownload: "Connectez-vous pour télécharger",
                 link: "Lier le compte",
-                loginAlert: "Veuillez vous connecter d'abord.",
+                loginAlert: "Veuillez d'abord vous connecter.",
                 linkAlert: "Veuillez d'abord lier votre compte Minecraft en vous connectant via le mod F34.",
                 modalTitle: "Détails de la configuration",
                 info: "Information",
@@ -489,34 +504,34 @@
                 raw: "Données brutes",
                 close: "Fermer",
                 support: "Support",
-                supportTitle: "Centre client",
+                supportTitle: "Centre d'Assistance",
                 supportDesc: "Un problème ou une suggestion ? Envoyez-nous un message.",
                 supportSuccess: "Ticket envoyé avec succès !",
                 supportError: "Échec de l'envoi du ticket.",
                 bannedTitle: "Vous êtes banni",
-                bannedDesc: "Votre accès au hub communautaire a été restreint en raison d'une violation de nos conditions.",
+                bannedDesc: "Votre accès au centre communautaire a été restreint en raison d'une violation de nos conditions.",
                 myConfigs: "Mes Configs",
                 myConfigsTitle: "Mes Configurations",
                 noMyConfigs: "Vous n'avez pas encore déployé de configurations.",
                 deleteConfirm: "Êtes-vous sûr de vouloir supprimer cette configuration ?",
                 deleteSuccess: "Configuration supprimée avec succès.",
-                deleteError: "Échec de la suppression de la configuration.",
+                deleteError: "Échec de la suppression.",
                 statusPending: "En attente",
-                statusApproved: "Approuvé",
+                statusApproved: "Approuvée",
                 categories: {
-                    All: "Tout", Adventure: "Aventure", Horror: "Horreur", Decoration: "Décoration", Economy: "Économie", Equipment: "Équipement", Food: "Nourriture", "Game Mechanics": "Mécaniques", Library: "Bibliothèque", Magic: "Magie", Management: "Gestion", Minigame: "Mini-jeu", Mobs: "Créatures", Optimization: "Optimisation", Social: "Social", Storage: "Stockage", Technology: "Technologie", Transportation: "Transport", Utility: "Utilité", "World Gen": "Gén. de Monde", General: "Général", Convenience: "Praticité"
+                    All: "Tout", Adventure: "Aventure", Horror: "Horreur", Decoration: "Décoration", Economy: "Économie", Equipment: "Équipement", Food: "Nourriture", "Game Mechanics": "Mécaniques", Library: "Bibliothèque", Magic: "Magie", Management: "Gestion", Minigame: "Mini-jeu", Mobs: "Créatures", Optimization: "Optimisation", Social: "Social", Storage: "Stockage", Technology: "Technologie", Transportation: "Transport", Utility: "Utilité", "World Gen": "Gén. du Monde", General: "Général", Convenience: "Commodité"
                 }
             },
             de: {
                 subtitle: "Entdecke und lade geteilte Konfigurationen herunter",
-                loading: "Lade Konfigurationen...",
-                noConfigs: "Noch keine Konfigurationen gefunden.",
+                loading: "Konfigurationen werden geladen...",
+                noConfigs: "Noch keine geteilten Konfigurationen vorhanden.",
                 noResults: "Keine Konfigurationen in dieser Kategorie gefunden.",
                 login: "Mit Google anmelden",
                 linkMod: "Minecraft verknüpfen (Im Mod anmelden)",
                 loggedInAs: "Angemeldet als:",
                 logout: "Abmelden",
-                download: "Download",
+                download: "Herunterladen",
                 details: "Details anzeigen",
                 loginToDownload: "Zum Herunterladen anmelden",
                 link: "Konto verknüpfen",
@@ -528,18 +543,18 @@
                 category: "Kategorie",
                 downloads: "Downloads",
                 description: "Beschreibung",
-                noDesc: "Keine Beschreibung vorhanden.",
-                buttons: "Buttons",
-                noButtons: "Keine benutzerdefinierten Buttons in dieser Konfig.",
+                noDesc: "Keine Beschreibung angegeben.",
+                buttons: "Schaltflächen",
+                noButtons: "Keine benutzerdefinierten Schaltflächen in dieser Konfig.",
                 raw: "Rohdaten",
                 close: "Schließen",
                 support: "Support",
                 supportTitle: "Kundencenter",
                 supportDesc: "Hast du ein Problem oder einen Vorschlag? Sende uns eine Nachricht.",
                 supportSuccess: "Ticket erfolgreich gesendet!",
-                supportError: "Senden fehlgeschlagen.",
+                supportError: "Fehler beim Senden des Tickets.",
                 bannedTitle: "Du bist gesperrt",
-                bannedDesc: "Dein Zugriff auf den Community-Hub wurde aufgrund eines Verstoßes gegen unsere Bedingungen eingeschränkt.",
+                bannedDesc: "Dein Zugriff auf das Community-Hub wurde aufgrund eines Verstoßes gegen unsere Bedingungen eingeschränkt.",
                 myConfigs: "Meine Configs",
                 myConfigsTitle: "Meine Konfigurationen",
                 noMyConfigs: "Du hast noch keine Konfigurationen bereitgestellt.",
@@ -549,13 +564,13 @@
                 statusPending: "Ausstehend",
                 statusApproved: "Genehmigt",
                 categories: {
-                    All: "Alle", Adventure: "Abenteuer", Horror: "Horror", Decoration: "Dekoration", Economy: "Wirtschaft", Equipment: "Ausrüstung", Food: "Essen", "Game Mechanics": "Spielmechanik", Library: "Bibliothek", Magic: "Magie", Management: "Verwaltung", Minigame: "Minispiel", Mobs: "Kreaturen", Optimization: "Optimierung", Social: "Sozial", Storage: "Lagerung", Technology: "Technik", Transportation: "Transport", Utility: "Dienstprogramm", "World Gen": "Weltgen.", General: "Allgemein", Convenience: "Komfort"
+                    All: "Alle", Adventure: "Abenteuer", Horror: "Horror", Decoration: "Dekoration", Economy: "Wirtschaft", Equipment: "Ausrüstung", Food: "Essen", "Game Mechanics": "Spielmechanik", Library: "Bibliothek", Magic: "Magie", Management: "Verwaltung", Minigame: "Minispiel", Mobs: "Kreaturen", Optimization: "Optimierung", Social: "Sozial", Storage: "Lagerung", Technology: "Technologie", Transportation: "Transport", Utility: "Dienstprogramm", "World Gen": "Weltgen.", General: "Allgemein", Convenience: "Komfort"
                 }
             },
             ru: {
-                subtitle: "Изучайте и скачивайте общие конфигурации",
+                subtitle: "Находите и скачивайте общие конфигурации",
                 loading: "Загрузка конфигураций...",
-                noConfigs: "Конфигурации пока не найдены.",
+                noConfigs: "Общих конфигураций пока нет.",
                 noResults: "Нет конфигураций в этой категории.",
                 login: "Войти через Google",
                 linkMod: "Привязать Minecraft (Войдите в моде)",
@@ -565,7 +580,7 @@
                 details: "Подробнее",
                 loginToDownload: "Войдите, чтобы скачать",
                 link: "Привязать аккаунт",
-                loginAlert: "Пожалуйста, сначала войдите.",
+                loginAlert: "Пожалуйста, сначала войдите в систему.",
                 linkAlert: "Пожалуйста, сначала привяжите свой аккаунт Minecraft, войдя через мод F34.",
                 modalTitle: "Детали конфигурации",
                 info: "Информация",
@@ -584,17 +599,17 @@
                 supportSuccess: "Тикет успешно отправлен!",
                 supportError: "Ошибка при отправке тикета.",
                 bannedTitle: "Вы заблокированы",
-                bannedDesc: "Ваш доступ к сообществу ограничен из-за нарушения наших правил.",
+                bannedDesc: "Ваш доступ к сообществу ограничен из-за нарушения наших условий.",
                 myConfigs: "Мои конфиги",
                 myConfigsTitle: "Мои конфигурации",
-                noMyConfigs: "Вы еще не опубликовали ни одной конфигурации.",
+                noMyConfigs: "Вы еще не развернули ни одной конфигурации.",
                 deleteConfirm: "Вы уверены, что хотите удалить эту конфигурацию?",
                 deleteSuccess: "Конфигурация успешно удалена.",
-                deleteError: "Ошибка при удалении конфигурации.",
+                deleteError: "Ошибка при удалении.",
                 statusPending: "Ожидание",
                 statusApproved: "Одобрено",
                 categories: {
-                    All: "Все", Adventure: "Приключения", Horror: "Хоррор", Decoration: "Декор", Economy: "Экономика", Equipment: "Снаряжение", Food: "Еда", "Game Mechanics": "Механики", Library: "Библиотеки", Magic: "Магия", Management: "Управление", Minigame: "Мини-игры", Mobs: "Мобы", Optimization: "Оптимизация", Social: "Социальное", Storage: "Хранение", Technology: "Технологии", Transportation: "Транспорт", Utility: "Утилиты", "World Gen": "Ген. мира", General: "Общее", Convenience: "Удобство"
+                    All: "Все", Adventure: "Приключения", Horror: "Хоррор", Decoration: "Декор", Economy: "Экономика", Equipment: "Снаряжение", Food: "Еда", "Game Mechanics": "Механики", Library: "Библиотека", Magic: "Магия", Management: "Управление", Minigame: "Мини-игра", Mobs: "Мобы", Optimization: "Оптимизация", Social: "Социальное", Storage: "Хранение", Technology: "Технологии", Transportation: "Транспорт", Utility: "Утилиты", "World Gen": "Ген. мира", General: "Общее", Convenience: "Удобство"
                 }
             }
         };
@@ -604,18 +619,11 @@
         let currentUser = null;
         let mcAccount = null;
         let allConfigs = [];
-        let myConfigs = [];
-        let currentCategory = 'All';
         let dataLoaded = false;
+        let currentCategory = 'All';
         let fetchTimeout = null;
 
-        function log(msg, isDebug = false) {
-            console.log(`[F34] ${msg}`);
-            if (isDebug) {
-                const debugEl = document.getElementById('debug-status');
-                if (debugEl) debugEl.textContent = msg;
-            }
-        }
+        function log(msg) { console.log(`[F34 Hub] ${msg}`); }
 
         window.setLang = (lang) => {
             currentLang = lang;
@@ -626,26 +634,17 @@
         function updateUI() {
             const t = i18n[currentLang] || i18n.en;
             document.getElementById('t-subtitle').textContent = t.subtitle;
-            if (!dataLoaded) document.getElementById('t-loading').textContent = t.loading;
+            document.getElementById('t-loading').textContent = t.loading;
             document.getElementById('t-support').textContent = t.support;
-            document.getElementById('t-close').textContent = t.close;
+            document.getElementById('t-support-title').textContent = t.supportTitle;
+            document.getElementById('t-support-desc').textContent = t.supportDesc;
+            document.getElementById('t-support-cancel').textContent = t.supportCancel || 'Cancel';
+            document.getElementById('t-support-submit').textContent = t.supportSubmit || 'Submit Ticket';
             document.getElementById('t-banned-title').textContent = t.bannedTitle;
             document.getElementById('t-banned-desc').textContent = t.bannedDesc;
-            document.getElementById('my-configs-btn').textContent = t.myConfigs;
+            document.getElementById('t-my-configs').textContent = t.myConfigs;
             document.getElementById('t-my-configs-title').textContent = t.myConfigsTitle;
-
-            const authBtn = document.getElementById('auth-btn');
-            const myConfigsBtn = document.getElementById('my-configs-btn');
-
-            if (!currentUser) {
-                authBtn.textContent = t.login;
-                myConfigsBtn.classList.add('hidden');
-            } else if (!mcAccount) {
-                authBtn.textContent = t.linkMod;
-                myConfigsBtn.classList.add('hidden');
-            } else {
-                myConfigsBtn.classList.remove('hidden');
-            }
+            document.getElementById('t-admin-panel').textContent = i18n[currentLang].adminPanel || 'Admin Panel';
 
             document.querySelectorAll('[id^="lang-"]').forEach(btn => {
                 btn.classList.remove('bg-white/10', 'text-blue-400');
@@ -654,25 +653,27 @@
 
             renderCategories();
             renderConfigs();
+            updateAuthUI();
         }
 
         function renderCategories() {
             const t = i18n[currentLang] || i18n.en;
-            const container = document.getElementById('category-list');
-            if (!container) return;
-            container.innerHTML = '';
-            Object.keys(t.categories).forEach(cat => {
-                const btn = document.createElement('button');
-                btn.className = `category-pill px-4 py-2 rounded-full glass text-xs font-bold uppercase tracking-wider ${currentCategory === cat ? 'active' : 'hover:bg-white/5'}`;
-                btn.textContent = t.categories[cat];
-                btn.onclick = () => {
-                    currentCategory = cat;
-                    renderCategories();
-                    renderConfigs();
-                };
-                container.appendChild(btn);
-            });
+            const catList = document.getElementById('category-list');
+            if (!catList) return;
+            const categories = Object.keys(t.categories);
+            catList.innerHTML = categories.map(cat => `
+                <button onclick="setCategory('${cat}')" 
+                    class="category-pill px-5 py-2 rounded-xl glass text-sm font-bold hover:bg-white/5 ${currentCategory === cat ? 'active' : ''}">
+                    ${t.categories[cat]}
+                </button>
+            `).join('');
         }
+
+        window.setCategory = (cat) => {
+            currentCategory = cat;
+            renderCategories();
+            renderConfigs();
+        };
 
         function renderConfigs() {
             if (!dataLoaded) return;
@@ -680,108 +681,41 @@
             const configList = document.getElementById('config-list');
             if (!configList) return;
 
-            const filtered = currentCategory === 'All' ? allConfigs : allConfigs.filter(c => c.category === currentCategory);
+            const filtered = allConfigs.filter(c => currentCategory === 'All' || c.category === currentCategory);
 
             if (filtered.length === 0) {
-                configList.innerHTML = `<div class="col-span-full glass p-12 text-center text-xl">${allConfigs.length === 0 ? t.noConfigs : t.noResults}</div>`;
+                configList.innerHTML = `<div class="col-span-full glass p-20 text-center text-xl text-slate-400">${currentCategory === 'All' ? t.noConfigs : t.noResults}</div>`;
                 return;
             }
 
-            configList.innerHTML = '';
-            filtered.forEach(data => {
-                const div = document.createElement('div');
-                div.className = "glass p-8 card-hover flex flex-col justify-between animate-fade-in";
-                div.innerHTML = `
+            configList.innerHTML = filtered.map(data => `
+                <div class="glass p-8 card-hover flex flex-col justify-between animate-fade-in">
                     <div>
-                        <div class="flex justify-between items-start">
+                        <div class="flex justify-between items-start mb-6">
                             <div>
-                                <h3 class="text-xl font-bold">${data.name || 'Untitled'}</h3>
-                                <span class="text-[10px] text-blue-400 font-bold uppercase tracking-wider">${t.categories[data.category] || data.category || 'General'}</span>
+                                <h3 class="text-2xl font-black tracking-tighter">${data.name || 'Untitled'}</h3>
+                                <span class="text-[10px] text-blue-400 font-bold uppercase tracking-widest">${t.categories[data.category] || data.category}</span>
                             </div>
-                            <span class="text-[10px] opacity-40 font-mono">${data.downloads || 0} DLs</span>
+                            <div class="flex items-center gap-1.5 text-slate-500 text-xs font-bold">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path></svg>
+                                ${data.downloads || 0}
+                            </div>
                         </div>
-                        <p class="text-slate-400 text-xs mt-1">by ${data.author ? data.author.split('@')[0] : 'Unknown'}</p>
-                        <p class="mt-4 text-sm text-slate-300 line-clamp-2">"${data.description || t.noDesc}"</p>
+                        <p class="text-slate-500 text-xs font-medium">by ${data.author}</p>
+                        <p class="mt-6 text-slate-400 text-sm leading-relaxed line-clamp-3">"${data.description || t.noDesc}"</p>
                     </div>
-                    <div class="flex gap-3 mt-6">
-                        <button onclick="showDetails('${data.id}')" class="flex-1 py-3 rounded-xl glass font-bold hover:bg-white/10 transition-colors">${t.details}</button>
-                        <button onclick="handleDownload('${data.id}')" class="btn-download flex-1 py-3 rounded-xl font-bold text-white transition-transform active:scale-95 ${(!currentUser || !mcAccount) ? 'opacity-50 cursor-not-allowed' : ''}">${(currentUser && mcAccount) ? t.download : (currentUser ? t.link : t.loginToDownload)}</button>
+                    <div class="flex gap-3 mt-10">
+                        <button onclick="showDetails('${data.id}')" class="flex-1 py-4 rounded-2xl glass font-bold text-sm hover:bg-white/5 transition-all">${t.details}</button>
+                        <button onclick="downloadConfig('${data.id}')" class="btn-download flex-1 py-4 rounded-2xl font-bold text-sm text-white transition-all">${currentUser ? t.download : t.loginToDownload}</button>
                     </div>
-                `;
-                configList.appendChild(div);
-            });
+                </div>
+            `).join('');
         }
 
-        // --- My Configs Management ---
-        window.openMyConfigsModal = async () => {
-            if (!currentUser) return;
-            const t = i18n[currentLang] || i18n.en;
-            const modal = document.getElementById('my-configs-modal');
-            const list = document.getElementById('my-configs-list');
-            modal.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-
-            list.innerHTML = '<div class="animate-pulse text-slate-500">Loading your configurations...</div>';
-
-            try {
-                const q = query(collection(db, "shared_configs"), where("author", "==", currentUser.email));
-                const snap = await getDocs(q);
-                myConfigs = [];
-                snap.forEach(doc => myConfigs.push({ id: doc.id, ...doc.data() }));
-
-                if (myConfigs.length === 0) {
-                    list.innerHTML = `<div class="text-slate-500 italic p-8 text-center">${t.noMyConfigs}</div>`;
-                } else {
-                    list.innerHTML = '';
-                    myConfigs.forEach(config => {
-                        const div = document.createElement('div');
-                        div.className = "glass p-4 flex justify-between items-center border border-white/5 hover:bg-white/5 transition-colors";
-                        const statusLabel = config.status === 'approved' ? t.statusApproved : t.statusPending;
-                        const statusColor = config.status === 'approved' ? 'text-green-400' : 'text-yellow-400';
-
-                        div.innerHTML = `
-                            <div>
-                                <div class="font-bold">${config.name || 'Untitled'}</div>
-                                <div class="text-xs ${statusColor} font-bold uppercase tracking-wider">${statusLabel}</div>
-                                <div class="text-[10px] text-slate-500">${t.categories[config.category] || config.category} • ${config.downloads || 0} DLs</div>
-                            </div>
-                            <button onclick="deleteMyConfig('${config.id}')" class="p-3 text-red-400 hover:bg-red-400/10 rounded-xl transition-colors">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                </svg>
-                            </button>
-                        `;
-                        list.appendChild(div);
-                    });
-                }
-            } catch (e) {
-                list.innerHTML = '<div class="text-red-400 p-8 text-center">Error loading configurations.</div>';
-            }
-        };
-
-        window.closeMyConfigsModal = () => {
-            document.getElementById('my-configs-modal').classList.add('hidden');
-            document.body.style.overflow = 'auto';
-        };
-
-        window.deleteMyConfig = async (id) => {
-            const t = i18n[currentLang] || i18n.en;
-            if (!confirm(t.deleteConfirm)) return;
-
-            try {
-                await deleteDoc(doc(db, "shared_configs", id));
-                alert(t.deleteSuccess);
-                openMyConfigsModal(); // Refresh list
-            } catch (e) {
-                alert(t.deleteError);
-            }
-        };
-
-        // --- REST API Fallback ---
         async function fetchConfigsREST() {
-            log("Attempting REST API fallback...", true);
+            log("Attempting REST API fallback...");
             try {
-                const url = `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/(default)/documents/shared_configs?mask.fieldPaths=name&mask.fieldPaths=author&mask.fieldPaths=category&mask.fieldPaths=description&mask.fieldPaths=downloads&mask.fieldPaths=status&mask.fieldPaths=config_json`;
+                const url = `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/(default)/documents/shared_configs`;
                 const response = await fetch(url);
                 const data = await response.json();
                 if (data.documents) {
@@ -797,58 +731,72 @@
                                 description: fields.description?.stringValue,
                                 downloads: parseInt(fields.downloads?.integerValue || 0),
                                 status: fields.status?.stringValue,
-                                config_json: fields.config_json?.stringValue
+                                data: fields.data?.stringValue
                             };
                         })
                         .filter(c => c.status === 'approved');
                     dataLoaded = true;
-                    log("REST API fetch successful.", true);
                     renderConfigs();
                 }
-            } catch (e) {
-                log("REST Fallback Error: " + e.message, true);
-            }
+            } catch (e) { log("REST Fallback Error: " + e.message); }
         }
 
         window.showDetails = (id) => {
-            const data = allConfigs.find(c => c.id === id);
-            if (!data) return;
+            const config = allConfigs.find(c => c.id === id);
+            if (!config) return;
             const t = i18n[currentLang] || i18n.en;
             const modal = document.getElementById('details-modal');
-            const modalBody = document.getElementById('modal-body');
-            const modalDownloadBtn = document.getElementById('modal-download-btn');
-            document.getElementById('modal-title').textContent = t.modalTitle;
+            const body = document.getElementById('modal-body');
+            const title = document.getElementById('modal-title');
+            const downloadBtn = document.getElementById('modal-download-btn');
 
-            let configObj = {};
-            try { configObj = JSON.parse(data.config_json); } catch (e) { }
+            title.textContent = config.name || t.modalTitle;
+            downloadBtn.textContent = currentUser ? t.download : t.loginToDownload;
+            downloadBtn.onclick = () => downloadConfig(id);
 
-            modalBody.innerHTML = `
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div>
-                        <h4 class="text-xs uppercase tracking-widest opacity-40 font-bold mb-4">${t.info}</h4>
-                        <div class="space-y-4">
-                            <div><div class="text-[10px] opacity-40">${t.author}</div><div class="font-semibold text-blue-400">${data.author || 'Unknown'}</div></div>
-                            <div><div class="text-[10px] opacity-40">${t.category}</div><div class="font-semibold">${t.categories[data.category] || data.category || 'General'}</div></div>
-                            <div><div class="text-[10px] opacity-40">${t.downloads}</div><div class="font-semibold">${data.downloads || 0}</div></div>
-                        </div>
-                        <h4 class="text-xs uppercase tracking-widest opacity-40 font-bold mt-8 mb-4">${t.description}</h4>
-                        <p class="text-slate-300 leading-relaxed">"${data.description || t.noDesc}"</p>
-                    </div>
-                    <div>
-                        <h4 class="text-xs uppercase tracking-widest opacity-40 font-bold mb-4">${t.buttons} (${configObj.buttons ? configObj.buttons.length : 0})</h4>
-                        <div class="space-y-3">
-                            ${(configObj.buttons || []).map(btn => `
-                                <div class="glass p-3 rounded-xl border border-white/5">
-                                    <div class="text-sm font-bold">${btn.name || 'Unnamed'}</div>
-                                    <div class="text-[10px] font-mono opacity-50 break-all">${btn.command || ''}</div>
+            let buttonsHtml = '';
+            try {
+                const configData = JSON.parse(config.data);
+                if (configData.buttons && configData.buttons.length > 0) {
+                    buttonsHtml = `
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                            ${configData.buttons.map(btn => `
+                                <div class="glass p-4 rounded-xl border border-white/5">
+                                    <div class="text-[10px] text-slate-500 font-bold uppercase mb-1">${btn.type}</div>
+                                    <div class="font-bold text-sm">${btn.label}</div>
                                 </div>
                             `).join('')}
+                        </div>
+                    `;
+                } else { buttonsHtml = `<p class="text-slate-500 italic text-sm">${t.noButtons}</p>`; }
+            } catch (e) { buttonsHtml = `<p class="text-red-400/50 italic text-sm">Error parsing button data</p>`; }
+
+            body.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div class="space-y-8">
+                        <div>
+                            <h4 class="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-4">${t.info}</h4>
+                            <div class="space-y-3">
+                                <div class="flex justify-between py-3 border-b border-white/5"><span class="text-slate-400 text-sm">${t.author}</span><span class="font-bold text-sm">${config.author}</span></div>
+                                <div class="flex justify-between py-3 border-b border-white/5"><span class="text-slate-400 text-sm">${t.category}</span><span class="font-bold text-sm text-blue-400">${t.categories[config.category] || config.category}</span></div>
+                                <div class="flex justify-between py-3 border-b border-white/5"><span class="text-slate-400 text-sm">${t.downloads}</span><span class="font-bold text-sm">${config.downloads || 0}</span></div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-4">${t.description}</h4>
+                            <p class="text-slate-300 text-sm leading-relaxed bg-white/5 p-6 rounded-2xl border border-white/5 italic">"${config.description || t.noDesc}"</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-4">${t.buttons}</h4>
+                        ${buttonsHtml}
+                        <div class="mt-8">
+                            <h4 class="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-4">${t.raw}</h4>
+                            <pre class="bg-black/40 p-6 rounded-2xl text-[10px] font-mono text-slate-500 overflow-x-auto max-h-40 border border-white/5">${config.data}</pre>
                         </div>
                     </div>
                 </div>
             `;
-            modalDownloadBtn.textContent = t.download;
-            modalDownloadBtn.onclick = () => window.handleDownload(id);
             modal.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
         };
@@ -858,43 +806,39 @@
             document.body.style.overflow = 'auto';
         };
 
-        window.handleDownload = async (id) => {
+        window.downloadConfig = async (id) => {
             const t = i18n[currentLang] || i18n.en;
             if (!currentUser) { alert(t.loginAlert); return; }
             if (!mcAccount) { alert(t.linkAlert); return; }
+
             try {
-                const data = allConfigs.find(c => c.id === id);
-                if (!data) return;
-                const blob = new Blob([data.config_json], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
+                const config = allConfigs.find(c => c.id === id);
+                const blob = new Blob([config.data], { type: 'application/json' });
+                const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `${data.name.replaceAll(' ', '_')}.json`;
+                a.download = `${config.name || 'config'}.json`;
                 a.click();
-                URL.revokeObjectURL(url);
                 await updateDoc(doc(db, "shared_configs", id), { downloads: increment(1) });
-            } catch (e) { alert("Download failed."); }
+            } catch (e) { log("Download Error: " + e.message); }
         };
 
         window.openSupportModal = () => {
-            if (!currentUser) { alert(i18n[currentLang].loginAlert); return; }
+            const t = i18n[currentLang] || i18n.en;
+            if (!currentUser) { alert(t.loginAlert); return; }
             document.getElementById('support-modal').classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
         };
 
-        window.closeSupportModal = () => {
-            document.getElementById('support-modal').classList.add('hidden');
-            document.body.style.overflow = 'auto';
-        };
+        window.closeSupportModal = () => document.getElementById('support-modal').classList.add('hidden');
 
         window.submitTicket = async () => {
             const t = i18n[currentLang] || i18n.en;
-            const msg = document.getElementById('support-message').value.trim();
+            const msg = document.getElementById('support-message').value;
             if (!msg) return;
             try {
                 await addDoc(collection(db, "support_tickets"), {
                     email: currentUser.email,
-                    mc_name: mcAccount ? mcAccount.mc_name : 'Unknown',
+                    mc_name: mcAccount?.mc_name || 'Unknown',
                     message: msg,
                     timestamp: Date.now()
                 });
@@ -904,104 +848,154 @@
             } catch (e) { alert(t.supportError); }
         };
 
-        // --- Firebase Logic ---
+        window.openMyConfigsModal = async () => {
+            const t = i18n[currentLang] || i18n.en;
+            if (!currentUser) return;
+            const modal = document.getElementById('my-configs-modal');
+            const list = document.getElementById('my-configs-list');
+            modal.classList.remove('hidden');
+            list.innerHTML = '<div class="animate-pulse text-slate-500">Loading...</div>';
+
+            try {
+                const q = query(collection(db, "shared_configs"), where("author", "==", currentUser.email));
+                const snap = await getDocs(q);
+                if (snap.empty) {
+                    list.innerHTML = `<div class="text-center py-8 text-slate-500 italic">${t.noMyConfigs}</div>`;
+                } else {
+                    list.innerHTML = '';
+                    snap.forEach(doc => {
+                        const data = doc.data();
+                        const statusColor = data.status === 'approved' ? 'text-green-400' : 'text-yellow-400';
+                        const statusText = data.status === 'approved' ? t.statusApproved : t.statusPending;
+                        const div = document.createElement('div');
+                        div.className = "glass p-4 flex justify-between items-center border border-white/5";
+                        div.innerHTML = `
+                            <div>
+                                <div class="font-bold">${data.name || 'Untitled'}</div>
+                                <div class="text-xs ${statusColor} font-bold uppercase tracking-widest mt-1">${statusText}</div>
+                            </div>
+                            <button onclick="deleteMyConfig('${doc.id}')" class="p-2 text-red-400 hover:bg-red-400/10 rounded-lg transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            </button>
+                        `;
+                        list.appendChild(div);
+                    });
+                }
+            } catch (e) { list.innerHTML = '<div class="text-red-400">Error loading configs.</div>'; }
+        };
+
+        window.closeMyConfigsModal = () => document.getElementById('my-configs-modal').classList.add('hidden');
+
+        window.deleteMyConfig = async (id) => {
+            const t = i18n[currentLang] || i18n.en;
+            if (!confirm(t.deleteConfirm)) return;
+            try {
+                await deleteDoc(doc(db, "shared_configs", id));
+                alert(t.deleteSuccess);
+                openMyConfigsModal();
+                setupDataFetching();
+            } catch (e) { alert(t.deleteError); }
+        };
+
+        function updateAuthUI() {
+            const t = i18n[currentLang] || i18n.en;
+            const btn = document.getElementById('auth-btn');
+            const myConfigsBtn = document.getElementById('my-configs-btn');
+            const adminLink = document.getElementById('t-admin-panel');
+
+            if (currentUser) {
+                myConfigsBtn.classList.remove('hidden');
+                if (mcAccount) {
+                    btn.classList.remove('px-6');
+                    btn.classList.add('px-4');
+                    btn.innerHTML = `
+                        <div class="flex items-center gap-3">
+                            <img src="https://mc-heads.net/avatar/${mcAccount.mc_name}/32" class="w-8 h-8 rounded border border-white/20">
+                            <div class="text-left">
+                                <div class="text-[10px] opacity-50">${t.loggedInAs}</div>
+                                <div class="font-bold text-xs">${mcAccount.mc_name}</div>
+                            </div>
+                        </div>
+                    `;
+                    if (mcAccount.mc_name === 'minseokkangfox') adminLink.classList.remove('hidden');
+                    else adminLink.classList.add('hidden');
+                } else {
+                    btn.textContent = t.linkMod;
+                    adminLink.classList.add('hidden');
+                }
+            } else {
+                btn.textContent = t.login;
+                btn.classList.remove('px-4');
+                btn.classList.add('px-6');
+                myConfigsBtn.classList.add('hidden');
+                adminLink.classList.add('hidden');
+            }
+        }
+
         try {
             const app = initializeApp(firebaseConfig);
-
             auth = initializeAuth(app, {
                 persistence: browserLocalPersistence,
                 popupRedirectResolver: browserPopupRedirectResolver
             });
-
             db = initializeFirestore(app, { experimentalForceLongPolling: true });
             provider = new GoogleAuthProvider();
 
             onAuthStateChanged(auth, async (user) => {
                 currentUser = user;
-                const t = i18n[currentLang] || i18n.en;
-                const authBtn = document.getElementById('auth-btn');
-                const adminPanelBtn = document.getElementById('t-admin-panel');
-                const myConfigsBtn = document.getElementById('my-configs-btn');
-                const banMessage = document.getElementById('ban-message');
-                const mainContent = document.getElementById('main-content');
-
                 if (user) {
-                    log(`User logged in: ${user.email}`, true);
                     try {
                         const userDoc = await getDoc(doc(db, "users", user.email));
                         if (userDoc.exists()) {
                             mcAccount = userDoc.data();
                             if (mcAccount.ban_until && mcAccount.ban_until > Date.now()) {
-                                banMessage.classList.remove('hidden');
-                                mainContent.classList.add('hidden');
+                                document.getElementById('main-content').classList.add('hidden');
+                                document.getElementById('ban-message').classList.remove('hidden');
                                 document.getElementById('ban-expiry').textContent = `Ban expires: ${new Date(mcAccount.ban_until).toLocaleString()}`;
-                                return;
+                            } else {
+                                document.getElementById('main-content').classList.remove('hidden');
+                                document.getElementById('ban-message').classList.add('hidden');
                             }
-                            if (mcAccount.mc_name === 'minseokkangfox') adminPanelBtn.classList.remove('hidden');
-                            myConfigsBtn.classList.remove('hidden');
-                            authBtn.classList.remove('px-6');
-                            authBtn.classList.add('px-4');
-                            authBtn.innerHTML = `<div class="flex items-center gap-3"><img src="https://mc-heads.net/avatar/${mcAccount.mc_name}/32" class="w-8 h-8 rounded border border-white/20"><div class="text-left"><div class="text-[10px] opacity-50">${t.loggedInAs}</div><div class="font-bold text-xs">${mcAccount.mc_name}</div></div></div>`;
-                        } else {
-                            authBtn.textContent = t.linkMod;
-                            myConfigsBtn.classList.add('hidden');
                         }
                     } catch (e) { log("Auth Doc Error: " + e.message); }
                 } else {
-                    authBtn.textContent = t.login;
-                    authBtn.classList.remove('px-4');
-                    authBtn.classList.add('px-6');
-                    adminPanelBtn.classList.add('hidden');
-                    myConfigsBtn.classList.add('hidden');
-                    banMessage.classList.add('hidden');
-                    mainContent.classList.remove('hidden');
+                    document.getElementById('main-content').classList.remove('hidden');
+                    document.getElementById('ban-message').classList.add('hidden');
                 }
                 updateUI();
             });
 
             document.getElementById('auth-btn').onclick = async () => {
-                if (currentUser) {
-                    log("Signing out...");
-                    signOut(auth);
-                } else {
-                    log("Attempting login...");
+                if (currentUser) { if (confirm(i18n[currentLang].logout)) signOut(auth); }
+                else {
                     try {
-                        const result = await signInWithPopup(auth, provider).catch(async (err) => {
-                            log("Popup failed, trying redirect: " + err.code);
+                        await signInWithPopup(auth, provider).catch(async (err) => {
                             if (['auth/popup-blocked', 'auth/popup-closed-by-user', 'auth/cancelled-popup-request', 'auth/internal-error'].includes(err.code)) {
                                 await signInWithRedirect(auth, provider);
                             } else throw err;
                         });
-                        if (result) log("Login successful for: " + result.user.email);
-                    } catch (e) {
-                        log("Login error: " + e.message);
-                        alert("Login failed: " + e.message);
-                    }
+                    } catch (e) { alert("Login failed: " + e.message); }
                 }
             };
 
             document.getElementById('ban-logout-btn').onclick = () => signOut(auth);
 
-            const q = query(collection(db, "shared_configs"), where("status", "==", "approved"));
-            onSnapshot(q, (snap) => {
-                if (fetchTimeout) clearTimeout(fetchTimeout);
-                allConfigs = [];
-                snap.forEach(doc => allConfigs.push({ id: doc.id, ...doc.data() }));
-                dataLoaded = true;
-                log(`Fetched ${allConfigs.length} configs via SDK`, true);
-                renderConfigs();
-            }, (err) => {
-                log("SDK Fetch Error: " + err.message, true);
-                if (!dataLoaded) fetchConfigsREST();
-            });
+            function setupDataFetching() {
+                const q = query(collection(db, "shared_configs"), where("status", "==", "approved"));
+                onSnapshot(q, (snap) => {
+                    if (fetchTimeout) clearTimeout(fetchTimeout);
+                    allConfigs = [];
+                    snap.forEach(doc => allConfigs.push({ id: doc.id, ...doc.data() }));
+                    dataLoaded = true;
+                    renderConfigs();
+                }, (err) => {
+                    log("SDK Error: " + err.message);
+                    if (!dataLoaded) fetchConfigsREST();
+                });
+                fetchTimeout = setTimeout(() => { if (!dataLoaded) fetchConfigsREST(); }, 5000);
+            }
 
-            fetchTimeout = setTimeout(() => {
-                if (!dataLoaded) {
-                    log("SDK hang detected, switching to REST...", true);
-                    fetchConfigsREST();
-                }
-            }, 5000);
-
+            setupDataFetching();
             updateUI();
         } catch (e) { log("Init Error: " + e.message); }
     </script>
