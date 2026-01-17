@@ -125,11 +125,16 @@
                         class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">RU</button>
                 </div>
 
-                <!-- Auth Button / Profile (Moved to 2nd position) -->
+                <!-- Auth Button / Profile -->
                 <button id="auth-btn"
                     class="glass px-6 py-2.5 font-bold hover:bg-white/10 transition-all border border-white/10">
                     Login with Google
                 </button>
+
+                <!-- My Configs Button (Hidden by default) -->
+                <button id="my-configs-btn" onclick="openMyConfigsModal()"
+                    class="glass px-6 py-3 font-bold hover:bg-white/5 transition-all hidden" id="t-my-configs">My
+                    Configs</button>
 
                 <button onclick="openSupportModal()" class="glass px-6 py-3 font-bold hover:bg-white/5 transition-all"
                     id="t-support">Support</button>
@@ -189,6 +194,25 @@
         </div>
     </div>
 
+    <!-- My Configs Modal -->
+    <div id="my-configs-modal" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeMyConfigsModal()"></div>
+        <div class="glass max-w-3xl w-full max-h-[80vh] overflow-y-auto relative z-10 p-8 animate-fade-in">
+            <div class="flex justify-between items-start mb-8">
+                <h2 class="text-3xl font-black tracking-tighter" id="t-my-configs-title">My Configurations</h2>
+                <button onclick="closeMyConfigsModal()" class="text-slate-400 hover:text-white transition-colors">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+            <div id="my-configs-list" class="space-y-4">
+                <!-- User configs will be injected here -->
+            </div>
+        </div>
+    </div>
+
     <!-- Support Modal -->
     <div id="support-modal" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeSupportModal()"></div>
@@ -211,7 +235,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { initializeFirestore, collection, query, where, onSnapshot, doc, getDoc, updateDoc, increment, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { initializeFirestore, collection, query, where, onSnapshot, doc, getDoc, getDocs, updateDoc, increment, addDoc, deleteDoc, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { initializeAuth, browserLocalPersistence, browserPopupRedirectResolver, signInWithPopup, signInWithRedirect, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
         const firebaseConfig = {
@@ -257,6 +281,14 @@
                 supportError: "Failed to submit ticket.",
                 bannedTitle: "You are banned",
                 bannedDesc: "Your access to the community hub has been restricted due to a violation of our terms.",
+                myConfigs: "My Configs",
+                myConfigsTitle: "My Configurations",
+                noMyConfigs: "You haven't deployed any configurations yet.",
+                deleteConfirm: "Are you sure you want to delete this configuration?",
+                deleteSuccess: "Configuration deleted successfully.",
+                deleteError: "Failed to delete configuration.",
+                statusPending: "Pending",
+                statusApproved: "Approved",
                 categories: {
                     All: "All", Adventure: "Adventure", Horror: "Horror", Decoration: "Decoration", Economy: "Economy", Equipment: "Equipment", Food: "Food", "Game Mechanics": "Game Mechanics", Library: "Library", Magic: "Magic", Management: "Management", Minigame: "Minigame", Mobs: "Mobs", Optimization: "Optimization", Social: "Social", Storage: "Storage", Technology: "Technology", Transportation: "Transportation", Utility: "Utility", "World Gen": "World Gen", General: "General", Convenience: "Convenience"
                 }
@@ -294,8 +326,286 @@
                 supportError: "문의 접수에 실패했습니다.",
                 bannedTitle: "당신은 차단 되었습니다.",
                 bannedDesc: "이용 약관 위반으로 인해 커뮤니티 허브 접속이 제한되었습니다.",
+                myConfigs: "내 설정",
+                myConfigsTitle: "내가 올린 설정",
+                noMyConfigs: "아직 배포한 설정이 없습니다.",
+                deleteConfirm: "정말로 이 설정을 삭제하시겠습니까?",
+                deleteSuccess: "설정이 삭제되었습니다.",
+                deleteError: "삭제에 실패했습니다.",
+                statusPending: "승인 대기 중",
+                statusApproved: "승인됨",
                 categories: {
                     All: "전체", Adventure: "모험", Horror: "공포", Decoration: "장식", Economy: "경제", Equipment: "장비", Food: "음식", "Game Mechanics": "게임 매커니즘", Library: "라이브러리", Magic: "마법", Management: "관리", Minigame: "미니게임", Mobs: "몹", Optimization: "최적화", Social: "소셜", Storage: "저장", Technology: "기술", Transportation: "운송", Utility: "유틸리티", "World Gen": "월드 생성", General: "일반", Convenience: "편의"
+                }
+            },
+            jp: {
+                subtitle: "共有された設定を探索してダウンロード",
+                loading: "設定を読み込み中...",
+                noConfigs: "まだ共有された設定はありません。",
+                noResults: "このカテゴリに該当する設定はありません。",
+                login: "Googleでログイン",
+                linkMod: "Minecraft連携が必要 (MODでログイン)",
+                loggedInAs: "ログイン中:",
+                logout: "ログアウト",
+                download: "ダウンロード",
+                details: "詳細を見る",
+                loginToDownload: "ログインしてダウンロード",
+                link: "アカウント連携",
+                loginAlert: "先にログインしてください。",
+                linkAlert: "F34 MODでログインしてMinecraftアカウントを連携してください。",
+                modalTitle: "設定の詳細情報",
+                info: "情報",
+                author: "作成者",
+                category: "カテゴリ",
+                downloads: "ダウンロード数",
+                description: "説明",
+                noDesc: "説明がありません。",
+                buttons: "ボタン構成",
+                noButtons: "この設定にはカスタムボタンがありません。",
+                raw: "元データ",
+                close: "閉じる",
+                support: "サポート",
+                supportTitle: "カスタマーセンター",
+                supportDesc: "問題や提案がありますか？メッセージを送信してください。",
+                supportSuccess: "お問い合わせが正常に送信されました！",
+                supportError: "送信に失敗しました。",
+                bannedTitle: "あなたは禁止されています",
+                bannedDesc: "利用規約違反により、コミュニティハブへのアクセスが制限されています。",
+                myConfigs: "マイ設定",
+                myConfigsTitle: "自分の設定",
+                noMyConfigs: "まだ配布した設定はありません。",
+                deleteConfirm: "本当にこの設定を削除しますか？",
+                deleteSuccess: "設定が削除されました。",
+                deleteError: "削除に失敗しました。",
+                statusPending: "承認待ち",
+                statusApproved: "承認済み",
+                categories: {
+                    All: "すべて", Adventure: "冒険", Horror: "ホラー", Decoration: "装飾", Economy: "経済", Equipment: "装備", Food: "食べ物", "Game Mechanics": "ゲームメカニクス", Library: "ライブラリ", Magic: "魔法", Management: "管理", Minigame: "ミニゲーム", Mobs: "モブ", Optimization: "最適化", Social: "ソーシャル", Storage: "ストレージ", Technology: "技術", Transportation: "輸送", Utility: "ユーティリティ", "World Gen": "ワールド生成", General: "一般", Convenience: "便利"
+                }
+            },
+            cn: {
+                subtitle: "探索并下载共享配置",
+                loading: "正在加载配置...",
+                noConfigs: "尚未找到共享配置。",
+                noResults: "没有符合此类别的配置。",
+                login: "使用 Google 登录",
+                linkMod: "需要关联 Minecraft (在模组中登录)",
+                loggedInAs: "已登录为:",
+                logout: "登出",
+                download: "下载",
+                details: "查看详情",
+                loginToDownload: "登录后下载",
+                link: "关联账号",
+                loginAlert: "请先登录。",
+                linkAlert: "请先在 F34 模组中登录以关联您的 Minecraft 账号。",
+                modalTitle: "配置详情",
+                info: "信息",
+                author: "作者",
+                category: "类别",
+                downloads: "下载次数",
+                description: "描述",
+                noDesc: "未提供描述。",
+                buttons: "按钮配置",
+                noButtons: "此配置中没有自定义按钮。",
+                raw: "原始数据",
+                close: "关闭",
+                support: "支持",
+                supportTitle: "客服中心",
+                supportDesc: "有问题或建议吗？请给我们留言。",
+                supportSuccess: "工单提交成功！",
+                supportError: "提交失败。",
+                bannedTitle: "您已被封禁",
+                bannedDesc: "由于违反我们的条款，您访问社区中心的权限已被限制。",
+                myConfigs: "我的配置",
+                myConfigsTitle: "我的配置",
+                noMyConfigs: "您尚未发布任何配置。",
+                deleteConfirm: "您确定要删除此配置吗？",
+                deleteSuccess: "配置已成功删除。",
+                deleteError: "删除失败。",
+                statusPending: "待审核",
+                statusApproved: "已批准",
+                categories: {
+                    All: "全部", Adventure: "冒险", Horror: "恐怖", Decoration: "装饰", Economy: "经济", Equipment: "装备", Food: "食物", "Game Mechanics": "游戏机制", Library: "库", Magic: "魔法", Management: "管理", Minigame: "小游戏", Mobs: "生物", Optimization: "优化", Social: "社交", Storage: "存储", Technology: "技术", Transportation: "运输", Utility: "工具", "World Gen": "世界生成", General: "通用", Convenience: "便捷"
+                }
+            },
+            es: {
+                subtitle: "Descubre y descarga configuraciones compartidas",
+                loading: "Cargando configuraciones...",
+                noConfigs: "Aún no se han encontrado configuraciones.",
+                noResults: "No hay configuraciones que coincidan con esta categoría.",
+                login: "Iniciar sesión con Google",
+                linkMod: "Vincular Minecraft (Iniciar sesión en el Mod)",
+                loggedInAs: "Sesión iniciada como:",
+                logout: "Cerrar sesión",
+                download: "Descargar",
+                details: "Ver detalles",
+                loginToDownload: "Inicia sesión para descargar",
+                link: "Vincular cuenta",
+                loginAlert: "Por favor, inicia sesión primero.",
+                linkAlert: "Por favor, vincula tu cuenta de Minecraft primero iniciando sesión a través del mod F34.",
+                modalTitle: "Detalles de la configuración",
+                info: "Información",
+                author: "Autor",
+                category: "Categoría",
+                downloads: "Descargas",
+                description: "Descripción",
+                noDesc: "No se proporcionó descripción.",
+                buttons: "Botones",
+                noButtons: "No hay botones personalizados en esta configuración.",
+                raw: "Datos sin procesar",
+                close: "Cerrar",
+                support: "Soporte",
+                supportTitle: "Centro de atención",
+                supportDesc: "¿Tienes algún problema o sugerencia? Envíanos un mensaje.",
+                supportSuccess: "¡Ticket enviado con éxito!",
+                supportError: "Error al enviar el ticket.",
+                bannedTitle: "Estás baneado",
+                bannedDesc: "Tu acceso al centro de la comunidad ha sido restringido debido a una violación de nuestros términos.",
+                myConfigs: "Mis Configs",
+                myConfigsTitle: "Mis Configuraciones",
+                noMyConfigs: "Aún no has desplegado ninguna configuración.",
+                deleteConfirm: "¿Estás seguro de que quieres eliminar esta configuración?",
+                deleteSuccess: "Configuración eliminada con éxito.",
+                deleteError: "Error al eliminar la configuración.",
+                statusPending: "Pendiente",
+                statusApproved: "Aprobado",
+                categories: {
+                    All: "Todo", Adventure: "Aventura", Horror: "Terror", Decoration: "Decoración", Economy: "Economía", Equipment: "Equipo", Food: "Comida", "Game Mechanics": "Mecánicas", Library: "Biblioteca", Magic: "Magia", Management: "Gestión", Minigame: "Minijuego", Mobs: "Criaturas", Optimization: "Optimización", Social: "Social", Storage: "Almacenamiento", Technology: "Tecnología", Transportation: "Transporte", Utility: "Utilidad", "World Gen": "Gen. de Mundo", General: "General", Convenience: "Conveniencia"
+                }
+            },
+            fr: {
+                subtitle: "Découvrez et téléchargez des configurations partagées",
+                loading: "Chargement des configurations...",
+                noConfigs: "Aucune configuration trouvée pour le moment.",
+                noResults: "Aucune configuration ne correspond à cette catégorie.",
+                login: "Connexion avec Google",
+                linkMod: "Lier Minecraft (Connexion dans le Mod)",
+                loggedInAs: "Connecté en tant que :",
+                logout: "Déconnexion",
+                download: "Télécharger",
+                details: "Voir les détails",
+                loginToDownload: "Connectez-vous pour télécharger",
+                link: "Lier le compte",
+                loginAlert: "Veuillez vous connecter d'abord.",
+                linkAlert: "Veuillez d'abord lier votre compte Minecraft en vous connectant via le mod F34.",
+                modalTitle: "Détails de la configuration",
+                info: "Information",
+                author: "Auteur",
+                category: "Catégorie",
+                downloads: "Téléchargements",
+                description: "Description",
+                noDesc: "Aucune description fournie.",
+                buttons: "Boutons",
+                noButtons: "Aucun bouton personnalisé dans cette config.",
+                raw: "Données brutes",
+                close: "Fermer",
+                support: "Support",
+                supportTitle: "Centre client",
+                supportDesc: "Un problème ou une suggestion ? Envoyez-nous un message.",
+                supportSuccess: "Ticket envoyé avec succès !",
+                supportError: "Échec de l'envoi du ticket.",
+                bannedTitle: "Vous êtes banni",
+                bannedDesc: "Votre accès au hub communautaire a été restreint en raison d'une violation de nos conditions.",
+                myConfigs: "Mes Configs",
+                myConfigsTitle: "Mes Configurations",
+                noMyConfigs: "Vous n'avez pas encore déployé de configurations.",
+                deleteConfirm: "Êtes-vous sûr de vouloir supprimer cette configuration ?",
+                deleteSuccess: "Configuration supprimée avec succès.",
+                deleteError: "Échec de la suppression de la configuration.",
+                statusPending: "En attente",
+                statusApproved: "Approuvé",
+                categories: {
+                    All: "Tout", Adventure: "Aventure", Horror: "Horreur", Decoration: "Décoration", Economy: "Économie", Equipment: "Équipement", Food: "Nourriture", "Game Mechanics": "Mécaniques", Library: "Bibliothèque", Magic: "Magie", Management: "Gestion", Minigame: "Mini-jeu", Mobs: "Créatures", Optimization: "Optimisation", Social: "Social", Storage: "Stockage", Technology: "Technologie", Transportation: "Transport", Utility: "Utilité", "World Gen": "Gén. de Monde", General: "Général", Convenience: "Praticité"
+                }
+            },
+            de: {
+                subtitle: "Entdecke und lade geteilte Konfigurationen herunter",
+                loading: "Lade Konfigurationen...",
+                noConfigs: "Noch keine Konfigurationen gefunden.",
+                noResults: "Keine Konfigurationen in dieser Kategorie gefunden.",
+                login: "Mit Google anmelden",
+                linkMod: "Minecraft verknüpfen (Im Mod anmelden)",
+                loggedInAs: "Angemeldet als:",
+                logout: "Abmelden",
+                download: "Download",
+                details: "Details anzeigen",
+                loginToDownload: "Zum Herunterladen anmelden",
+                link: "Konto verknüpfen",
+                loginAlert: "Bitte melde dich zuerst an.",
+                linkAlert: "Bitte verknüpfe zuerst dein Minecraft-Konto, indem du dich über den F34-Mod anmeldest.",
+                modalTitle: "Konfigurationsdetails",
+                info: "Information",
+                author: "Autor",
+                category: "Kategorie",
+                downloads: "Downloads",
+                description: "Beschreibung",
+                noDesc: "Keine Beschreibung vorhanden.",
+                buttons: "Buttons",
+                noButtons: "Keine benutzerdefinierten Buttons in dieser Konfig.",
+                raw: "Rohdaten",
+                close: "Schließen",
+                support: "Support",
+                supportTitle: "Kundencenter",
+                supportDesc: "Hast du ein Problem oder einen Vorschlag? Sende uns eine Nachricht.",
+                supportSuccess: "Ticket erfolgreich gesendet!",
+                supportError: "Senden fehlgeschlagen.",
+                bannedTitle: "Du bist gesperrt",
+                bannedDesc: "Dein Zugriff auf den Community-Hub wurde aufgrund eines Verstoßes gegen unsere Bedingungen eingeschränkt.",
+                myConfigs: "Meine Configs",
+                myConfigsTitle: "Meine Konfigurationen",
+                noMyConfigs: "Du hast noch keine Konfigurationen bereitgestellt.",
+                deleteConfirm: "Bist du sicher, dass du diese Konfiguration löschen möchtest?",
+                deleteSuccess: "Konfiguration erfolgreich gelöscht.",
+                deleteError: "Löschen fehlgeschlagen.",
+                statusPending: "Ausstehend",
+                statusApproved: "Genehmigt",
+                categories: {
+                    All: "Alle", Adventure: "Abenteuer", Horror: "Horror", Decoration: "Dekoration", Economy: "Wirtschaft", Equipment: "Ausrüstung", Food: "Essen", "Game Mechanics": "Spielmechanik", Library: "Bibliothek", Magic: "Magie", Management: "Verwaltung", Minigame: "Minispiel", Mobs: "Kreaturen", Optimization: "Optimierung", Social: "Sozial", Storage: "Lagerung", Technology: "Technik", Transportation: "Transport", Utility: "Dienstprogramm", "World Gen": "Weltgen.", General: "Allgemein", Convenience: "Komfort"
+                }
+            },
+            ru: {
+                subtitle: "Изучайте и скачивайте общие конфигурации",
+                loading: "Загрузка конфигураций...",
+                noConfigs: "Конфигурации пока не найдены.",
+                noResults: "Нет конфигураций в этой категории.",
+                login: "Войти через Google",
+                linkMod: "Привязать Minecraft (Войдите в моде)",
+                loggedInAs: "Вы вошли как:",
+                logout: "Выйти",
+                download: "Скачать",
+                details: "Подробнее",
+                loginToDownload: "Войдите, чтобы скачать",
+                link: "Привязать аккаунт",
+                loginAlert: "Пожалуйста, сначала войдите.",
+                linkAlert: "Пожалуйста, сначала привяжите свой аккаунт Minecraft, войдя через мод F34.",
+                modalTitle: "Детали конфигурации",
+                info: "Информация",
+                author: "Автор",
+                category: "Категория",
+                downloads: "Загрузки",
+                description: "Описание",
+                noDesc: "Описание отсутствует.",
+                buttons: "Кнопки",
+                noButtons: "В этой конфигурации нет кастомных кнопок.",
+                raw: "Исходные данные",
+                close: "Закрыть",
+                support: "Поддержка",
+                supportTitle: "Центр поддержки",
+                supportDesc: "Есть проблема или предложение? Отправьте нам сообщение.",
+                supportSuccess: "Тикет успешно отправлен!",
+                supportError: "Ошибка при отправке тикета.",
+                bannedTitle: "Вы заблокированы",
+                bannedDesc: "Ваш доступ к сообществу ограничен из-за нарушения наших правил.",
+                myConfigs: "Мои конфиги",
+                myConfigsTitle: "Мои конфигурации",
+                noMyConfigs: "Вы еще не опубликовали ни одной конфигурации.",
+                deleteConfirm: "Вы уверены, что хотите удалить эту конфигурацию?",
+                deleteSuccess: "Конфигурация успешно удалена.",
+                deleteError: "Ошибка при удалении конфигурации.",
+                statusPending: "Ожидание",
+                statusApproved: "Одобрено",
+                categories: {
+                    All: "Все", Adventure: "Приключения", Horror: "Хоррор", Decoration: "Декор", Economy: "Экономика", Equipment: "Снаряжение", Food: "Еда", "Game Mechanics": "Механики", Library: "Библиотеки", Magic: "Магия", Management: "Управление", Minigame: "Мини-игры", Mobs: "Мобы", Optimization: "Оптимизация", Social: "Социальное", Storage: "Хранение", Technology: "Технологии", Transportation: "Транспорт", Utility: "Утилиты", "World Gen": "Ген. мира", General: "Общее", Convenience: "Удобство"
                 }
             }
         };
@@ -305,6 +615,7 @@
         let currentUser = null;
         let mcAccount = null;
         let allConfigs = [];
+        let myConfigs = [];
         let currentCategory = 'All';
         let dataLoaded = false;
         let fetchTimeout = null;
@@ -331,10 +642,21 @@
             document.getElementById('t-close').textContent = t.close;
             document.getElementById('t-banned-title').textContent = t.bannedTitle;
             document.getElementById('t-banned-desc').textContent = t.bannedDesc;
+            document.getElementById('my-configs-btn').textContent = t.myConfigs;
+            document.getElementById('t-my-configs-title').textContent = t.myConfigsTitle;
 
             const authBtn = document.getElementById('auth-btn');
-            if (!currentUser) authBtn.textContent = t.login;
-            else if (!mcAccount) authBtn.textContent = t.linkMod;
+            const myConfigsBtn = document.getElementById('my-configs-btn');
+
+            if (!currentUser) {
+                authBtn.textContent = t.login;
+                myConfigsBtn.classList.add('hidden');
+            } else if (!mcAccount) {
+                authBtn.textContent = t.linkMod;
+                myConfigsBtn.classList.add('hidden');
+            } else {
+                myConfigsBtn.classList.remove('hidden');
+            }
 
             document.querySelectorAll('[id^="lang-"]').forEach(btn => {
                 btn.classList.remove('bg-white/10', 'text-blue-400');
@@ -400,6 +722,71 @@
                 configList.appendChild(div);
             });
         }
+
+        // --- My Configs Management ---
+        window.openMyConfigsModal = async () => {
+            if (!currentUser) return;
+            const t = i18n[currentLang] || i18n.en;
+            const modal = document.getElementById('my-configs-modal');
+            const list = document.getElementById('my-configs-list');
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+
+            list.innerHTML = '<div class="animate-pulse text-slate-500">Loading your configurations...</div>';
+
+            try {
+                const q = query(collection(db, "shared_configs"), where("author", "==", currentUser.email));
+                const snap = await getDocs(q);
+                myConfigs = [];
+                snap.forEach(doc => myConfigs.push({ id: doc.id, ...doc.data() }));
+
+                if (myConfigs.length === 0) {
+                    list.innerHTML = `<div class="text-slate-500 italic p-8 text-center">${t.noMyConfigs}</div>`;
+                } else {
+                    list.innerHTML = '';
+                    myConfigs.forEach(config => {
+                        const div = document.createElement('div');
+                        div.className = "glass p-4 flex justify-between items-center border border-white/5 hover:bg-white/5 transition-colors";
+                        const statusLabel = config.status === 'approved' ? t.statusApproved : t.statusPending;
+                        const statusColor = config.status === 'approved' ? 'text-green-400' : 'text-yellow-400';
+
+                        div.innerHTML = `
+                            <div>
+                                <div class="font-bold">${config.name || 'Untitled'}</div>
+                                <div class="text-xs ${statusColor} font-bold uppercase tracking-wider">${statusLabel}</div>
+                                <div class="text-[10px] text-slate-500">${t.categories[config.category] || config.category} • ${config.downloads || 0} DLs</div>
+                            </div>
+                            <button onclick="deleteMyConfig('${config.id}')" class="p-3 text-red-400 hover:bg-red-400/10 rounded-xl transition-colors">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                            </button>
+                        `;
+                        list.appendChild(div);
+                    });
+                }
+            } catch (e) {
+                list.innerHTML = '<div class="text-red-400 p-8 text-center">Error loading configurations.</div>';
+            }
+        };
+
+        window.closeMyConfigsModal = () => {
+            document.getElementById('my-configs-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        };
+
+        window.deleteMyConfig = async (id) => {
+            const t = i18n[currentLang] || i18n.en;
+            if (!confirm(t.deleteConfirm)) return;
+
+            try {
+                await deleteDoc(doc(db, "shared_configs", id));
+                alert(t.deleteSuccess);
+                openMyConfigsModal(); // Refresh list
+            } catch (e) {
+                alert(t.deleteError);
+            }
+        };
 
         // --- REST API Fallback ---
         async function fetchConfigsREST() {
@@ -545,6 +932,7 @@
                 const t = i18n[currentLang] || i18n.en;
                 const authBtn = document.getElementById('auth-btn');
                 const adminPanelBtn = document.getElementById('t-admin-panel');
+                const myConfigsBtn = document.getElementById('my-configs-btn');
                 const banMessage = document.getElementById('ban-message');
                 const mainContent = document.getElementById('main-content');
 
@@ -561,11 +949,13 @@
                                 return;
                             }
                             if (mcAccount.mc_name === 'minseokkangfox') adminPanelBtn.classList.remove('hidden');
+                            myConfigsBtn.classList.remove('hidden');
                             authBtn.classList.remove('px-6');
                             authBtn.classList.add('px-4');
                             authBtn.innerHTML = `<div class="flex items-center gap-3"><img src="https://mc-heads.net/avatar/${mcAccount.mc_name}/32" class="w-8 h-8 rounded border border-white/20"><div class="text-left"><div class="text-[10px] opacity-50">${t.loggedInAs}</div><div class="font-bold text-xs">${mcAccount.mc_name}</div></div></div>`;
                         } else {
                             authBtn.textContent = t.linkMod;
+                            myConfigsBtn.classList.add('hidden');
                         }
                     } catch (e) { log("Auth Doc Error: " + e.message); }
                 } else {
@@ -573,6 +963,7 @@
                     authBtn.classList.remove('px-4');
                     authBtn.classList.add('px-6');
                     adminPanelBtn.classList.add('hidden');
+                    myConfigsBtn.classList.add('hidden');
                     banMessage.classList.add('hidden');
                     mainContent.classList.remove('hidden');
                 }
