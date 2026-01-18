@@ -759,21 +759,5 @@
             if (!config) return;
             const t = i18n[currentLang] || i18n.en;
             const modal = document.getElementById('details-modal');
-            const body = document.getElementById('modal-body');
-            const title = document.getElementById('modal-title');
-            const downloadBtn = document.getElementById('modal-download-btn');
 
-            title.textContent = config.name || t.modalTitle;
-            downloadBtn.textContent = currentUser ? t.download : t.loginToDownload;
-            if (!dataLoaded) fetchConfigsREST();
-        });
-        fetchTimeout = setTimeout(() => { if (!dataLoaded) fetchConfigsREST(); }, 5000);
-            }
-
-        setupDataFetching();
-        updateUI();
-        } catch (e) { log("Init Error: " + e.message); }
-    </script>
-</body>
-
-</html>
+</html >
