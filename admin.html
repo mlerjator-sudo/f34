@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>F34 DI-Community Admin</title>
+    <title>F34 Admin Panel</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Noto+Sans+KR:wght@300;400;700;900&display=swap"
@@ -12,13 +12,12 @@
     <style>
         body {
             font-family: 'Outfit', 'Noto Sans KR', sans-serif;
-            background: #020617;
+            background: #0f172a;
             color: #f8fafc;
-            overflow-x: hidden;
         }
 
         .glass {
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 24px;
@@ -29,87 +28,94 @@
         }
 
         .card-hover:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.06);
         }
 
         .tab-btn {
             transition: all 0.3s ease;
-            position: relative;
+            border-bottom: 2px solid transparent;
         }
 
         .tab-btn.active {
             color: #3b82f6;
+            border-color: #3b82f6;
         }
 
-        .tab-btn.active::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: #3b82f6;
-            border-radius: 2px;
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
         }
     </style>
 </head>
 
 <body class="min-h-screen">
     <!-- Login Screen -->
-    <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center p-6 bg-[#020617]">
+    <div id="login-screen" class="fixed inset-0 z-[100] bg-slate-950 flex items-center justify-center p-6">
         <div class="glass p-12 max-w-md w-full text-center">
-            <img src="logo.png" alt="F34 Logo"
-                class="h-32 w-auto mx-auto mb-8 object-contain rounded-3xl shadow-2xl border border-white/10">
-            <h1 class="text-4xl font-black mb-2 tracking-tighter">F34 DI-Community</h1>
-            <p class="text-slate-500 mb-8">Admin Access Only</p>
+            <img src="logo.png" alt="Logo" class="h-24 mx-auto mb-8 rounded-2xl">
+            <h1 class="text-3xl font-black mb-2">Admin Access</h1>
+            <p class="text-slate-500 mb-8">Please login with an authorized administrator account.</p>
             <button id="login-btn"
-                class="w-full py-4 rounded-2xl bg-white text-black font-bold hover:bg-slate-200 transition-colors">
+                class="w-full py-4 rounded-2xl bg-white text-black font-bold hover:bg-slate-200 transition-colors flex items-center justify-center gap-3">
+                <svg class="w-5 h-5" viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                    <path fill="currentColor"
+                        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                    <path fill="currentColor"
+                        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" />
+                    <path fill="currentColor"
+                        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                </svg>
                 Login with Google
             </button>
-            <p id="login-error" class="text-red-400 text-xs mt-4 hidden"></p>
+            <p id="login-error" class="text-red-400 text-sm mt-4 hidden"></p>
         </div>
     </div>
 
-    <!-- Admin Panel -->
+    <!-- Main Admin Panel -->
     <div id="admin-panel" class="hidden">
-        <!-- Header -->
-        <header class="max-w-7xl mx-auto px-6 pt-12 pb-8">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-8 mb-12">
-                <div class="flex items-center gap-6">
-                    <img src="logo.png" alt="F34 Logo"
-                        class="h-20 w-auto object-contain rounded-2xl shadow-xl border border-white/10">
-                    <div>
-                        <h1 class="text-4xl font-black tracking-tighter">F34 DI-Community</h1>
-                        <p class="text-slate-500 mt-1">Admin Panel • Moderation</p>
-                    </div>
+        <!-- Sidebar/Header -->
+        <header class="glass sticky top-0 z-40 mx-6 mt-6 p-4 flex justify-between items-center border-white/10">
+            <div class="flex items-center gap-8">
+                <div class="flex items-center gap-3">
+                    <img src="logo.png" alt="Logo" class="h-10 rounded-lg">
+                    <span class="font-black tracking-tighter text-xl">ADMIN</span>
                 </div>
-                <div class="flex items-center gap-6">
-                    <nav class="glass p-1 flex gap-1 text-sm font-bold">
-                        <button onclick="switchTab('configs')" id="tab-configs"
-                            class="tab-btn active px-6 py-2 rounded-xl hover:bg-white/5 transition-all">Configurations</button>
-                        <button onclick="switchTab('players')" id="tab-players"
-                            class="tab-btn px-6 py-2 rounded-xl hover:bg-white/5 transition-all">Players</button>
-                        <button onclick="switchTab('support')" id="tab-support"
-                            class="tab-btn px-6 py-2 rounded-xl hover:bg-white/5 transition-all">Support Center</button>
-                    </nav>
-
-                    <!-- Auth Button / Profile -->
-                    <button id="auth-btn"
-                        class="glass px-6 py-2.5 font-bold hover:bg-white/10 transition-all border border-white/10 min-w-[120px]"></button>
-
-                    <div class="glass p-1 flex gap-1 text-[10px] font-bold uppercase tracking-widest">
-                        <button onclick="setLang('en')" id="lang-en"
-                            class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">EN</button>
-                        <button onclick="setLang('ko')" id="lang-ko"
-                            class="px-3 py-1.5 rounded-lg transition-all hover:bg-white/5">KO</button>
-                    </div>
+                <nav class="flex gap-2">
+                    <button onclick="switchTab('configs')" id="tab-configs"
+                        class="tab-btn active px-6 py-2 font-bold text-sm">Approvals</button>
+                    <button onclick="switchTab('players')" id="tab-players"
+                        class="tab-btn px-6 py-2 font-bold text-sm">Players</button>
+                    <button onclick="switchTab('support')" id="tab-support"
+                        class="tab-btn px-6 py-2 font-bold text-sm">Tickets</button>
+                </nav>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="glass p-1 flex gap-1 text-[10px] font-bold uppercase">
+                    <button onclick="setLang('en')" id="lang-en" class="px-3 py-1.5 rounded-lg">EN</button>
+                    <button onclick="setLang('ko')" id="lang-ko" class="px-3 py-1.5 rounded-lg">KO</button>
                 </div>
+                <button id="auth-btn" class="glass px-6 py-2 font-bold text-xs hover:bg-white/10 transition-all">
+                    Logout
+                </button>
             </div>
         </header>
 
-        <main class="max-w-7xl mx-auto px-6 pb-20">
-            <!-- Section: Configurations -->
+        <main class="max-w-7xl mx-auto p-6">
+            <!-- Section: Config Approvals -->
             <div id="section-configs" class="space-y-6">
                 <div class="flex justify-between items-end mb-8">
                     <h2 class="text-2xl font-bold" id="t-pending-title">Pending Approvals</h2>
@@ -119,7 +125,7 @@
                 </div>
             </div>
 
-            <!-- Section: Players -->
+            <!-- Section: Player Management -->
             <div id="section-players" class="hidden space-y-6">
                 <div class="flex justify-between items-end mb-8">
                     <h2 class="text-2xl font-bold" id="t-players-title">Player Management</h2>
@@ -127,8 +133,7 @@
                 <div class="glass overflow-hidden">
                     <table class="w-full text-left">
                         <thead>
-                            <tr
-                                class="border-b border-white/5 text-[10px] uppercase tracking-widest text-slate-500 font-bold">
+                            <tr class="bg-white/5 text-[10px] font-bold uppercase tracking-widest text-slate-500">
                                 <th class="px-6 py-4">Player</th>
                                 <th class="px-6 py-4">Email</th>
                                 <th class="px-6 py-4">Warnings</th>
@@ -334,7 +339,8 @@
                                 author: fields.author?.stringValue,
                                 category: fields.category?.stringValue,
                                 description: fields.description?.stringValue,
-                                status: fields.status?.stringValue
+                                status: fields.status?.stringValue,
+                                data: fields.data?.stringValue || fields.config_json?.stringValue
                             };
                         })
                         .filter(c => c.status === 'pending');
@@ -562,7 +568,14 @@
                 onSnapshot(q, (snap) => {
                     if (fetchTimeout) clearTimeout(fetchTimeout);
                     allConfigs = [];
-                    snap.forEach(doc => allConfigs.push({ id: doc.id, ...doc.data() }));
+                    snap.forEach(doc => {
+                        const d = doc.data();
+                        allConfigs.push({
+                            id: doc.id,
+                            ...d,
+                            data: d.data || d.config_json
+                        });
+                    });
                     dataLoaded = true;
                     renderConfigs();
                 }, (err) => {
