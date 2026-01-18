@@ -136,6 +136,7 @@
                             <tr class="bg-white/5 text-[10px] font-bold uppercase tracking-widest text-slate-500">
                                 <th class="px-6 py-4">Player</th>
                                 <th class="px-6 py-4">Email</th>
+                                <th class="px-6 py-4">Grade</th>
                                 <th class="px-6 py-4">Warnings</th>
                                 <th class="px-6 py-4">Status</th>
                                 <th class="px-6 py-4 text-right">Actions</th>
@@ -208,6 +209,10 @@
                 banHours: "Hours",
                 banStatus: "Banned until:",
                 activeStatus: "Active",
+                playerGrade: "Player Grade",
+                grades: {
+                    General: "General", Wood: "Wood", Stone: "Stone", Coal: "Coal", Copper: "Copper", Iron: "Iron", Gold: "Gold", Diamond: "Diamond", Emerald: "Emerald", Premium: "Premium"
+                },
                 categories: { General: "General" }
             },
             ko: {
@@ -230,6 +235,10 @@
                 banHours: "시간",
                 banStatus: "차단 만료:",
                 activeStatus: "정상",
+                playerGrade: "플레이어 등급",
+                grades: {
+                    General: "일반", Wood: "나무", Stone: "돌", Coal: "석탄", Copper: "구리", Iron: "철", Gold: "금", Diamond: "다이아몬드", Emerald: "에메랄드", Premium: "프리미엄"
+                },
                 categories: { General: "일반" }
             }
         };
@@ -375,6 +384,7 @@
                         <span class="font-bold">${player.mc_name || 'Unknown'}</span>
                     </td>
                     <td class="px-6 py-4 text-slate-400 text-sm">${player.email}</td>
+                    <td class="px-6 py-4 text-slate-400 text-sm font-bold text-blue-400">${t.grades[player.grade || 'General'] || (player.grade || 'General')}</td>
                     <td class="px-6 py-4 text-slate-400 text-sm">${player.warnings || 0}</td>
                     <td class="px-6 py-4">
                         <span class="px-2 py-1 rounded-full text-[10px] font-bold uppercase ${isBanned ? 'bg-red-500/10 text-red-400' : 'bg-green-500/10 text-green-400'}">
@@ -450,6 +460,15 @@
                                 <button onclick="warnPlayer('${email}')" class="flex-1 py-3 bg-yellow-600/20 text-yellow-400 rounded-xl font-bold hover:bg-yellow-600/30 transition-colors">${t.playerWarn} (${player.warnings || 0})</button>
                                 <button onclick="deletePlayer('${email}')" class="flex-1 py-3 bg-red-600/20 text-red-400 rounded-xl font-bold hover:bg-red-600/30 transition-colors">${t.playerDelete}</button>
                             </div>
+                            <div class="glass p-6 border border-white/5">
+                                <h3 class="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-4">${t.playerGrade}</h3>
+                                <div class="flex gap-3">
+                                    <select id="grade-select" class="flex-1 bg-black/20 border border-white/10 rounded-xl px-4 py-2 text-white outline-none focus:border-blue-500 transition-colors">
+                                        ${Object.keys(t.grades).map(g => `<option value="${g}" ${(player.grade || 'General') === g ? 'selected' : ''}>${t.grades[g]}</option>`).join('')}
+                                    </select>
+                                    <button onclick="updateGrade('${email}')" class="px-6 py-2 bg-blue-600 rounded-xl font-bold hover:bg-blue-500 transition-colors">Update</button>
+                                </div>
+                            </div>
                         </div>
                         <div>
                             <h3 class="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-4">${t.playerConfigs}</h3>
@@ -467,6 +486,7 @@
         window.unbanPlayer = async (email) => { try { await updateDoc(doc(db, "users", email), { ban_until: null }); alert("Player unbanned."); fetchPlayers(); showPlayerDetails(email); } catch (e) { alert("Failed to unban player."); } };
         window.warnPlayer = async (email) => { try { const playerRef = doc(db, "users", email); const snap = await getDoc(playerRef); const warnings = (snap.data().warnings || 0) + 1; await updateDoc(playerRef, { warnings: warnings }); alert(`Warning issued. Total: ${warnings}`); fetchPlayers(); showPlayerDetails(email); } catch (e) { alert("Failed to warn player."); } };
         window.deletePlayer = async (email) => { if (!confirm("Are you sure?")) return; try { await deleteDoc(doc(db, "users", email)); alert("Deleted."); closePlayerModal(); fetchPlayers(); } catch (e) { alert("Failed."); } };
+        window.updateGrade = async (email) => { const newGrade = document.getElementById('grade-select').value; try { await updateDoc(doc(db, "users", email), { grade: newGrade }); alert("Grade updated."); fetchPlayers(); showPlayerDetails(email); } catch (e) { alert("Failed to update grade."); } };
         window.deleteConfig = async (id, email) => { if (!confirm("Delete this config?")) return; try { await deleteDoc(doc(db, "shared_configs", id)); alert("Deleted."); showPlayerDetails(email); } catch (e) { alert("Failed."); } };
 
         async function fetchTickets() {
