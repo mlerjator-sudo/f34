@@ -129,7 +129,27 @@
 
                 <div class="flex items-center gap-4">
                     <!-- Auth Button / Profile -->
-                    <button id="auth-btn"
+                    <div id="user-profile" class="hidden flex items-center gap-4">
+                        <button onclick="openProfileModal()"
+                            class="glass pl-2 pr-6 py-2 flex items-center gap-3 hover:bg-white/10 transition-all border border-white/10">
+                            <img id="user-avatar" src="" alt="Avatar" class="w-8 h-8 rounded-lg bg-slate-800">
+                            <div class="text-left">
+                                <div id="user-mc-name" class="text-xs font-black tracking-tight leading-none">--</div>
+                                <div id="user-email" class="text-[10px] text-slate-500 font-medium">--</div>
+                            </div>
+                        </button>
+                        <button id="auth-btn-logout"
+                            class="glass p-3 hover:bg-red-500/10 hover:text-red-400 transition-all border border-white/10"
+                            title="Logout">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                                </path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <button id="auth-btn-login"
                         class="glass px-8 py-3 font-bold hover:bg-white/10 transition-all border border-white/10 text-sm">
                         Login with Google
                     </button>
@@ -239,6 +259,54 @@
                 <button onclick="submitTicket()"
                     class="btn-download px-8 py-3 rounded-xl font-bold text-white transition-all"
                     id="t-support-submit">Submit Ticket</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div id="profile-modal" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeProfileModal()"></div>
+        <div class="glass max-w-2xl w-full relative z-10 p-10 animate-fade-in overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 blur-[100px] -z-10"></div>
+
+            <button onclick="closeProfileModal()"
+                class="absolute top-8 right-8 text-slate-400 hover:text-white transition-colors">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
+
+            <div class="flex flex-col md:flex-row gap-10 items-center">
+                <div class="relative group">
+                    <div class="absolute inset-0 bg-blue-500/20 blur-2xl group-hover:bg-blue-500/30 transition-all">
+                    </div>
+                    <img id="profile-body-skin" src="" alt="Skin Body"
+                        class="relative z-10 h-80 w-auto object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+                </div>
+
+                <div class="flex-1 text-center md:text-left">
+                    <h2 class="text-4xl font-black tracking-tighter mb-2" id="profile-mc-name">--</h2>
+                    <p class="text-slate-500 font-medium mb-8" id="profile-email">--</p>
+
+                    <div class="grid grid-cols-2 gap-4 mb-8">
+                        <div class="glass p-4 border border-white/5">
+                            <div class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1">Status
+                            </div>
+                            <div class="text-green-400 font-bold text-sm">Linked</div>
+                        </div>
+                        <div class="glass p-4 border border-white/5">
+                            <div class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1">Account
+                            </div>
+                            <div class="text-blue-400 font-bold text-sm">Premium</div>
+                        </div>
+                    </div>
+
+                    <button id="profile-logout-btn"
+                        class="w-full py-4 rounded-2xl bg-white/5 border border-white/10 font-bold hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20 transition-all">
+                        Logout Account
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -373,11 +441,11 @@
                 description: "説明",
                 noDesc: "説明がありません。",
                 buttons: "ボタン構成",
-                noButtons: "この設定にはカスタムボタンがありません。",
+                noButtons: "この設定에는 커스텀 버튼이 없습니다.",
                 raw: "生データ",
                 close: "閉じる",
                 support: "カスタマーセンター",
-                supportTitle: "カスタマーセンター",
+                supportTitle: "カスタ머센터",
                 supportDesc: "問題や提案がありますか？メッセージを送ってください。",
                 supportSuccess: "お問い合わせが正常に受け付けられました！",
                 supportError: "お問い合わせの送信に失敗しました。",
@@ -577,7 +645,7 @@
                 statusApproved: "Genehmigt",
                 adminPanel: "Admin-Panel",
                 categories: {
-                    All: "Alle", Adventure: "Abenteuer", Horror: "Horror", Decoration: "Dekoration", Economy: "Wirtschaft", Equipment: "Ausrüstung", Food: "Essen", "Game Mechanics": "Spielmechanik", Library: "Bibliothek", Magic: "Magie", Management: "Verwaltung", Minigame: "Minispiel", Mobs: "Kreaturen", Optimization: "Optimierung", Social: "Sozial", Storage: "Lagerung", Technology: "Technologie", Transportation: "Transport", Utility: "Dienstprogramm", "World Gen": "Weltgen.", General: "Allgemein", Convenience: "Komfort"
+                    All: "Alle", Adventure: "Abenteuer", Horror: "Horror", Decoration: "Dekoration", Economy: "Wirtschaft", Equipment: "Ausrüstung", Food: "Essen", "Game Mechanics": "Spielmechanik", Library: "Bibliothek", Magic: "Magie", Management: "Verwaltung", Minigame: "Minispiel", Mobs: "Kreaturen", Optimization: "Optimierung", Social: "Sozial", Storage: "Lagerung", Technology: "Technologie", Transportation: "Transport", Utility: "Dienstprogramm", "World Gen": "Weltgen.", General: "Allgeme인", Convenience: "Komfort"
                 }
             },
             ru: {
@@ -647,16 +715,19 @@
 
         onAuthStateChanged(auth, (user) => {
             currentUser = user;
-            updateUI();
             if (user) {
                 const q = query(collection(db, "users"), where("email", "==", user.email));
                 getDocs(q).then(snap => {
                     if (!snap.empty) {
                         mcAccount = snap.docs[0].data();
+                    } else {
+                        mcAccount = null;
                     }
+                    updateUI();
                 });
             } else {
                 mcAccount = null;
+                updateUI();
             }
         });
 
@@ -694,22 +765,52 @@
 
         function updateAuthUI() {
             const t = i18n[currentLang] || i18n.en;
-            const authBtn = document.getElementById('auth-btn');
+            const loginBtn = document.getElementById('auth-btn-login');
+            const userProfile = document.getElementById('user-profile');
             const myConfigsBtn = document.getElementById('my-configs-btn');
             const adminLink = document.getElementById('t-admin-panel');
 
             if (currentUser) {
-                authBtn.textContent = t.logout;
-                authBtn.onclick = () => signOut(auth);
+                loginBtn.classList.add('hidden');
+                userProfile.classList.remove('hidden');
+
+                const mcName = mcAccount?.mc_name || 'Guest';
+                document.getElementById('user-mc-name').textContent = mcName;
+                document.getElementById('user-email').textContent = currentUser.email;
+                document.getElementById('user-avatar').src = `https://mc-heads.net/avatar/${mcName}/32`;
+
+                document.getElementById('auth-btn-logout').onclick = () => signOut(auth);
                 myConfigsBtn.classList.remove('hidden');
                 adminLink.classList.remove('hidden');
             } else {
-                authBtn.textContent = t.login;
-                authBtn.onclick = () => signInWithPopup(auth, provider);
+                loginBtn.classList.remove('hidden');
+                userProfile.classList.add('hidden');
+                loginBtn.textContent = t.login;
+                loginBtn.onclick = () => signInWithPopup(auth, provider);
                 myConfigsBtn.classList.add('hidden');
                 adminLink.classList.add('hidden');
             }
         }
+
+        window.openProfileModal = () => {
+            if (!currentUser) return;
+            const mcName = mcAccount?.mc_name || 'Guest';
+            document.getElementById('profile-mc-name').textContent = mcName;
+            document.getElementById('profile-email').textContent = currentUser.email;
+            document.getElementById('profile-body-skin').src = `https://mc-heads.net/body/${mcName}/right`;
+            document.getElementById('profile-logout-btn').onclick = () => {
+                signOut(auth);
+                closeProfileModal();
+            };
+
+            document.getElementById('profile-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        };
+
+        window.closeProfileModal = () => {
+            document.getElementById('profile-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        };
 
         function renderCategories() {
             const t = i18n[currentLang] || i18n.en;
@@ -915,7 +1016,7 @@
                 const q = query(collection(db, "shared_configs"), where("author", "==", currentUser.email));
                 const snap = await getDocs(q);
                 if (snap.empty) {
-                    list.innerHTML = `< div class= "text-center py-8 text-slate-500 italic" > ${t.noMyConfigs}</div > `;
+                    list.innerHTML = `<div class="text-center py-8 text-slate-500 italic">${t.noMyConfigs}</div>`;
                 } else {
                     list.innerHTML = '';
                     snap.forEach(doc => {
@@ -925,13 +1026,13 @@
                         const div = document.createElement('div');
                         div.className = "glass p-4 flex justify-between items-center border border-white/5";
                         div.innerHTML = `
-            < div >
+                            <div>
                                 <div class="font-bold">${data.name || 'Untitled'}</div>
                                 <div class="text-xs ${statusColor} font-bold uppercase tracking-widest mt-1">${statusText}</div>
-                            </div >
-                <button onclick="deleteMyConfig('${doc.id}')" class="p-2 text-red-400 hover:bg-red-400/10 rounded-lg transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                </button>
+                            </div>
+                            <button onclick="deleteMyConfig('${doc.id}')" class="p-2 text-red-400 hover:bg-red-400/10 rounded-lg transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            </button>
                         `;
                         list.appendChild(div);
                     });
